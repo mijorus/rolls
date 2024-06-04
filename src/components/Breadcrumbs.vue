@@ -1,11 +1,13 @@
 <template>
 	<div>
-		<NcButton href="record">
-			<template #icon>
-				<Plus :size="20" />
-			</template>
-			New Roll
-		</NcButton>
+		<router-link to="/record">
+			<NcButton>
+				<template #icon>
+					<Plus :size="20" />
+				</template>
+				New Roll
+			</NcButton>
+		</router-link>
 	</div>
 </template>
 

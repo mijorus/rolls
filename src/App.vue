@@ -2,7 +2,6 @@
 	<NcAppContent>
 		<div id="rolls">
 			<div class="container">
-				<Breadcrumbs />
 				<router-view />
 			</div>
 		</div>
@@ -11,13 +10,11 @@
 
 <script>
 import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
-import Breadcrumbs from './components/Breadcrumbs.vue'
 
 export default {
 	name: 'App',
 	components: {
 		NcAppContent,
-		Breadcrumbs,
 	},
 	mounted() {
 		console.log('activated', this.$route)

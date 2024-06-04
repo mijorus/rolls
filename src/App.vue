@@ -16,9 +16,7 @@ export default {
 	components: {
 		NcAppContent,
 	},
-	mounted() {
-		console.log('activated', this.$route)
-	},
+	mounted() {},
 }
 </script>
 

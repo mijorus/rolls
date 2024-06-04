@@ -10,8 +10,8 @@ const BASE_URL = '/index.php/apps/rolls'
 
 // We'll talk about nested routes later.
 const routes = [
-	{ path: BASE_URL + '/record', component: Record },
-	{ path: BASE_URL + '/', component: Index },
+	{ path: '/record', component: Record },
+	{ path: '/', component: Index },
 	{
 		// will match everything
 		path: '*',
@@ -23,5 +23,6 @@ const routes = [
 // keep it simple for now.
 export default new VueRouter({
 	mode: 'history',
+	base: BASE_URL,
 	routes, // short for `routes: routes`
 })

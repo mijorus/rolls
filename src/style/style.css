@@ -1,0 +1,7 @@
+.muted {
+	color: var(--color-text-maxcontrast);
+}
+
+.separator {
+	background-color: var(--color-background-hover);
+}

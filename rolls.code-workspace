@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.insertSpaces": false,
+		"javascript.format.semicolons": "insert",
+		"vetur.format.options.tabSize": 4,
+		"vetur.format.options.useTabs": true,
+		"vetur.completion.tagCasing": "initial",
+		"intelephense.format.braces": "k&r",
+		"vetur.format.defaultFormatterOptions": {
+			"prettier": {
+				"printWidth": 120
+			}
+		},
+	}
+}

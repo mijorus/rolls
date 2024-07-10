@@ -17,6 +17,8 @@ use OCP\AppFramework\Http\Attribute\SubAdminRequired;
 use OCP\AppFramework\Http\Attribute\UseSession;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\NotFoundResponse;
+use OCP\AppFramework\Http\Response;
 use OCP\Files\IRootFolder;
 use OCP\IRequest;
 use OCP\ISession;
@@ -233,5 +235,39 @@ class RollApiController extends ApiController {
 		return new JSONResponse([
 			'data' => $response,
 		]);
+	}
+
+	#[NoAdminRequired]
+	public function deleteRoll(): Response {
+		$uuid = $this->request->getParam('id');
+		$user = $this->session->getUser();
+
+		if (empty($uuid)) {
+			return new JSONResponse([
+				'message' => 'Missing uuid'
+			], Http::STATUS_NOT_FOUND);
+		}
+
+		$roll = $this->rollsDb->find($uuid);
+
+		if ($roll->getOwner() !== $user->getUID()) {
+			return new Response(Http::STATUS_UNAUTHORIZED);
+		}
+
+		if (!$roll) {
+			return new JSONResponse([
+				'message' => 'Item not found in database'
+			], Http::STATUS_NOT_FOUND);
+		}
+
+		// TODO:
+		$nodes = $this->storage->getById(intval($roll->getVideoFolder()));
+
+		foreach ($nodes as $node) {
+			$node->delete();
+		}
+
+		$this->rollsDb->delete($roll);
+		return new Response(Http::STATUS_OK);
 	}
 }

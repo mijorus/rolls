@@ -124,7 +124,7 @@ class RollApiController extends ApiController {
 			$this->storage->newFile($folder->getPath() . '/README.md', $requestText);
 		}
 
-		$roll = $this->rollsDb->create($uuid, $videoFile->getId(), $videoFolder->getId(), $user->getUID());
+		$roll = $this->rollsDb->create($uuid, $videoFile->getId(), $folder->getId(), $user->getUID());
 
 		return new JSONResponse(
 			['data' => [
@@ -239,7 +239,7 @@ class RollApiController extends ApiController {
 
 	#[NoAdminRequired]
 	public function deleteRoll(): Response {
-		$uuid = $this->request->getParam('id');
+		$uuid = $this->request->getParam('uuid');
 		$user = $this->session->getUser();
 
 		if (empty($uuid)) {

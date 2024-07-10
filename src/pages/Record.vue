@@ -9,10 +9,14 @@
 				v-show="status === statusOpts.ASKING_PERMISSION"
 				@click="() => initScreen()"
 			>
-				<div class="tw-flex tw-flex-col tw-gap-2 tw-justify-center tw-h-full tw-w-full tw-items-center">
-					<MonitorShare :size="60" />
-					<span class="tw-text-2xl">{{ t("rolls", "Select a screen") }}</span>
-				</div>
+				<NcEmptyContent 
+					:name="t('rolls', 'Select a screen to get started')"
+					:description="t('rolls', 'If you decide to share a only window, the webcam Picture in Picture will not be available')"
+				>
+					<template #icon>
+						<MonitorShare />
+					</template>
+				</NcEmptyContent>
 			</button>
 		</div>
 		<video id="screen-video" ref="screenVideo" muted autoplay class="invisible"></video>
@@ -26,7 +30,7 @@
 
 		<div>
 			<RecordActions
-				:ready="status !== statusOpts.ASKING_PERMISSION"
+				:ready="status !== statusOpts.ASKING_PERMISSION && screenSharingHasEnded === false"
 				:activeStreamName="activeStreamName"
 				:streamMonitor="streamMonitor"
 				:streamMonitorWithWebcam="streamMonitorWithWebcam"
@@ -125,12 +129,7 @@ import fixWebmDuration from "fix-webm-duration";
 import dayjs from "dayjs";
 import Dexie from "dexie";
 import dayjs_duration from "dayjs/plugin/duration";
-import {
-	NcButton,
-	NcActionButton,
-	NcActions,
-	NcLoadingIcon,
-} from "@nextcloud/vue";
+import { NcButton, NcActionButton, NcActions, NcLoadingIcon, NcEmptyContent } from "@nextcloud/vue";
 import { mdiClock } from "@mdi/js";
 import Video from "vue-material-design-icons/Video.vue";
 import Stop from "vue-material-design-icons/Stop.vue";
@@ -145,8 +144,8 @@ import PictureInPictureBottomRight from "vue-material-design-icons/PictureInPict
 import { APP_API, DAV_URL } from "../constants";
 import MarkdownEditor from "../components/MarkdownEditor.vue";
 import { randomString } from "../utils/funcs";
-import RecordActions from '../components/RecordActions.vue';
-import RecordSwitchSourceBtns from '../components/RecordSwitchSourceBtns.vue';
+import RecordActions from "../components/RecordActions.vue";
+import RecordSwitchSourceBtns from "../components/RecordSwitchSourceBtns.vue";
 
 dayjs.extend(dayjs_duration);
 
@@ -162,6 +161,7 @@ export default {
 		PictureInPictureBottomRight,
 		OpenInNew,
 		MonitorShare,
+		NcEmptyContent,
 		Video,
 		Stop,
 		Monitor,
@@ -187,6 +187,7 @@ export default {
 			documentPictureInPictureSupported: false,
 			webcamVideoVisibility: "hidden",
 			activeStreamName: "",
+			screenSharingHasEnded: false,
 			activeStream: undefined,
 			/** @type {HTMLVideoElement | null} */
 			ulFlippedWebcamVideo: null,
@@ -245,9 +246,7 @@ export default {
 
 		stopWebcam() {
 			if (this.ulFlippedWebcamVideo) {
-				this.ulFlippedWebcamVideo.srcObject
-					.getTracks()
-					.forEach((track) => track.stop());
+				this.ulFlippedWebcamVideo.srcObject.getTracks().forEach((track) => track.stop());
 
 				this.ulFlippedWebcamVideo.remove();
 			}
@@ -266,14 +265,12 @@ export default {
 
 				if (this.$refs.webcamVideo.srcObject) {
 					let wt = [];
-					this.$refs.webcamVideo.srcObject
-						.getTracks()
-						.forEach((track) => {
-							wt.push(track);
-							track.stop();
-						});
+					this.$refs.webcamVideo.srcObject.getTracks().forEach((track) => {
+						wt.push(track);
+						track.stop();
+					});
 
-					wt.forEach(t => this.$refs.webcamVideo.srcObject.removeTrack(t));
+					wt.forEach((t) => this.$refs.webcamVideo.srcObject.removeTrack(t));
 				}
 
 				if (document.pictureInPictureElement) {
@@ -286,15 +283,14 @@ export default {
 
 		stopScreen() {
 			if (this.$refs.screenVideo.srcObject) {
-				this.$refs.screenVideo.srcObject
-					.getTracks()
-					.forEach((track) => track.stop());
+				this.$refs.screenVideo.srcObject.getTracks()[0].removeEventListener('ended', this.screenSharingEnded);
+				this.$refs.screenVideo.srcObject.getTracks().forEach((track) => track.stop());
 			}
 		},
 
 		stopCapture() {
 			this.recorder.stop();
-			window.removeEventListener('beforeunload', this.preventUnload)
+			window.removeEventListener("beforeunload", this.preventUnload);
 		},
 
 		async startCapture() {
@@ -346,12 +342,19 @@ export default {
 			this.videoStartedAt = new Date();
 			this.savingCompleted = false;
 			this.startVideoTimer();
-			window.addEventListener('beforeunload', this.preventUnload)
+			window.addEventListener("beforeunload", this.preventUnload);
 		},
 
 		stopMic() {
 			if (this.audioStream) {
 				this.audioStream.getTracks().forEach((track) => track.stop());
+			}
+		},
+
+		screenSharingEnded(e) {
+			if (typeof this.activeStream !== 'undefined') {
+				this.streamWebcam();
+				this.screenSharingHasEnded = true;
 			}
 		},
 
@@ -387,13 +390,9 @@ export default {
 				this.ulFlippedWebcamCanvas?.classList.add("hidden");
 
 				this.webcamIsVisible = true;
-				this.drawVideoOnCanvas(
-					this.ulFlippedWebcamVideo,
-					this.ulFlippedWebcamCanvas
-				);
+				this.drawVideoOnCanvas(this.ulFlippedWebcamVideo, this.ulFlippedWebcamCanvas);
 
-				const canvasStream =
-					this.ulFlippedWebcamCanvas.captureStream(30);
+				const canvasStream = this.ulFlippedWebcamCanvas.captureStream(30);
 
 				this.$refs.webcamVideo.srcObject = canvasStream;
 				await this.$refs.webcamVideo.play();
@@ -424,13 +423,12 @@ export default {
 			};
 
 			if (!this.$refs.screenVideo.srcObject) {
-				this.$refs.screenVideo.srcObject =
-					await navigator.mediaDevices.getDisplayMedia(
-						displayMediaOptions
-					);
+				this.$refs.screenVideo.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
 			}
 
 			this.$refs.screenVideo.play();
+			this.screenSharingHasEnded = false;
+			this.$refs.screenVideo.srcObject.getTracks()[0].addEventListener('ended', this.screenSharingEnded);
 			this.setVideoOnMainCanvas(this.$refs.screenVideo, "screen");
 		},
 
@@ -530,10 +528,7 @@ export default {
 				target.width = this.$refs.screenVideo.videoWidth;
 				target.height = this.$refs.screenVideo.videoHeight;
 
-				if (
-					source.videoWidth !== target.width &&
-					source.videoHeight !== target.height
-				) {
+				if (source.videoWidth !== target.width && source.videoHeight !== target.height) {
 					// Get canvas dimensions
 					const canvasWidth = target.width;
 					const canvasHeight = target.height;
@@ -567,10 +562,7 @@ export default {
 					ctx.drawImage(source, 0, 0, target.width, target.height);
 				}
 
-				if (
-					this.status === this.statusOpts.RECORDING &&
-					!this.thumbnail
-				) {
+				if (this.status === this.statusOpts.RECORDING && !this.thumbnail) {
 					this.thumbnail = true;
 					target.toBlob((b) => {
 						this.thumbnail = b;
@@ -621,9 +613,7 @@ export default {
 			this.videoStartedInterval = setInterval(() => {
 				const diff = dayjs().diff(this.videoStartedAt, "milliseconds");
 				if (diff > 1000 * 3600) {
-					this.videoDuration = dayjs
-						.duration(diff)
-						.format("HH:mm:ss");
+					this.videoDuration = dayjs.duration(diff).format("HH:mm:ss");
 				} else {
 					this.videoDuration = dayjs.duration(diff).format("mm:ss");
 				}
@@ -652,20 +642,14 @@ export default {
 				console.error(err);
 				this.status = this.statusOpts.UPLOAD_ERR;
 
-				alert(
-					t("rolls", "An error occurred while uploading your Roll")
-				);
+				alert(t("rolls", "An error occurred while uploading your Roll"));
 			}
 		},
 
 		async uploadVideo() {
-			const duration =
-				this.videoEndedAt.getTime() - this.videoStartedAt.getTime();
+			const duration = this.videoEndedAt.getTime() - this.videoStartedAt.getTime();
 
-			const chunksData = await this.appDB
-				.table("currentStream")
-				.orderBy("id")
-				.toArray();
+			const chunksData = await this.appDB.table("currentStream").orderBy("id").toArray();
 
 			let recordedBlob = new Blob([...chunksData.map((c) => c.blob)], {
 				type: videoMime,
@@ -752,9 +736,7 @@ export default {
 
 			[...document.styleSheets].forEach((styleSheet) => {
 				try {
-					const cssRules = [...styleSheet.cssRules]
-						.map((rule) => rule.cssText)
-						.join("");
+					const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join("");
 					const style = document.createElement("style");
 
 					style.textContent = cssRules;
@@ -777,17 +759,17 @@ export default {
 		 * @param device { MediaDeviceInfo }
 		 */
 		async setDevice(device) {
-			if (device.kind === 'audioinput') {
+			if (device.kind === "audioinput") {
 				this.micId = device.deviceId;
-			} else if (device.kind === 'videoinput') {
+			} else if (device.kind === "videoinput") {
 				this.webcamId = device.deviceId;
 
-				if (['webcam-stream', 'webcam-screen'].includes(this.activeStreamName)) {
+				if (["webcam-stream", "webcam-screen"].includes(this.activeStreamName)) {
 					this.stopWebcam();
 					await this.createFlippedWebcamStream();
 				}
 
-				if ('webcam-screen' === this.activeStreamName) {
+				if ("webcam-screen" === this.activeStreamName) {
 					this.$refs.webcamVideo.requestPictureInPicture();
 				}
 			}
@@ -795,8 +777,8 @@ export default {
 
 		preventUnload(e) {
 			e.preventDefault();
-			e.returnValue = '';
-		}
+			e.returnValue = "";
+		},
 	},
 	computed: {
 		sortedComments() {

@@ -22,7 +22,7 @@
 						</template>
 						<template #subname>
 							<i v-if="newCommenEditMode === comment['oc:id']">
-								{{ t('rolls', 'Editing') }}: {{ comment["oc:message"] }}
+								{{ t("rolls", "Editing") }}: {{ comment["oc:message"] }}
 							</i>
 							<span v-else>
 								{{ comment["oc:message"] }}
@@ -46,16 +46,14 @@
 				</ul>
 			</div>
 			<div v-else class="muted tw-pb-10 tw-pt-5">
-				<ul>
-					<NcListItem name="" class="tw-pointer-events-none" :active="false">
-						<template #icon>
-							<CommentOff :size="30" />
-						</template>
-						<template #subname>
-							{{ t("rolls", "No comments yet") }}
-						</template>
-					</NcListItem>
-				</ul>
+				<NcEmptyContent
+					:name="t('rolls', 'No comments yet')"
+					:description="t('rolls', 'Start writing comments and they will appear here.')"
+				>
+					<template #icon>
+						<Comment />
+					</template>
+				</NcEmptyContent>
 			</div>
 
 			<form class="tw-flex tw-flex-row tw-gap-2" @submit.prevent>
@@ -97,9 +95,8 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import axios from "@nextcloud/axios";
-import { NcLoadingIcon, NcListItem, NcAvatar, NcActions, NcButton, NcActionButton } from "@nextcloud/vue";
+import { NcLoadingIcon, NcListItem, NcAvatar, NcActions, NcButton, NcActionButton, NcEmptyContent } from "@nextcloud/vue";
 import Comment from "vue-material-design-icons/Comment.vue";
-import CommentOff from "vue-material-design-icons/CommentOff.vue";
 import TextIcon from "vue-material-design-icons/Text.vue";
 import IconEdit from "vue-material-design-icons/Pencil.vue";
 import ArrowDown from "vue-material-design-icons/ArrowDown.vue";
@@ -114,10 +111,11 @@ dayjs.extend(relativeTime);
 export default {
 	name: "Watch",
 	components: {
+		NcEmptyContent,
 		ArrowDown,
 		Comment,
 		Tab,
-		CommentOff,
+		Comment,
 		TextIcon,
 		NcLoadingIcon,
 		NcListItem,

@@ -5,7 +5,7 @@
 				<template #icon>
 					<Plus :size="20" />
 				</template>
-				{{ t('rolls', 'New Roll') }}
+				{{ t('rolls', 'New roll') }}
 			</NcButton>
 		</router-link>
 	</div>

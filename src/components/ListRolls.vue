@@ -1,50 +1,59 @@
 <template>
 	<div>
-		<ul>
-			<li v-for="roll in rolls" :key="roll.uuid">
-				<RouterLink
-					:to="'/watch/' + roll.uuid"
-					class="list-item tw-my-5 tw-flex tw-flex-col md:tw-flex-row tw-gap-2"
-				>
-					<div class="tw-w-60 tw-h-30">
-						<img
-							v-if="roll.thumbnail"
-							:src="DAV_URL + '/files/' +roll.thumbnail"
-							alt=""
-							class="tw-w-full tw-h-full tw-object-cover tw-rounded-xl"
-						/>
-						<div v-else class="tw-bg-black"></div>
-					</div>
-					<div>
-						<h2 class="tw-text-xl">{{ roll.title }}</h2>
-						<div
-							class="muted tw-text-muted tw-whitespace-pre-line tw-overflow-hidden tw-text-ellipsis"
-						>
-							{{ roll.description }}
+		<div v-if="ready">
+			<ul v-if="rolls.length">
+				<li v-for="roll in rolls" :key="roll.uuid">
+					<RouterLink
+						:to="'/watch/' + roll.uuid"
+						class="list-item tw-my-5 tw-flex tw-flex-col md:tw-flex-row tw-gap-2"
+					>
+						<div class="tw-w-60 tw-h-30">
+							<img
+								v-if="roll.thumbnail"
+								:src="DAV_URL + '/files/' + roll.thumbnail"
+								alt=""
+								class="tw-w-full tw-h-full tw-object-cover tw-rounded-xl"
+							/>
+							<div v-else class="tw-bg-black"></div>
 						</div>
-					</div>
-				</RouterLink>
-			</li>
-		</ul>
+						<div>
+							<h2 class="tw-text-xl">{{ roll.title }}</h2>
+							<div class="muted tw-text-muted tw-whitespace-pre-line tw-overflow-hidden tw-text-ellipsis">
+								{{ roll.description }}
+							</div>
+						</div>
+					</RouterLink>
+				</li>
+			</ul>
+			<div v-else>
+				<NcEmptyContent
+					:name="t('rolls', 'No rolls yet')"
+					:description="t('rolls', 'Start by creating a new roll using the button above.')"
+				>
+					<template #icon>
+						<MovieRoll />
+					</template>
+				</NcEmptyContent>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
 import { APP_API, DAV_URL, APP_URL } from "../constants";
 import axios from "@nextcloud/axios";
-import {
-	NcListItem,
-	NcActionButton,
-	NcActions,
-	NcLoadingIcon,
-} from "@nextcloud/vue";
+import { NcListItem, NcActionButton, NcActions, NcLoadingIcon, NcEmptyContent } from "@nextcloud/vue";
 import MarkdownPreview from "./MarkdownPreview.vue";
+import RecordCircleOutline from "vue-material-design-icons/RecordCircleOutline.vue";
+import MovieRoll from "vue-material-design-icons/MovieRoll.vue";
 
 export default {
 	name: "ListRolls",
 	components: {
 		NcListItem,
 		MarkdownPreview,
+		NcEmptyContent,
+		MovieRoll,
 	},
 	async mounted() {
 		let rolls = (await axios.get(`${APP_API}/rolls`)).data.data;
@@ -87,9 +96,12 @@ export default {
 
 			return roll;
 		});
+
+		this.ready = true;
 	},
 	data() {
 		return {
+			ready: false,
 			rolls: [],
 			DAV_URL,
 			APP_URL,

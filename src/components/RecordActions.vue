@@ -72,7 +72,7 @@ export default {
 		},
 		ready: {
 			type: Boolean,
-		}
+		},
 	}
 }
 </script>

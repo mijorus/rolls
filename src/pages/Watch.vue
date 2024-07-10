@@ -5,7 +5,15 @@
 		</div>
 
 		<div>
-			<h1 class="tw-mb-5 tw-font-bold !tw-text-3xl">{{ title }}</h1>
+			<div class="tw-mb-5" v-if="ready">
+				<h1 class="!tw-text-3xl tw-font-bold">{{ title }}</h1>
+				<small
+					>{{ t("roll", "Created by") }}:
+					<a :href="`${APP_INDEX}/u/${roll.owner.id}`" class="tw-underline">
+						{{ roll.owner.displayName }}
+					</a>
+				</small>
+			</div>
 
 			<div>
 				<div class="tw-flex tw-flex-row tw-items-center tw-gap-3 tw-mb-5">
@@ -30,22 +38,31 @@
 						</template>
 					</Tab>
 					<div class="tw-h-10 tw-w-0.5 separator"></div>
-					<a
-						class="button"
-						name="download"
-						:download="roll ? roll.file.path.split('/').at(-1) : false"
-						:href="videoUrl"
-						:disabled="!roll"
-					>
-						<ArrowDown :size="20" />
-						<div class="tw-capitalize">{{ t("files", "Download") }}</div>
-					</a>
+					<NcButton>
+						<template #icon>
+							<ArrowDown :size="20" />
+						</template>
+						<a
+							name="download"
+							:download="roll ? roll.file.path.split('/').at(-1) : false"
+							:href="videoUrl"
+							:disabled="!roll"
+						>
+							<div class="tw-capitalize">{{ t("files", "Download") }}</div>
+						</a>
+					</NcButton>
+					<NcButton v-if="ready && roll.isMine" class="button" type="error" @click="deleteRoll">
+						<template #icon>
+							<Delete :size="20" />
+						</template>
+						<div class="tw-capitalize">{{ t("files", "Delete") }}</div>
+					</NcButton>
 				</div>
 
 				<div>
 					<div ref="editor" v-show="activeTab === 'description'"></div>
 					<div v-show="activeTab === 'comments'">
-						<CommentsBox :roll="roll" v-if="roll"/>
+						<CommentsBox :roll="roll" v-if="ready" />
 					</div>
 				</div>
 			</div>
@@ -58,7 +75,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import axios from "@nextcloud/axios";
 import VideoPlayer from "./../components/VideoPlayer.vue";
-import { APP_API, APP_URL, DAV_URL, REMOTE_URL } from "../constants";
+import { APP_API, APP_INDEX, APP_URL, DAV_URL, REMOTE_URL } from "../constants";
 import { convertUrlsToMarkdown, validateUUID, xmlResponse } from "../utils/funcs";
 import MarkdownPreview from "../components/MarkdownPreview.vue";
 import MarkdownEditor from "../components/MarkdownEditor.vue";
@@ -101,6 +118,7 @@ export default {
 	},
 	data() {
 		return {
+			APP_INDEX,
 			activeTab: "description",
 			/** @type { object | undefined} */
 			roll: undefined,
@@ -239,6 +257,7 @@ export default {
 
 					this.editor = await window.OCA.Text.createEditor(editorConf);
 				} else {
+					console.log(this.description);
 					this.editor = await window.OCA.Text.createEditor({
 						content: this.description,
 						el: this.$refs.editor,
@@ -246,6 +265,19 @@ export default {
 					});
 				}
 			}
+		},
+
+		async deleteRoll() {
+			const confirmation = confirm(t("roll", "Do you really want to delete this roll?"));
+
+			if (!confirmation) {
+				return;
+			}
+
+			const uuid = this.$route.params.uuid;
+			await axios.delete(`${APP_API}/rolls`, { params: { uuid } });
+
+			this.$router.push("/");
 		},
 	},
 };

@@ -1,16 +1,20 @@
 <template>
-	<button
-		:class="{active: activeTab === name}"
-		@click="onClick"
-	>
-		<slot name="icon" />
+	<NcButton :type="activeTab === name ? 'primary' : 'tertiary'" @click="onClick">
+		<template #icon>
+			<slot name="icon" />
+		</template>
 		<div class="tw-capitalize">{{ title }}</div>
-	</button>
+	</NcButton>
 </template>
 
 <script>
+import { NcLoadingIcon, NcListItem, NcAvatar, NcActions, NcButton, NcActionButton } from "@nextcloud/vue";
+
 export default {
-	name: 'Tab',
+	name: "Tab",
+	components: {
+		NcButton,
+	},
 	props: {
 		name: {
 			type: String,
@@ -27,8 +31,8 @@ export default {
 	},
 	methods: {
 		onClick() {
-			this.$emit('click', { name: this.name });
-		}
-	}
-}
+			this.$emit("click", { name: this.name });
+		},
+	},
+};
 </script>

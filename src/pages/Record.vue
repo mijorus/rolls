@@ -622,6 +622,10 @@ export default {
 
 		async initVideoUpload() {
 			try {
+				this.stopWebcam();
+				this.stopScreen();
+				this.stopMic();
+
 				const data = await this.uploadVideo();
 				this.videoDuration = "00:00";
 				this.videoStartedAt = null;
@@ -632,10 +636,6 @@ export default {
 				this.$refs.inputComment.value = "";
 				this.comments = [];
 				clearInterval(this.videoStartedInterval);
-
-				this.stopWebcam();
-				this.stopScreen();
-				this.stopMic();
 
 				this.$router.push("/watch/" + data.data.uuid);
 			} catch (err) {

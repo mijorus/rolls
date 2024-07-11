@@ -5,6 +5,8 @@ import router from './router.js'
 import { linkTo } from '@nextcloud/router'
 import './style/tailwind.css'
 import { mixins } from './utils/mixins.js';
+import { detectMobile } from './utils/funcs.js';
+import { isMobile } from '@nextcloud/vue';
 
 const isDevServer = process.env.WEBPACK_DEV_SERVER
 
@@ -24,6 +26,8 @@ Vue.mixin({ methods: { t, n } })
 Vue.mixin({
 	methods: mixins
 })
+
+window.isMobile = detectMobile()
 
 const View = Vue.extend(App)
 new View({ router }).$mount('#rolls')

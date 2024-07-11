@@ -1,7 +1,7 @@
 <template>
 	<div class="tw-mb-10">
 		<router-link to="/record">
-			<NcButton>
+			<NcButton v-if="window.isMobile">
 				<template #icon>
 					<Plus :size="20" />
 				</template>

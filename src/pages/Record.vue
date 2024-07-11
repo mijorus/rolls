@@ -1,96 +1,111 @@
 <template>
 	<div>
-		<canvas ref="ulMainCanvas" class="tw-w-full hidden tw-rounded-xl"></canvas>
-		<div class="tw-relative tw-mb-3" id="main-video-container">
-			<video id="main-video" ref="mainVideo" class="tw-rounded-2xl" autoplay></video>
-			<button
-				id="main-video-placeholder"
-				class="!tw-rounded-2xl"
-				v-show="status === statusOpts.ASKING_PERMISSION"
-				@click="() => initScreen()"
-			>
-				<NcEmptyContent 
-					:name="t('rolls', 'Select a screen to get started')"
-					:description="t('rolls', 'If you decide to share a only window, the webcam Picture in Picture will not be available')"
-				>
-					<template #icon>
-						<MonitorShare />
-					</template>
-				</NcEmptyContent>
-			</button>
-		</div>
-		<video id="screen-video" ref="screenVideo" muted autoplay class="invisible"></video>
-		<video
-			id="webcam-video"
-			ref="webcamVideo"
-			muted
-			autoplay
-			:style="{ visibility: webcamVideoVisibility }"
-		></video>
-
-		<div>
-			<RecordActions
-				:ready="status !== statusOpts.ASKING_PERMISSION && screenSharingHasEnded === false"
-				:activeStreamName="activeStreamName"
-				:streamMonitor="streamMonitor"
-				:streamMonitorWithWebcam="streamMonitorWithWebcam"
-				:streamWebcam="streamWebcam"
-			/>
-		</div>
-
-		<div class="tw-pt-5"></div>
-
-		<div class="tw-flex tw-flex-row tw-items-center tw-gap-2">
-			<NcButton
-				:disabled="![statusOpts.READY, statusOpts.RECORDING, statusOpts.UPLOAD_ERR].includes(status)"
-				aria-label="Start recording"
-				@click="startCapture()"
-				:type="status === statusOpts.RECORDING ? 'error' : 'secondary'"
+		<div v-if="window.isMobile">
+			<NcEmptyContent
+				:name="t('rolls', 'Rolls is not available on mobile devices')"
 			>
 				<template #icon>
-					<Stop :size="20" v-if="status === statusOpts.RECORDING" />
-					<NcLoadingIcon :size="20" v-else-if="status === statusOpts.UPLOADING"></NcLoadingIcon>
-					<ArrowUp :size="20" v-else-if="status === statusOpts.UPLOAD_ERR"></ArrowUp>
-					<Video :size="20" v-else class="video-icon" />
+					<CellphoneOff />
 				</template>
-				<span v-if="status === statusOpts.RECORDING">
-					{{ videoDuration }}
-				</span>
-				<span v-else-if="status === statusOpts.UPLOADING">
-					{{ t("rolls", "Uploading...") }}
-				</span>
-				<span v-else-if="status === statusOpts.UPLOAD_ERR">
-					{{ t("rolls", "Try to upload again") }}
-				</span>
-				<span v-else>
-					{{ t("rolls", "Start recording") }}
-				</span>
-			</NcButton>
-			<div class="tw-ml-1"></div>
-			<RecordSwitchSourceBtns
-				:activeWebcamId="webcamId"
-				:activeMicId="micId"
-				:ready="status === statusOpts.READY"
-				v-on:webcamChange="setDevice"
-				v-on:micChange="setDevice"
-			/>
+			</NcEmptyContent>
 		</div>
+		<div v-else>
+			<canvas ref="ulMainCanvas" class="tw-w-full hidden tw-rounded-xl"></canvas>
+			<div class="tw-relative tw-mb-3" id="main-video-container">
+				<video id="main-video" ref="mainVideo" class="tw-rounded-2xl" autoplay></video>
+				<button
+					id="main-video-placeholder"
+					class="!tw-rounded-2xl"
+					v-show="status === statusOpts.ASKING_PERMISSION"
+					@click="() => initScreen()"
+				>
+					<NcEmptyContent
+						:name="t('rolls', 'Select a screen to get started')"
+						:description="
+							t(
+								'rolls',
+								'If you decide to share a only window, the webcam Picture in Picture will not be available'
+							)
+						"
+					>
+						<template #icon>
+							<MonitorShare />
+						</template>
+					</NcEmptyContent>
+				</button>
+			</div>
+			<video id="screen-video" ref="screenVideo" muted autoplay class="invisible"></video>
+			<video
+				id="webcam-video"
+				ref="webcamVideo"
+				muted
+				autoplay
+				:style="{ visibility: webcamVideoVisibility }"
+			></video>
 
-		<div class="tw-py-5">
-			<hr />
-		</div>
-
-		<div>
-			<div class="tw-mb-8">
-				<input
-					type="text"
-					class="tw-w-full tw-d-block !tw-border-none !tw-outline-none tw-font-bold !tw-text-3xl placeholder:!tw-text-3xl"
-					:placeholder="t('rolls', 'Add a title')"
-					v-model="title"
+			<div>
+				<RecordActions
+					:ready="status !== statusOpts.ASKING_PERMISSION && screenSharingHasEnded === false"
+					:activeStreamName="activeStreamName"
+					:streamMonitor="streamMonitor"
+					:streamMonitorWithWebcam="streamMonitorWithWebcam"
+					:streamWebcam="streamWebcam"
 				/>
 			</div>
-			<div class="tw-relative">
-				<!-- <div
+
+			<div class="tw-pt-5"></div>
+
+			<div class="tw-flex tw-flex-row tw-items-center tw-gap-2">
+				<NcButton
+					:disabled="![statusOpts.READY, statusOpts.RECORDING, statusOpts.UPLOAD_ERR].includes(status)"
+					aria-label="Start recording"
+					@click="startCapture()"
+					:type="status === statusOpts.RECORDING ? 'error' : 'secondary'"
+				>
+					<template #icon>
+						<Stop :size="20" v-if="status === statusOpts.RECORDING" />
+						<NcLoadingIcon :size="20" v-else-if="status === statusOpts.UPLOADING"></NcLoadingIcon>
+						<ArrowUp :size="20" v-else-if="status === statusOpts.UPLOAD_ERR"></ArrowUp>
+						<Video :size="20" v-else class="video-icon" />
+					</template>
+					<span v-if="status === statusOpts.RECORDING">
+						{{ videoDuration }}
+					</span>
+					<span v-else-if="status === statusOpts.UPLOADING">
+						{{ t("rolls", "Uploading...") }}
+					</span>
+					<span v-else-if="status === statusOpts.UPLOAD_ERR">
+						{{ t("rolls", "Try to upload again") }}
+					</span>
+					<span v-else>
+						{{ t("rolls", "Start recording") }}
+					</span>
+				</NcButton>
+				<div class="tw-ml-1"></div>
+				<RecordSwitchSourceBtns
+					:activeWebcamId="webcamId"
+					:activeMicId="micId"
+					:ready="status === statusOpts.READY"
+					v-on:webcamChange="setDevice"
+					v-on:micChange="setDevice"
+				/>
+			</div>
+
+			<div class="tw-py-5">
+				<hr />
+			</div>
+
+			<div>
+				<div class="tw-mb-8">
+					<input
+						type="text"
+						class="tw-w-full tw-d-block !tw-border-none !tw-outline-none tw-font-bold !tw-text-3xl placeholder:!tw-text-3xl"
+						:placeholder="t('rolls', 'Add a title')"
+						v-model="title"
+					/>
+				</div>
+				<div class="tw-relative">
+					<!-- <div
 					v-if="documentPictureInPictureSupported"
 					class="tw-absolute tw-top-0 tw-right-0"
 				>
@@ -100,25 +115,26 @@
 						</template>
 					</NcButton>
 				</div> -->
-				<span ref="addCommentBox">
-					<div
-						class="tw-text-white tw-inline-flex tw-px-2 tw-py-1 tw-rounded-full tw-flex-row tw-gap-2 bg-primary"
-					>
-						<Clock :size="20" />
-						<span>{{ commentAt || videoDuration }}</span>
-					</div>
-					<input
-						ref="inputComment"
-						class="!tw-border-none !tw-outline-none tw-w-full"
-						type="text"
-						:placeholder="t('rolls', 'Add a comment at this timestamp')"
-						@keydown="onCommentKeyDown"
-						@focus="onCommentFocus"
-						@blur="onCommentBlur"
-					/>
-				</span>
+					<span ref="addCommentBox">
+						<div
+							class="tw-text-white tw-inline-flex tw-px-2 tw-py-1 tw-rounded-full tw-flex-row tw-gap-2 bg-primary"
+						>
+							<Clock :size="20" />
+							<span>{{ commentAt || videoDuration }}</span>
+						</div>
+						<input
+							ref="inputComment"
+							class="!tw-border-none !tw-outline-none tw-w-full"
+							type="text"
+							:placeholder="t('rolls', 'Add a comment at this timestamp')"
+							@keydown="onCommentKeyDown"
+							@focus="onCommentFocus"
+							@blur="onCommentBlur"
+						/>
+					</span>
 
-				<p v-for="comment in sortedComments" :key="comment.id">{{ comment.ts }} - {{ comment.text }}</p>
+					<p v-for="comment in sortedComments" :key="comment.id">{{ comment.ts }} - {{ comment.text }}</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -137,6 +153,7 @@ import Clock from "vue-material-design-icons/Clock.vue";
 import Monitor from "vue-material-design-icons/Monitor.vue";
 import MonitorShare from "vue-material-design-icons/MonitorShare.vue";
 import ArrowUp from "vue-material-design-icons/ArrowUp.vue";
+import CellphoneOff from "vue-material-design-icons/CellphoneOff.vue";
 import Webcam from "vue-material-design-icons/Webcam.vue";
 import OpenInNew from "vue-material-design-icons/OpenInNew.vue";
 import axios from "@nextcloud/axios";
@@ -156,6 +173,7 @@ export default {
 	name: "Record",
 	components: {
 		NcButton,
+		CellphoneOff,
 		NcActionButton,
 		NcActions,
 		PictureInPictureBottomRight,
@@ -283,7 +301,7 @@ export default {
 
 		stopScreen() {
 			if (this.$refs.screenVideo.srcObject) {
-				this.$refs.screenVideo.srcObject.getTracks()[0].removeEventListener('ended', this.screenSharingEnded);
+				this.$refs.screenVideo.srcObject.getTracks()[0].removeEventListener("ended", this.screenSharingEnded);
 				this.$refs.screenVideo.srcObject.getTracks().forEach((track) => track.stop());
 			}
 		},
@@ -352,7 +370,7 @@ export default {
 		},
 
 		screenSharingEnded(e) {
-			if (typeof this.activeStream !== 'undefined') {
+			if (typeof this.activeStream !== "undefined") {
 				this.streamWebcam();
 				this.screenSharingHasEnded = true;
 			}
@@ -428,7 +446,7 @@ export default {
 
 			this.$refs.screenVideo.play();
 			this.screenSharingHasEnded = false;
-			this.$refs.screenVideo.srcObject.getTracks()[0].addEventListener('ended', this.screenSharingEnded);
+			this.$refs.screenVideo.srcObject.getTracks()[0].addEventListener("ended", this.screenSharingEnded);
 			this.setVideoOnMainCanvas(this.$refs.screenVideo, "screen");
 		},
 

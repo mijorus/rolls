@@ -268,14 +268,14 @@ export default {
 		},
 
 		async deleteRoll() {
-			const confirmation = confirm(t("roll", "Do you really want to delete this roll?"));
+			const confirmation = confirm(t("roll", "Do you really want to delete this Roll?"));
 
 			if (!confirmation) {
 				return;
 			}
 
 			const uuid = this.$route.params.uuid;
-			await axios.delete(`${APP_API}/rolls`, { params: { uuid } });
+			await axios.delete(`${APP_API}/rolls/${uuid}`);
 
 			this.$router.push("/");
 		},

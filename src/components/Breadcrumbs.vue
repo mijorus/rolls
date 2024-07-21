@@ -1,7 +1,7 @@
 <template>
 	<div class="tw-mb-10">
 		<router-link to="/record">
-			<NcButton v-if="window.isMobile">
+			<NcButton v-if="!isMobile">
 				<template #icon>
 					<Plus :size="20" />
 				</template>
@@ -21,5 +21,10 @@ export default {
 		Plus,
 		NcButton,
 	},
+	computed: {
+		isMobile() {
+			return window.isMobile
+		}
+	}
 };
 </script>

@@ -11,7 +11,7 @@ return [
 		['name' => 'rollapi#get_upload_path', 'url' => '/api/upload_path', 'verb' => 'GET'],
 		['name' => 'rollapi#create_roll', 'url' => '/api/rolls', 'verb' => 'POST'],
 		['name' => 'rollapi#get_rolls',	'url' => '/api/rolls', 'verb' => 'GET'],
-		['name' => 'rollapi#delete_roll',	'url' => '/api/rolls', 'verb' => 'DELETE'],
+		['name' => 'rollapi#delete_roll',	'url' => '/api/rolls/{uuid}', 'verb' => 'DELETE'],
 	],
 
 ];

@@ -1,13 +1,7 @@
 <template>
 	<div>
-		<div v-if="window.isMobile">
-			<NcEmptyContent
-				:name="t('rolls', 'Rolls is not available on mobile devices')"
-			>
-				<template #icon>
-					<CellphoneOff />
-				</template>
-			</NcEmptyContent>
+		<div v-if="isMobile">
+			<RecordNotAvailable />
 		</div>
 		<div v-else>
 			<canvas ref="ulMainCanvas" class="tw-w-full hidden tw-rounded-xl"></canvas>
@@ -19,20 +13,12 @@
 					v-show="status === statusOpts.ASKING_PERMISSION"
 					@click="() => initScreen()"
 				>
-					<NcEmptyContent
-						:name="t('rolls', 'Select a screen to get started')"
-						:description="
-							t(
-								'rolls',
-								'If you decide to share a only window, the webcam Picture in Picture will not be available'
-							)
-						"
-					>
-						<template #icon>
-							<MonitorShare />
-						</template>
-					</NcEmptyContent>
+					<SelectAScreenPlaceholder />
 				</button>
+				<ScreenBeingRecorded
+					v-show="status === statusOpts.RECORDING && ['screen', 'webcam-screen'].includes(activeStreamName)"
+					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl"
+				/>
 			</div>
 			<video id="screen-video" ref="screenVideo" muted autoplay class="invisible"></video>
 			<video
@@ -151,9 +137,7 @@ import Video from "vue-material-design-icons/Video.vue";
 import Stop from "vue-material-design-icons/Stop.vue";
 import Clock from "vue-material-design-icons/Clock.vue";
 import Monitor from "vue-material-design-icons/Monitor.vue";
-import MonitorShare from "vue-material-design-icons/MonitorShare.vue";
 import ArrowUp from "vue-material-design-icons/ArrowUp.vue";
-import CellphoneOff from "vue-material-design-icons/CellphoneOff.vue";
 import Webcam from "vue-material-design-icons/Webcam.vue";
 import OpenInNew from "vue-material-design-icons/OpenInNew.vue";
 import axios from "@nextcloud/axios";
@@ -163,6 +147,9 @@ import MarkdownEditor from "../components/MarkdownEditor.vue";
 import { randomString } from "../utils/funcs";
 import RecordActions from "../components/RecordActions.vue";
 import RecordSwitchSourceBtns from "../components/RecordSwitchSourceBtns.vue";
+import SelectAScreenPlaceholder from '../components/SelectAScreenPlaceholder.vue';
+import RecordNotAvailable from '../components/RecordNotAvailable.vue';
+import ScreenBeingRecorded from '../components/ScreenBeingRecorded.vue';
 
 dayjs.extend(dayjs_duration);
 
@@ -173,12 +160,10 @@ export default {
 	name: "Record",
 	components: {
 		NcButton,
-		CellphoneOff,
 		NcActionButton,
 		NcActions,
 		PictureInPictureBottomRight,
 		OpenInNew,
-		MonitorShare,
 		NcEmptyContent,
 		Video,
 		Stop,
@@ -190,6 +175,9 @@ export default {
 		Clock,
 		RecordActions,
 		RecordSwitchSourceBtns,
+		SelectAScreenPlaceholder,
+		RecordNotAvailable,
+		ScreenBeingRecorded,
 	},
 	setup() {
 		return {
@@ -204,6 +192,7 @@ export default {
 			webcamIsVisible: false,
 			documentPictureInPictureSupported: false,
 			webcamVideoVisibility: "hidden",
+			// screen, webcam-stream, webcam-screen
 			activeStreamName: "",
 			screenSharingHasEnded: false,
 			activeStream: undefined,
@@ -248,7 +237,7 @@ export default {
 			currentStream: "id, blob",
 		});
 
-		if (documentPictureInPicture && "window" in documentPictureInPicture) {
+		if (window.documentPictureInPicture) {
 			this.documentPictureInPictureSupported = true;
 		}
 	},
@@ -337,16 +326,22 @@ export default {
 			}
 
 			const mainStream = this.$refs.mainVideo.srcObject;
-			let streams = [...mainStream.getTracks()];
+			
+			const audioTrack = this.audioStream.getAudioTracks()[0]
+			const videoTrack = mainStream.getTracks()[0] 
+			
+			let streams = [videoTrack, audioTrack];
 
 			if (this.audioStream) {
-				streams = [...streams, ...this.audioStream.getTracks()];
+				streams = [...streams, audioTrack];
 			}
 
 			const mediaStream = new MediaStream(streams);
 
 			this.recorder = new MediaRecorder(mediaStream, {
 				mimeType: videoMime,
+				audioBitsPerSecond: audioTrack.getSettings().sampleRate,
+				videoBitsPerSecond: videoTrack.getSettings().sampleRate,
 			});
 
 			this.recorder.ondataavailable = (event) => {
@@ -612,7 +607,7 @@ export default {
 				blob: event.data,
 			});
 
-			console.log("Uploaded chunk!", this.recorder.state);
+			console.log("Saved chunk!", this.recorder.state);
 			if (this.recorder.state === "inactive") {
 				if (this.savingCompleted) {
 					return;
@@ -666,7 +661,6 @@ export default {
 
 		async uploadVideo() {
 			const duration = this.videoEndedAt.getTime() - this.videoStartedAt.getTime();
-
 			const chunksData = await this.appDB.table("currentStream").orderBy("id").toArray();
 
 			let recordedBlob = new Blob([...chunksData.map((c) => c.blob)], {
@@ -802,6 +796,9 @@ export default {
 		sortedComments() {
 			return this.comments.slice().reverse();
 		},
+		isMobile() {
+			return window.isMobile;
+		}
 	},
 };
 </script>

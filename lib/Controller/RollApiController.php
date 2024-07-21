@@ -238,16 +238,14 @@ class RollApiController extends ApiController {
 	}
 
 	#[NoAdminRequired]
-	public function deleteRoll(): Response {
-		$uuid = $this->request->getParam('uuid');
-		$user = $this->session->getUser();
-
+	public function deleteRoll(string $uuid): Response {
 		if (empty($uuid)) {
 			return new JSONResponse([
 				'message' => 'Missing uuid'
 			], Http::STATUS_NOT_FOUND);
 		}
-
+		
+		$user = $this->session->getUser();
 		$roll = $this->rollsDb->find($uuid);
 
 		if ($roll->getOwner() !== $user->getUID()) {
@@ -260,14 +258,16 @@ class RollApiController extends ApiController {
 			], Http::STATUS_NOT_FOUND);
 		}
 
-		// TODO:
-		$nodes = $this->storage->getById(intval($roll->getVideoFolder()));
+		$nodes = $this->storage->getById(
+			intval($roll->getVideoFolder())
+		);
 
 		foreach ($nodes as $node) {
 			$node->delete();
 		}
 
 		$this->rollsDb->delete($roll);
+
 		return new Response(Http::STATUS_OK);
 	}
 }

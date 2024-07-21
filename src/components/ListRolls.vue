@@ -2,10 +2,10 @@
 	<div>
 		<div v-if="ready">
 			<ul v-if="rolls.length">
-				<li v-for="roll in rolls" :key="roll.uuid">
+				<li v-for="roll in rolls" :key="roll.uuid" class="tw-relative">
 					<RouterLink
 						:to="'/watch/' + roll.uuid"
-						class="list-item tw-my-5 tw-flex tw-flex-col md:tw-flex-row tw-gap-2"
+						class="tw-relative list-item tw-my-5 tw-flex tw-flex-col md:tw-flex-row tw-gap-2"
 					>
 						<div class="tw-w-60 tw-h-30">
 							<img
@@ -23,6 +23,22 @@
 							</div>
 						</div>
 					</RouterLink>
+					<div class="tw-absolute tw-right-0 tw-top-0 tw-z-10">
+						<NcActions :inline="0">
+							<NcActionButton @click="showMessage('Edit')">
+								<template #icon>
+									<Share :size="20" />
+								</template>
+								Share
+							</NcActionButton>
+							<NcActionButton @click="() => onDeleteClicked(roll)">
+								<template #icon>
+									<Delete :size="20" />
+								</template>
+								Delete
+							</NcActionButton>
+						</NcActions>
+					</div>
 				</li>
 			</ul>
 			<div v-else>
@@ -40,12 +56,14 @@
 </template>
 
 <script>
-import { APP_API, DAV_URL, APP_URL } from "../constants";
+import { APP_API, DAV_URL, APP_URL, APP_INDEX } from "../constants";
 import axios from "@nextcloud/axios";
 import { NcListItem, NcActionButton, NcActions, NcLoadingIcon, NcEmptyContent } from "@nextcloud/vue";
 import MarkdownPreview from "./MarkdownPreview.vue";
 import RecordCircleOutline from "vue-material-design-icons/RecordCircleOutline.vue";
 import MovieRoll from "vue-material-design-icons/MovieRoll.vue";
+import Delete from "vue-material-design-icons/Delete.vue";
+import Share from "vue-material-design-icons/Share.vue";
 
 export default {
 	name: "ListRolls",
@@ -54,6 +72,10 @@ export default {
 		MarkdownPreview,
 		NcEmptyContent,
 		MovieRoll,
+		NcActionButton,
+		NcActions,
+		Delete,
+		Share
 	},
 	async mounted() {
 		let rolls = (await axios.get(`${APP_API}/rolls`)).data.data;
@@ -107,7 +129,17 @@ export default {
 			APP_URL,
 		};
 	},
-	methods: {},
+	methods: {
+		async onDeleteClicked(roll) {
+			const response = confirm(t('rolls', 'Do you really want to delete this Roll?'));
+			if (!response) {
+				return;
+			}
+
+			await axios.delete(`${APP_API}/rolls/${roll.uuid}`);
+			this.rolls = this.rolls.filter(el => el.uuid !== roll.uuid);
+		}
+	},
 };
 </script>
 

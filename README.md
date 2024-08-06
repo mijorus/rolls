@@ -1,3 +1,1 @@
-# Rolls
-
-A template to get started with Nextcloud app development.
+A WIP Nextcloud plugin

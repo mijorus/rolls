@@ -104,7 +104,7 @@ import Delete from "vue-material-design-icons/Delete.vue";
 import Send from "vue-material-design-icons/Send.vue";
 import Tab from "../components/Tab.vue";
 import { COMMENTS_DAYJS_FORMAT, PROMISE_STATUS } from "../utils/constants";
-import { createComment, deleteComment, editComment, getComments } from "../utils/comments";
+import { comments } from '../lib/comments'
 
 dayjs.extend(relativeTime);
 
@@ -155,7 +155,7 @@ export default {
 			}
 
 			this.commentsStatus = PROMISE_STATUS.pending;
-			this.comments = await getComments(this.roll.file.id);
+			this.comments = await comments.getComments(this.roll.file.id);
 			this.commentsStatus = PROMISE_STATUS.done;
 		},
 
@@ -170,12 +170,12 @@ export default {
 			try {
 				this.submitCommentStatus = PROMISE_STATUS.pending;
 				if (this.newCommenEditMode !== null) {
-					await editComment(fileId, this.newCommenEditMode, this.newComment);
+					await comments.editComment(fileId, this.newCommenEditMode, this.newComment);
 					await this.loadComments();
 					this.newCommenEditMode = null;
 				} else {
-					id = await createComment(fileId, this.newComment);
-					const newItem = await getComments(fileId, id);
+					id = await comments.createComment(fileId, this.newComment);
+					const newItem = await comments.getComments(fileId, id);
 					this.comments = [...this.comments, newItem[0]];
 				}
 			} catch (e) {
@@ -189,7 +189,7 @@ export default {
 
 		async removeComment(comment) {
 			const id = comment["oc:id"];
-			await deleteComment(this.roll.file.id, id);
+			await comments.deleteComment(this.roll.file.id, id);
 
 			let toDelete;
 			for (let i = 0; i < this.comments.length; i++) {

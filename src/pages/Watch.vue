@@ -89,7 +89,6 @@ import Delete from "vue-material-design-icons/Delete.vue";
 import Send from "vue-material-design-icons/Send.vue";
 import Tab from "../components/Tab.vue";
 import { COMMENTS_DAYJS_FORMAT, PROMISE_STATUS } from "../utils/constants";
-import { createComment, deleteComment, getComments } from "../utils/comments";
 import CommentsBox from "../components/CommentsBox.vue";
 
 dayjs.extend(relativeTime);

@@ -23,7 +23,7 @@
 							</div>
 						</div>
 					</RouterLink>
-					<div class="tw-absolute tw-right-0 tw-top-0 tw-z-10">
+					<div v-if="roll.isMine" class="tw-absolute tw-right-0 tw-top-0 tw-z-10">
 						<NcActions :inline="0">
 							<NcActionButton @click="showMessage('Edit')">
 								<template #icon>

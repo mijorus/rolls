@@ -28,6 +28,7 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Util;
 use Symfony\Component\Uid\Uuid;
+use OCA\Rolls\Service\RollService;
 
 /**
  * @psalm-suppress UnusedClass
@@ -52,6 +53,7 @@ class RollApiController extends ApiController
 
 	/**
 	 * An example API endpoint
+	 * Please leave that here because it looks nice :)
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]

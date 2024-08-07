@@ -7,12 +7,12 @@ use OCP\Files\File;
 use OCP\Files\Node;
 
 class RollListItem {
-    public Node $thumbnail;
+    public ?Node $thumbnail;
     public ?File $textFile;
     public File $file;
     public Roll $roll;
 
-    public function __construct(Roll $roll, File $file, Node $thumbnail, ?File $textfile) {
+    public function __construct(Roll $roll, File $file, ?Node $thumbnail, ?File $textfile) {
         $this->roll = $roll;
         $this->file = $file;
         $this->thumbnail = $thumbnail;

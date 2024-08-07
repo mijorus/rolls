@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OCA\Rolls\Controller;
+namespace OCA\Rolls\Service;
 
 use OCA\Rolls\Db\Roll;
 use OCA\Rolls\Db\RollsDb;
@@ -11,6 +11,7 @@ use OCA\Rolls\Utils\Funcs;
 use OCP\Files\IRootFolder;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\Share\IManager;
 use OCP\Util;
 use Symfony\Component\Uid\Uuid;
 
@@ -22,14 +23,14 @@ class RollService
 	private IUserSession $session;
 	private IRootFolder $storage;
 	private IUserManager $userManager;
-	protected RollsDb $rollsDb;
+	protected RollsDb $db;
 
-	public function __construct(RollsDb $rollsDb, IUserSession $session, IRootFolder $rootFolder, IUserManager $userManager)
+	public function __construct(RollsDb $db, IUserSession $session, IRootFolder $rootFolder, IManager $shareManager)
 	{
 		$this->storage = $rootFolder;
-		$this->rollsDb = $rollsDb;
-		$this->userManager = $userManager;
+		$this->db = $db;
 		$this->session = $session;
+		$this->shareManager = $shareManager;
 	}
 
 
@@ -67,7 +68,7 @@ class RollService
 			$this->storage->newFile($readmeFilePath, $requestText);
 		}
 
-		$roll = $this->rollsDb->create($uuid, $videoFile->getId(), $folder->getId(), $user->getUID());
+		$roll = $this->db->create($uuid, $videoFile->getId(), $folder->getId(), $user->getUID());
 
 		return $roll;
 	}
@@ -82,7 +83,7 @@ class RollService
 			$node->delete();
 		}
 
-		$this->rollsDb->delete($roll);
+		$this->db->delete($roll);
 	}
 
 	public function getRolls(?string $uuid): array
@@ -91,10 +92,10 @@ class RollService
 
 		$entities = [];
 
-		if ($uuid && $item = $this->rollsDb->find($uuid)) {
+		if ($uuid && $item = $this->db->find($uuid)) {
 			$entities[] = $item;
 		} else {
-			$entities = $this->rollsDb->findAll($user);
+			$entities = $this->db->findAll($user);
 		}
 
 		$userFolder = $this->storage->getUserFolder($user->getUID());
@@ -154,5 +155,6 @@ class RollService
 		}
 
 		return $output;
+	}
 	
 }

@@ -51,7 +51,7 @@ class RollsDb extends QBMapper {
 				$sqb->expr()->eq('s.share_with', $sqb->createNamedParameter($user->getUID(), IQueryBuilder::PARAM_STR))
 			)
 			->from($this->tableName, 't')
-			->leftJoin('t', 'share', 's', 't.video_file = s.file_source')
+			->leftJoin('t', 'share', 's', 't.video_folder = s.file_source')
 			->orderBy('t.id', 'desc');
 
 		$entities = array_merge($entities, $this->findEntities($sqb));

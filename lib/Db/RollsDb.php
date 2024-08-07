@@ -4,18 +4,25 @@ namespace OCA\Rolls\Db;
 
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\IRootFolder;
+use OCP\Files\Storage\IStorage;
 use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Share\IManager;
 use PDO;
 use Symfony\Component\Uid\Uuid;
 
 class RollsDb extends QBMapper {
 
 	protected $db;
+	private $shareManager;
+	private $storage;
 
-	public function __construct(IDBConnection $db) {
+	public function __construct(IDBConnection $db, IManager $shareManager, IRootFolder $storage) {
 		parent::__construct($db, 'rolls_videos', 'OCA\Rolls\Db\Roll');
+		$this->shareManager = $shareManager;
+		$this->storage = $storage;
 	}
 
 	public function find(string $uuid) {
@@ -43,18 +50,30 @@ class RollsDb extends QBMapper {
 		$entities = $this->findEntities($qb);
 
 		$sqb = $this->db->getQueryBuilder();
-		$sqb->select('t.*')
+		$sqb->select('*')
+			->from($this->tableName)
 			->where(
-				$sqb->expr()->neq('t.owner', $sqb->createNamedParameter($user->getUID(), IQueryBuilder::PARAM_STR))
+				$sqb->expr()->neq('owner', $sqb->createNamedParameter($user->getUID(), IQueryBuilder::PARAM_STR))
 			)
-			->where(
-				$sqb->expr()->eq('s.share_with', $sqb->createNamedParameter($user->getUID(), IQueryBuilder::PARAM_STR))
-			)
-			->from($this->tableName, 't')
-			->leftJoin('t', 'share', 's', 't.video_folder = s.file_source')
-			->orderBy('t.id', 'desc');
+			->orderBy('id', 'desc');
 
-		$entities = array_merge($entities, $this->findEntities($sqb));
+		$externalShares = [];
+		foreach ($this->findEntities($sqb) as $s) {
+			$nodes = $this->storage->getById($s->getVideoFolder());
+
+			foreach ($nodes as $node) {
+				if ($node) {
+					$shareList = $this->shareManager->getAccessList($node, false, false);
+					$accessUsers = $shareList['users'] ?? [];
+					if (in_array($user->getUID(), $accessUsers)) {
+						$externalShares[] = $s;
+						break;
+					}
+				}
+			}
+		}
+
+		$entities = array_merge($entities, $externalShares);
 
 		return $entities;
 	}

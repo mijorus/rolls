@@ -16,7 +16,7 @@
 			</div>
 
 			<div>
-				<div class="tw-flex tw-flex-row tw-items-center tw-gap-3 tw-mb-5">
+				<div class="tw-flex tw-flex-row tw-items-center tw-gap-3 tw-mb-5" ref="tabSelector">
 					<Tab
 						:title="t('rolls', 'description')"
 						name="description"
@@ -145,7 +145,8 @@ export default {
 			return;
 		}
 
-		const rolls = (await axios.get(`${APP_API}/rolls`, { params: { uuid } })).data.data;
+		const { data } = await axios.get(`${APP_API}/rolls`, { params: { uuid } });
+		const rolls = data.data;
 
 		if (rolls.length) {
 			this.roll = rolls[0];
@@ -162,7 +163,7 @@ export default {
 	methods: {
 		changeActiveTab(e) {
 			this.activeTab = e.name;
-			this.$refs.player.scrollIntoView();
+			this.$refs.tabSelector.scrollIntoView();
 		},
 
 		async loadDescription() {

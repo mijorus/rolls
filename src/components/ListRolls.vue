@@ -12,7 +12,7 @@
 								v-if="roll.thumbnail"
 								:src="DAV_URL + '/files/' + roll.thumbnail"
 								alt=""
-								class="tw-w-full tw-h-full tw-object-cover tw-rounded-xl"
+								class="tw-w-full tw-aspect-video tw-object-cover tw-rounded-xl"
 							/>
 							<div v-else class="tw-bg-black"></div>
 						</div>
@@ -60,7 +60,6 @@ import { APP_API, DAV_URL, APP_URL, APP_INDEX } from "../constants";
 import axios from "@nextcloud/axios";
 import { NcListItem, NcActionButton, NcActions, NcLoadingIcon, NcEmptyContent } from "@nextcloud/vue";
 import MarkdownPreview from "./MarkdownPreview.vue";
-import RecordCircleOutline from "vue-material-design-icons/RecordCircleOutline.vue";
 import MovieRoll from "vue-material-design-icons/MovieRoll.vue";
 import Delete from "vue-material-design-icons/Delete.vue";
 import Share from "vue-material-design-icons/Share.vue";
@@ -75,10 +74,11 @@ export default {
 		NcActionButton,
 		NcActions,
 		Delete,
-		Share
+		Share,
 	},
 	async mounted() {
-		let rolls = (await axios.get(`${APP_API}/rolls`)).data.data;
+		let { data } = await axios.get(`${APP_API}/rolls`);
+		let rolls = data.data;
 
 		this.rolls = rolls.map((roll) => {
 			if (!roll.text) {
@@ -131,14 +131,14 @@ export default {
 	},
 	methods: {
 		async onDeleteClicked(roll) {
-			const response = confirm(t('rolls', 'Do you really want to delete this Roll?'));
+			const response = confirm(t("rolls", "Do you really want to delete this Roll?"));
 			if (!response) {
 				return;
 			}
 
 			await axios.delete(`${APP_API}/rolls/${roll.uuid}`);
-			this.rolls = this.rolls.filter(el => el.uuid !== roll.uuid);
-		}
+			this.rolls = this.rolls.filter((el) => el.uuid !== roll.uuid);
+		},
 	},
 };
 </script>

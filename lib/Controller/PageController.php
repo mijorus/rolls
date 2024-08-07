@@ -52,9 +52,18 @@ class PageController extends Controller {
 		if (class_exists(LoadViewer::class)) {
 			$this->eventDispatcher->dispatchTyped(new LoadViewer());
 		}
-		
+
 		$response->addHeader('Feature-Policy', "");
 
 		return $response;
+	}
+
+	#[NoCSRFRequired]
+	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'GET', url: '/phpinfo')]
+	public function info() {
+		phpinfo();
+		die;
 	}
 }

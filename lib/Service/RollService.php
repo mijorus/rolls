@@ -22,7 +22,7 @@ class RollService
 {
 	private IUserSession $session;
 	private IRootFolder $storage;
-	private IUserManager $userManager;
+	private IManager $shareManager;
 	protected RollsDb $db;
 
 	public function __construct(RollsDb $db, IUserSession $session, IRootFolder $rootFolder, IManager $shareManager)

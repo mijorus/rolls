@@ -91,16 +91,6 @@
 					/>
 				</div>
 				<div class="tw-relative">
-					<!-- <div
-					v-if="documentPictureInPictureSupported"
-					class="tw-absolute tw-top-0 tw-right-0"
-				>
-					<NcButton type="tertiary" @click="openCommentPip">
-						<template #icon>
-							<OpenInNew :size="20" />
-						</template>
-					</NcButton>
-				</div> -->
 					<span ref="addCommentBox">
 						<div
 							class="tw-text-white tw-inline-flex tw-px-2 tw-py-1 tw-rounded-full tw-flex-row tw-gap-2 bg-primary"
@@ -147,9 +137,9 @@ import MarkdownEditor from "../components/MarkdownEditor.vue";
 import { randomString } from "../utils/funcs";
 import RecordActions from "../components/RecordActions.vue";
 import RecordSwitchSourceBtns from "../components/RecordSwitchSourceBtns.vue";
-import SelectAScreenPlaceholder from '../components/SelectAScreenPlaceholder.vue';
-import RecordNotAvailable from '../components/RecordNotAvailable.vue';
-import ScreenBeingRecorded from '../components/ScreenBeingRecorded.vue';
+import SelectAScreenPlaceholder from "../components/SelectAScreenPlaceholder.vue";
+import RecordNotAvailable from "../components/RecordNotAvailable.vue";
+import ScreenBeingRecorded from "../components/ScreenBeingRecorded.vue";
 
 dayjs.extend(dayjs_duration);
 
@@ -190,7 +180,7 @@ export default {
 			comments: [],
 			commentAt: null,
 			webcamIsVisible: false,
-			documentPictureInPictureSupported: false,
+			pictureInPictureSupported: false,
 			webcamVideoVisibility: "hidden",
 			// screen, webcam-stream, webcam-screen
 			activeStreamName: "",
@@ -236,10 +226,6 @@ export default {
 		this.appDB.version(1).stores({
 			currentStream: "id, blob",
 		});
-
-		if (window.documentPictureInPicture) {
-			this.documentPictureInPictureSupported = true;
-		}
 	},
 	methods: {
 		async initScreen() {
@@ -326,10 +312,10 @@ export default {
 			}
 
 			const mainStream = this.$refs.mainVideo.srcObject;
-			
-			const audioTrack = this.audioStream.getAudioTracks()[0]
-			const videoTrack = mainStream.getTracks()[0] 
-			
+
+			const audioTrack = this.audioStream.getAudioTracks()[0];
+			const videoTrack = mainStream.getTracks()[0];
+
 			let streams = [videoTrack, audioTrack];
 
 			if (this.audioStream) {
@@ -482,7 +468,7 @@ export default {
 			}
 		},
 
-		async openWebcam() {
+		async openWebcamInPip() {
 			if (!this.$refs.webcamVideo) {
 				return;
 			}
@@ -490,12 +476,7 @@ export default {
 			await this.createFlippedWebcamStream();
 
 			if (document.pictureInPictureEnabled) {
-				try {
-					await this.$refs.webcamVideo.requestPictureInPicture();
-				} catch (err) {
-					this.webcamVideoVisibility = "visible";
-					console.warn(err);
-				}
+				await this.$refs.webcamVideo.requestPictureInPicture();
 			}
 		},
 
@@ -798,7 +779,7 @@ export default {
 		},
 		isMobile() {
 			return window.isMobile;
-		}
+		},
 	},
 };
 </script>

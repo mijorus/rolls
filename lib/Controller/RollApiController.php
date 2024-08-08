@@ -123,6 +123,7 @@ class RollApiController extends ApiController
 			$thumbnail = Funcs::getUserFilePath($user, $this->storage, $item->thumbnail);
 			$textPath = Funcs::getUserFilePath($user, $this->storage, $item->textFile);
 			$path = Funcs::getUserFilePath($user, $this->storage, $item->file);
+			$folder = Funcs::getUserFilePath($user, $this->storage, $item->file->getParent());
 			$creationDate = $item->roll->getCreatedAt() ?? $item->file->getMtime();
 			$owner = $this->userManager->get($item->roll->getOwner());
 			$text = $item->textFile ? $item->textFile->getContent() : null;
@@ -137,6 +138,7 @@ class RollApiController extends ApiController
 				'creationDate' => $creationDate,
 				'uuid' => $item->roll->getUuid(),
 				'file' => [
+					'folder' => $folder,
 					'id' => $item->file->getId(),
 					'path' => $path,
 				],

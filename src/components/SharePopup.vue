@@ -1,25 +1,34 @@
 <template>
-	<div class="tw-mb-10">
-		<router-link to="/record">
-			<NcButton v-if="!isMobile">
-				<template #icon>
-					<Plus :size="20" />
-				</template>
-				{{ t("rolls", "New roll") }}
-			</NcButton>
-		</router-link>
-	</div>
+	<NcModal ref="modalRef" @close="closeModal">
+		<div class="modal__content" style="padding: 50px; text-align: center">
+			<div class="form-group">
+				<NcSelect
+					ref="userselect"
+					:userSelect="true"
+					input-id="user-select"
+					:options="selectOptions"
+					:inputLabel="t('files_sharing', 'Search for share recipients')"
+					:placeholder="t('rolls', 'Name or email')"
+				/>
+			</div>
+
+			<NcButton> Submit </NcButton>
+		</div>
+	</NcModal>
 </template>
 
 <script>
-import { NcButton } from "@nextcloud/vue";
+import { NcButton, NcSelect, NcModal } from "@nextcloud/vue";
 import axios from "@nextcloud/axios";
 import { SHARE_API_HEADERS, SHARE_API_URL } from "../constants";
+import { removeUserPath } from "../utils/funcs";
 
 export default {
 	name: "SharePopup",
 	components: {
 		NcButton,
+		NcModal,
+		NcSelect,
 	},
 	props: {
 		path: {
@@ -34,23 +43,37 @@ export default {
 			ready: false,
 			shareData: null,
 			sharee: [],
+			selectOptions: [],
 		};
 	},
 	async mounted() {
-		const { data } = await axios.get(`${SHARE_API_URL}`, {
+		let path = removeUserPath(this.$props.path);
+
+		const { data } = await axios.get(`${SHARE_API_URL}/shares`, {
 			headers: SHARE_API_HEADERS,
 			params: {
+				path,
 				format: "json",
-				path: this.$props.path,
 				reshares: true,
 			},
 		});
 
 		this.shareData = data.ocs.data;
 		this.ready = true;
+		document.querySelector('#user-select')?.addEventListener('keyup', this.getSharee)
+		// this.selectOptions = this.shareData.map((el) => {
+		// 	return {
+		// 		id: el.id,
+		// 		displayName: el.share_with_displayname,
+		// 		isNoUser: false,
+		// 		user: el.share_with,
+		// 	};
+		// });
 	},
 	methods: {
-		async getSharee(query) {
+		async getSharee(e) {
+			const query = e.target.value;
+
 			this.sharee = [];
 			const { data } = await axios.get(`${SHARE_API_URL}/sharee`, {
 				headers: SHARE_API_HEADERS,
@@ -80,6 +103,10 @@ export default {
 					headers: SHARE_API_HEADERS,
 				}
 			);
+		},
+
+		closeModal() {
+			this.$emit("close");
 		},
 	},
 };

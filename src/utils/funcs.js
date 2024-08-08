@@ -39,17 +39,24 @@ export function escapeXml(s) {
 }
 
 export function detectMobile() {
-    const toMatch = [
-        /Android/i,
-        /webOS/i,
-        /iPhone/i,
-        /iPad/i,
-        /iPod/i,
-        /BlackBerry/i,
-        /Windows Phone/i
-    ];
-    
-    return toMatch.some((toMatchItem) => {
-        return navigator.userAgent.match(toMatchItem);
-    });
+	const toMatch = [
+		/Android/i,
+		/webOS/i,
+		/iPhone/i,
+		/iPad/i,
+		/iPod/i,
+		/BlackBerry/i,
+		/Windows Phone/i
+	];
+
+	return toMatch.some((toMatchItem) => {
+		return navigator.userAgent.match(toMatchItem);
+	});
+}
+
+export function removeUserPath(path) {
+	let s = path.split('/');
+	s.splice(0, 2)
+
+	return '/' + s.join('/');
 }

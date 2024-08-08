@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<SharePopup :path="shareModalPath" :itemType="'folder'" v-if="showShareModal" @close="closeShareModal" />
 		<div v-if="ready">
 			<ul v-if="rolls.length">
 				<li v-for="roll in rolls" :key="roll.uuid" class="tw-relative">
@@ -25,7 +26,7 @@
 					</RouterLink>
 					<div v-if="roll.isMine" class="tw-absolute tw-right-0 tw-top-0 tw-z-10">
 						<NcActions :inline="0">
-							<NcActionButton @click="showMessage('Edit')">
+							<NcActionButton @click="openShareModal(roll)">
 								<template #icon>
 									<Share :size="20" />
 								</template>
@@ -63,6 +64,7 @@ import MarkdownPreview from "./MarkdownPreview.vue";
 import MovieRoll from "vue-material-design-icons/MovieRoll.vue";
 import Delete from "vue-material-design-icons/Delete.vue";
 import Share from "vue-material-design-icons/Share.vue";
+import SharePopup from "./SharePopup.vue";
 
 export default {
 	name: "ListRolls",
@@ -75,6 +77,7 @@ export default {
 		NcActions,
 		Delete,
 		Share,
+		SharePopup,
 	},
 	async mounted() {
 		let { data } = await axios.get(`${APP_API}/rolls`);
@@ -123,6 +126,8 @@ export default {
 	},
 	data() {
 		return {
+			showShareModal: false,
+			shareModalPath: null,
 			ready: false,
 			rolls: [],
 			DAV_URL,
@@ -130,6 +135,16 @@ export default {
 		};
 	},
 	methods: {
+		openShareModal(roll) {
+			this.shareModalPath = roll.file.folder;
+			this.showShareModal = true;
+		},
+
+		closeShareModal() {
+			this.shareModalPath = null;
+			this.showShareModal = false;
+		},
+
 		async onDeleteClicked(roll) {
 			const response = confirm(t("rolls", "Do you really want to delete this Roll?"));
 			if (!response) {

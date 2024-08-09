@@ -666,9 +666,9 @@ export default {
 			}
 
 			this.comments.forEach((comment) => {
-				text += `> [${comment.ts}]<br>`;
+				text += `> [${comment.ts}]\n`;
 				text += `> ${comment.text}`;
-				text += `<br><br>`;
+				text += `\n\n`;
 			});
 
 			const formData = new FormData();

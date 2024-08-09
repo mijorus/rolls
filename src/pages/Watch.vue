@@ -60,7 +60,14 @@
 				</div>
 
 				<div>
-					<div ref="editor" v-show="activeTab === 'description'"></div>
+					<div v-show="activeTab === 'description'">
+						<div v-if="!editMode">
+							<button class="tw-absolute tw-right-0 tw-z-10" @click="enableEditMode">
+								<IconEdit :size="20" />
+							</button>
+						</div>
+						<div ref="editor"></div>
+					</div>
 					<div v-show="activeTab === 'comments'">
 						<CommentsBox :roll="roll" v-if="ready" />
 					</div>
@@ -171,66 +178,69 @@ export default {
 
 			const descriptionPlaceholder = `*${t("rolls", "No description provided")}*`;
 
-			this.description = descriptionPlaceholder;
+			let content = descriptionPlaceholder;
 
 			if (text) {
 				if (text.startsWith("#")) {
-					const tokens = text.split("\n", 2);
+					const tokens = text.split("\n");
 					this.title = tokens[0].replace(/^#/, "").trim();
 
 					if (tokens.length > 1) {
-						this.description = tokens[1];
+						tokens.splice(0, 1);
+						content = tokens.join("\n");
 					}
 				} else {
-					this.description = text.trim();
+					content = text;
+				}
 
-					if (!this.description.length) {
-						this.description = descriptionPlaceholder;
-					} else {
-						const blockQuoteReg = new RegExp(/(^(\>{1})(\s)(.*)(?:$)?\n)+/, "gm");
+				content = content.trim();
 
-						let blockQuotes = text.match(blockQuoteReg) || [];
-						let markers = [];
+				if (!content.length) {
+					content = descriptionPlaceholder;
+				} else {
+					const blockQuoteReg = new RegExp(/(^(\>{1})(\s)(.*)(?:$)?\n)+/, "gm");
 
-						const timestampRegex = new RegExp(/^>\s\[((\d{2}:\d{2})|((\d{2}:)\d{2}:\d{2}))\]\n/);
+					let blockQuotes = text.match(blockQuoteReg) || [];
+					let markers = [];
 
-						for (let element of blockQuotes) {
-							element = element.trim();
-							const match = element.match(timestampRegex);
+					const timestampRegex = new RegExp(/^>\s\[((\d{2}:\d{2})|((\d{2}:)\d{2}:\d{2}))\]\n/);
 
-							if (!match) {
-								continue;
-							}
+					for (let element of blockQuotes) {
+						element = element.trim();
+						const match = element.match(timestampRegex);
 
-							let time = 0;
-							const lines = element.split(">");
-
-							if (lines.length < 3) {
-								// Empty note
-								continue;
-							}
-
-							const contentString = lines[2].trim();
-							const durationString = match[1];
-							const tokens = durationString.split(":").map((el) => parseInt(el));
-
-							if (tokens.length === 2) {
-								// Minutes, seconds
-								time = tokens[0] * 60 + tokens[1];
-							} else {
-								// Hours, minutes, seconds
-								time = tokens[0] * 3600 + tokens[1] * 60 + tokens[2];
-							}
-
-							markers.push({
-								time,
-								label: contentString,
-							});
+						if (!match) {
+							continue;
 						}
 
-						this.markers = markers;
-						this.description = convertUrlsToMarkdown(this.description);
+						let time = 0;
+						const lines = element.split(">");
+
+						if (lines.length < 3) {
+							// Empty note
+							continue;
+						}
+
+						const contentString = lines[2].trim();
+						const durationString = match[1];
+						const tokens = durationString.split(":").map((el) => parseInt(el));
+
+						if (tokens.length === 2) {
+							// Minutes, seconds
+							time = tokens[0] * 60 + tokens[1];
+						} else {
+							// Hours, minutes, seconds
+							time = tokens[0] * 3600 + tokens[1] * 60 + tokens[2];
+						}
+
+						markers.push({
+							time,
+							label: contentString,
+						});
 					}
+
+					this.markers = markers;
+					content = convertUrlsToMarkdown(content);
 				}
 			}
 
@@ -241,7 +251,7 @@ export default {
 
 				if (this.editMode) {
 					let editorConf = {
-						content: this.description,
+						content: content,
 						el: this.$refs.editor,
 						readOnly: false,
 					};
@@ -257,14 +267,18 @@ export default {
 
 					this.editor = await window.OCA.Text.createEditor(editorConf);
 				} else {
-					console.log(this.description);
 					this.editor = await window.OCA.Text.createEditor({
-						content: this.description,
+						content: content,
 						el: this.$refs.editor,
 						readOnly: true,
 					});
 				}
 			}
+		},
+
+		enableEditMode() {
+			this.editMode = true;
+			this.loadDescription();
 		},
 
 		async deleteRoll() {

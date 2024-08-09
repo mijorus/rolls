@@ -1,7 +1,7 @@
 <template>
 	<NcModal ref="modalRef" @close="closeModal">
 		<div class="modal__content" style="padding: 50px; text-align: center">
-			<label for="user-select" class="tw-mb-2">{{ t('rolls', 'Search for share recipients') }}</label>
+			<label for="user-select" class="tw-mb-2">{{ t("rolls", "Search for share recipients") }}</label>
 			<div class="form-group tw-flex tw-flex-row tw-justify-center tw-items-end tw-gap-2">
 				<NcSelect
 					v-model="selectedOption"
@@ -15,15 +15,17 @@
 					:placeholder="t('rolls', 'Name or email')"
 				/>
 				<div>
-					<NcButton>{{ t("rolls", "Add") }}</NcButton>
+					<NcButton :disabled="!selectOptions.length" @click="() => shareWith()">{{
+						t("rolls", "Add")
+					}}</NcButton>
 				</div>
 			</div>
 			<div class="tw-mt-10 tw-max-w-80 tw-m-auto share-list">
 				<ul>
 					<NcListItem
-						v-for="user in shareData"
-						:key="user.id"
-						:name="user.share_with_displayname"
+						v-for="share in shareData"
+						:key="share.id"
+						:name="share.share_with_displayname"
 						counterType="highlighted"
 						:force-display-actions="true"
 					>
@@ -31,12 +33,12 @@
 							<NcAvatar
 								disable-menu
 								:size="44"
-								:user="user.share_with"
-								:display-name="user.share_with_displayname"
+								:user="share.share_with"
+								:display-name="share.share_with_displayname"
 							/>
 						</template>
 						<template #actions>
-							<NcActionButton @click="() => removeShare(user)">
+							<NcActionButton :disabled="busy" @click="() => removeShare(share)" v-if="share.can_delete">
 								<template #icon>
 									<Delete :size="20" />
 								</template>
@@ -78,30 +80,38 @@ export default {
 	},
 	data() {
 		return {
+			busy: false,
 			ready: false,
 			shareData: null,
 			sharee: [],
 			selectOptions: [],
-			selectedOption: [],
+			selectedOption: null,
 		};
 	},
 	async mounted() {
-		let path = removeUserPath(this.$props.path);
-
-		const { data } = await axios.get(`${SHARE_API_URL}/shares`, {
-			headers: SHARE_API_HEADERS,
-			params: {
-				path,
-				format: "json",
-				reshares: true,
-			},
-		});
-
-		this.shareData = data.ocs.data;
-		this.ready = true;
 		document.querySelector("#user-select")?.addEventListener("keyup", debounce(this.getSharee, 500));
+		await this.getShares();
+		this.ready = true;
+	},
+	destroyed() {
+		document.querySelector("#user-select")?.removeEventListener("keyup", debounce);
 	},
 	methods: {
+		async getShares() {
+			let path = removeUserPath(this.$props.path);
+
+			const { data } = await axios.get(`${SHARE_API_URL}/shares`, {
+				headers: SHARE_API_HEADERS,
+				params: {
+					path,
+					format: "json",
+					reshares: true,
+				},
+			});
+
+			this.shareData = data.ocs.data;
+		},
+
 		async getSharee(e) {
 			const query = e.target.value;
 
@@ -122,22 +132,33 @@ export default {
 			});
 
 			this.sharee = data.ocs.data.users;
-			this.selectOptions = this.sharee.map((el, i) => {
-				return {
-					id: i.toString(),
-					subname: el.subline,
-					displayName: el.shareWithDisplayNameUnique,
-					isNoUser: false,
-					user: el.label,
-				};
-			});
+
+			const currentShares = this.shareData.map((el) => el.share_with);
+
+			this.selectOptions = this.sharee
+				.filter((el) => {
+					return !currentShares.includes(el.value.shareWith);
+				})
+				.map((el, i) => {
+					return {
+						id: i.toString(),
+						subname: el.subline,
+						displayName: el.shareWithDisplayNameUnique,
+						isNoUser: false,
+						user: el.value.shareWith,
+					};
+				});
 		},
 
-		async shareWith(userUID) {
+		async shareWith() {
+			let path = removeUserPath(this.$props.path);
+			const userUID = this.selectedOption.user;
+
+			this.busy = true;
 			const { data } = await axios.post(
-				`${SHARE_API_URL}/sharee`,
+				`${SHARE_API_URL}/shares`,
 				{
-					path: this.$props.path,
+					path,
 					shareType: 0,
 					permissions: 1,
 					shareWith: userUID,
@@ -147,9 +168,27 @@ export default {
 					headers: SHARE_API_HEADERS,
 				}
 			);
+
+			this.busy = false;
+			this.selectedOption = null;
+			this.selectOptions = [];
+
+			this.getShares()
 		},
 
-		async removeShare(user) {},
+		async removeShare(share) {
+			if (!share.can_delete) {
+				return;
+			}
+
+			this.busy = true;
+			const { data } = await axios.delete(`${SHARE_API_URL}/shares/${share.id}`, {
+				headers: SHARE_API_HEADERS,
+			});
+
+			await this.getShares()
+			this.busy = false;
+		},
 
 		closeModal() {
 			this.$emit("close");

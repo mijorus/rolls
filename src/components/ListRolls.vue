@@ -13,12 +13,18 @@
 								v-if="roll.thumbnail"
 								:src="DAV_URL + '/files/' + roll.thumbnail"
 								alt=""
-								class="tw-w-full tw-aspect-video tw-object-cover tw-rounded-xl"
+								class="tw-w-56 tw-aspect-video tw-object-cover tw-rounded-xl"
 							/>
 							<div v-else class="tw-bg-black"></div>
 						</div>
 						<div>
-							<h2 class="tw-text-xl">{{ roll.title }}</h2>
+							<h2 class="tw-text-xl tw-mb-0">{{ roll.title }}</h2>
+							<small class="muted"
+								>{{ t("roll", "Created by") }}:
+								<a :href="`${APP_INDEX}/u/${roll.owner.id}`" class="tw-underline">
+									{{ roll.owner.displayName }}
+								</a>
+							</small>
 							<div class="muted tw-text-muted tw-whitespace-pre-line tw-overflow-hidden tw-text-ellipsis">
 								{{ roll.description }}
 							</div>
@@ -132,6 +138,7 @@ export default {
 			rolls: [],
 			DAV_URL,
 			APP_URL,
+			APP_INDEX,
 		};
 	},
 	methods: {

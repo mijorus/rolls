@@ -125,6 +125,7 @@ class RollService
 
 			$thumbnailNode = null;
 			$textFileNode = null;
+			$videoFolderNode = null;
 
 			try {
 				$readmeFilePath = Funcs::joinPaths($file->getParent()->getPath(), 'README.md');

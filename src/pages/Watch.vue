@@ -60,10 +60,13 @@
 				</div>
 
 				<div>
-					<div v-show="activeTab === 'description'">
-						<div v-if="!editMode">
-							<button class="tw-absolute tw-right-0 tw-z-10" @click="enableEditMode">
+					<div v-show="activeTab === 'description'" class="tw-relative">
+						<div class="tw-text-right">
+							<button :disabled="busy" v-if="!editMode" class="tw-z-10" @click="enableEditMode">
 								<IconEdit :size="20" />
+							</button>
+							<button :disabled="busy" v-else class="tw-z-10" @click="disableEditMode">
+								<Close :size="20" />
 							</button>
 						</div>
 						<div ref="editor"></div>
@@ -93,6 +96,7 @@ import TextIcon from "vue-material-design-icons/Text.vue";
 import IconEdit from "vue-material-design-icons/Pencil.vue";
 import ArrowDown from "vue-material-design-icons/ArrowDown.vue";
 import Delete from "vue-material-design-icons/Delete.vue";
+import Close from "vue-material-design-icons/Close.vue";
 import Send from "vue-material-design-icons/Send.vue";
 import Tab from "../components/Tab.vue";
 import { COMMENTS_DAYJS_FORMAT, PROMISE_STATUS } from "../utils/constants";
@@ -121,6 +125,7 @@ export default {
 		IconEdit,
 		Delete,
 		CommentsBox,
+		Close,
 	},
 	data() {
 		return {
@@ -139,21 +144,14 @@ export default {
 			commentsStatus: PROMISE_STATUS.done,
 			submitCommentStatus: PROMISE_STATUS.done,
 			ready: false,
+			busy: false,
 			PROMISE_STATUS,
 			currentUser: window.OC.getCurrentUser(),
 			newComment: "",
 		};
 	},
 	async mounted() {
-		const uuid = this.$route.params.uuid;
-
-		if (!validateUUID(uuid)) {
-			alert(t("rolls", "This URL is not valid"));
-			return;
-		}
-
-		const { data } = await axios.get(`${APP_API}/rolls`, { params: { uuid } });
-		const rolls = data.data;
+		const rolls = await this.getRoll();
 
 		if (rolls.length) {
 			this.roll = rolls[0];
@@ -168,6 +166,19 @@ export default {
 		this.ready = true;
 	},
 	methods: {
+		async getRoll() {
+			const uuid = this.$route.params.uuid;
+
+			if (!validateUUID(uuid)) {
+				alert(t("rolls", "This URL is not valid"));
+				return;
+			}
+
+			const { data } = await axios.get(`${APP_API}/rolls`, { params: { uuid } });
+			const rolls = data.data;
+			return rolls;
+		},
+
 		changeActiveTab(e) {
 			this.activeTab = e.name;
 			this.$refs.tabSelector.scrollIntoView();
@@ -278,6 +289,20 @@ export default {
 
 		enableEditMode() {
 			this.editMode = true;
+			this.loadDescription();
+		},
+
+		async disableEditMode() {
+			this.editMode = false;
+
+			this.busy = true
+			const rolls = await this.getRoll();
+			
+			if (rolls.length) {
+				this.roll = rolls[0];
+			}
+			
+			this.busy = false
 			this.loadDescription();
 		},
 

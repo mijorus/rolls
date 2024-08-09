@@ -166,16 +166,18 @@ class RollApiController extends ApiController
 		}
 
 		$user = $this->session->getUser();
-		$roll = $this->rollsDb->find($uuid);
+		$rolls = $this->rollsDb->find($uuid);
 
-		if ($roll->getOwner() !== $user->getUID()) {
-			return new Response(Http::STATUS_UNAUTHORIZED);
-		}
+		$roll = sizeof($rolls) ? $rolls[0] : null;
 
 		if (!$roll) {
 			return new JSONResponse([
 				'message' => 'Item not found in database'
 			], Http::STATUS_NOT_FOUND);
+		}
+
+		if ($roll->getOwner() !== $user->getUID()) {
+			return new Response(Http::STATUS_UNAUTHORIZED);
 		}
 
 		$this->service->deleteRoll($roll);

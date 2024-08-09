@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\Rolls\Service;
 
+use Exception;
 use OCA\Rolls\Db\Roll;
 use OCA\Rolls\Db\RollsDb;
 use OCA\Rolls\Entity\RollListItem;
@@ -63,10 +64,8 @@ class RollService
 		$videoFile = $this->storage->newFile($filename, $requestFile);
 		$tbFolder->newFile($videoFilename . '.' . $tbExt, $thumbFile);
 
-		if (strlen($requestText) > 0) {
-			$readmeFilePath = Funcs::joinPaths($folder->getPath(), 'README.md');
-			$this->storage->newFile($readmeFilePath, $requestText);
-		}
+		$readmeFilePath = Funcs::joinPaths($folder->getPath(), 'README.md');
+		$this->storage->newFile($readmeFilePath, $requestText);
 
 		$roll = $this->db->create($uuid, $videoFile->getId(), $folder->getId(), $user->getUID());
 
@@ -92,8 +91,12 @@ class RollService
 
 		$entities = [];
 
-		if ($uuid && $item = $this->db->find($uuid)) {
-			$entities[] = $item;
+		if ($uuid) {
+			$item = $this->db->find($uuid);
+
+			if (sizeof($item)) {
+				$entities[] = $item[0];
+			}
 		} else {
 			$entities = $this->db->findAll($user);
 		}
@@ -125,7 +128,6 @@ class RollService
 
 			$thumbnailNode = null;
 			$textFileNode = null;
-			$videoFolderNode = null;
 
 			try {
 				$readmeFilePath = Funcs::joinPaths($file->getParent()->getPath(), 'README.md');

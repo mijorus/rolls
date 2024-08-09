@@ -1,10 +1,14 @@
 <template>
 	<div>
+		<NcNoteCard v-if="ready && !roll" type="error" :heading="t('rolls', 'Error')">
+			{{ t("rolls", "This roll was not found") }}
+		</NcNoteCard>
+
 		<div v-if="ready && videoUrl" class="tw-mb-10" ref="player">
 			<VideoPlayer :src="videoUrl" :markers="markers"></VideoPlayer>
 		</div>
 
-		<div>
+		<div v-if="ready && roll">
 			<div class="tw-mb-5" v-if="ready">
 				<h1 class="!tw-text-3xl tw-font-bold">{{ title }}</h1>
 				<small
@@ -51,6 +55,12 @@
 							<div class="tw-capitalize">{{ t("files", "Download") }}</div>
 						</a>
 					</NcButton>
+					<NcButton v-if="ready && roll.isMine" class="button" @click="openShareModal">
+						<template #icon>
+							<Share :size="20" />
+						</template>
+						<div class="tw-capitalize">{{ t("files", "Share") }}</div>
+					</NcButton>
 					<NcButton v-if="ready && roll.isMine" class="button" type="error" @click="deleteRoll">
 						<template #icon>
 							<Delete :size="20" />
@@ -61,13 +71,16 @@
 
 				<div>
 					<div v-show="activeTab === 'description'" class="tw-relative">
-						<div class="tw-text-right">
+						<div class="tw-text-right" v-if="roll && roll.isMine">
 							<button :disabled="busy" v-if="!editMode" class="tw-z-10" @click="enableEditMode">
 								<IconEdit :size="20" />
 							</button>
 							<button :disabled="busy" v-else class="tw-z-10" @click="disableEditMode">
 								<Close :size="20" />
 							</button>
+						</div>
+						<div class="muted" v-if="roll.text.length === 0 && !editMode">
+							<i>{{ t('rolls', 'No description provided') }}</i>
 						</div>
 						<div ref="editor"></div>
 					</div>
@@ -77,6 +90,13 @@
 				</div>
 			</div>
 		</div>
+
+		<SharePopup
+			:path="roll.file.folder"
+			itemType="folder"
+			v-if="showShareModal && roll.isMine"
+			@close="closeShareModal"
+		/>
 	</div>
 </template>
 
@@ -89,7 +109,7 @@ import { APP_API, APP_INDEX, APP_URL, DAV_URL, REMOTE_URL } from "../constants";
 import { convertUrlsToMarkdown, validateUUID, xmlResponse } from "../utils/funcs";
 import MarkdownPreview from "../components/MarkdownPreview.vue";
 import MarkdownEditor from "../components/MarkdownEditor.vue";
-import { NcLoadingIcon, NcListItem, NcAvatar, NcActions, NcButton, NcActionButton } from "@nextcloud/vue";
+import { NcLoadingIcon, NcListItem, NcAvatar, NcActions, NcButton, NcActionButton, NcNoteCard } from "@nextcloud/vue";
 import Comment from "vue-material-design-icons/Comment.vue";
 import CommentOff from "vue-material-design-icons/CommentOff.vue";
 import TextIcon from "vue-material-design-icons/Text.vue";
@@ -98,9 +118,11 @@ import ArrowDown from "vue-material-design-icons/ArrowDown.vue";
 import Delete from "vue-material-design-icons/Delete.vue";
 import Close from "vue-material-design-icons/Close.vue";
 import Send from "vue-material-design-icons/Send.vue";
+import Share from "vue-material-design-icons/Share.vue";
 import Tab from "../components/Tab.vue";
 import { COMMENTS_DAYJS_FORMAT, PROMISE_STATUS } from "../utils/constants";
 import CommentsBox from "../components/CommentsBox.vue";
+import SharePopup from "../components/SharePopup.vue";
 
 dayjs.extend(relativeTime);
 
@@ -125,11 +147,15 @@ export default {
 		IconEdit,
 		Delete,
 		CommentsBox,
+		NcNoteCard,
 		Close,
+		Share,
+		SharePopup,
 	},
 	data() {
 		return {
 			APP_INDEX,
+			showShareModal: false,
 			activeTab: "description",
 			/** @type { object | undefined} */
 			roll: undefined,
@@ -160,6 +186,7 @@ export default {
 
 			this.videoUrl = `${DAV_URL}/files${this.roll.file.path}`;
 			this.title = creationDate.toLocaleString() + ", Roll";
+
 			this.loadDescription();
 		}
 
@@ -168,11 +195,6 @@ export default {
 	methods: {
 		async getRoll() {
 			const uuid = this.$route.params.uuid;
-
-			if (!validateUUID(uuid)) {
-				alert(t("rolls", "This URL is not valid"));
-				return;
-			}
 
 			const { data } = await axios.get(`${APP_API}/rolls`, { params: { uuid } });
 			const rolls = data.data;
@@ -187,9 +209,7 @@ export default {
 		async loadDescription() {
 			let { text } = this.roll;
 
-			const descriptionPlaceholder = `*${t("rolls", "No description provided")}*`;
-
-			let content = descriptionPlaceholder;
+			let content = '';
 
 			if (text) {
 				if (text.startsWith("#")) {
@@ -255,6 +275,8 @@ export default {
 				}
 			}
 
+			await this.$nextTick()
+
 			if (window.OCA.Text) {
 				if (this.editor) {
 					this.editor.destroy();
@@ -295,14 +317,14 @@ export default {
 		async disableEditMode() {
 			this.editMode = false;
 
-			this.busy = true
+			this.busy = true;
 			const rolls = await this.getRoll();
-			
+
 			if (rolls.length) {
 				this.roll = rolls[0];
 			}
-			
-			this.busy = false
+
+			this.busy = false;
 			this.loadDescription();
 		},
 
@@ -317,6 +339,14 @@ export default {
 			await axios.delete(`${APP_API}/rolls/${uuid}`);
 
 			this.$router.push("/");
+		},
+
+		openShareModal(roll) {
+			this.showShareModal = true;
+		},
+
+		closeShareModal() {
+			this.showShareModal = false;
 		},
 	},
 };

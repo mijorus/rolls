@@ -34,7 +34,7 @@ class RollsDb extends QBMapper {
 				$qb->expr()->eq('uuid', $qb->createNamedParameter($uuid, IQueryBuilder::PARAM_STR))
 			);
 
-		return $this->findEntity($qb);
+		return $this->findEntities($qb);
 	}
 
 	public function findAll(IUser $user) {

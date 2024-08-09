@@ -19,6 +19,11 @@
 					v-show="status === statusOpts.RECORDING && ['screen', 'webcam-screen'].includes(activeStreamName)"
 					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl"
 				/>
+				<RollUploading
+					v-show="status === statusOpts.UPLOADING"
+					:perc="uploadPerc"
+					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl"
+				/>
 			</div>
 			<video id="screen-video" ref="screenVideo" muted autoplay class="invisible"></video>
 			<video
@@ -69,6 +74,7 @@
 				</NcButton>
 				<div class="tw-ml-1"></div>
 				<RecordSwitchSourceBtns
+					v-if="status !== statusOpts.ASKING_PERMISSION"
 					:activeWebcamId="webcamId"
 					:activeMicId="micId"
 					:ready="status === statusOpts.READY"
@@ -140,6 +146,7 @@ import RecordSwitchSourceBtns from "../components/RecordSwitchSourceBtns.vue";
 import SelectAScreenPlaceholder from "../components/SelectAScreenPlaceholder.vue";
 import RecordNotAvailable from "../components/RecordNotAvailable.vue";
 import ScreenBeingRecorded from "../components/ScreenBeingRecorded.vue";
+import RollUploading from "../components/RollUploading.vue";
 
 dayjs.extend(dayjs_duration);
 
@@ -168,6 +175,7 @@ export default {
 		SelectAScreenPlaceholder,
 		RecordNotAvailable,
 		ScreenBeingRecorded,
+		RollUploading,
 	},
 	setup() {
 		return {
@@ -180,6 +188,7 @@ export default {
 			comments: [],
 			commentAt: null,
 			webcamIsVisible: false,
+			uploadPerc: 0,
 			pictureInPictureSupported: false,
 			webcamVideoVisibility: "hidden",
 			// screen, webcam-stream, webcam-screen
@@ -231,9 +240,11 @@ export default {
 		async initScreen() {
 			try {
 				await this.streamMonitor();
+				await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 				this.status = this.statusOpts.READY;
 			} catch (err) {
 				console.error(err);
+				alert("Permissions denied!");
 			}
 		},
 
@@ -450,7 +461,7 @@ export default {
 			}
 
 			this.streamMonitor(false);
-			this.openWebcam();
+			this.openWebcamInPip();
 
 			this.activeStreamName = "webcam-screen";
 		},
@@ -619,6 +630,7 @@ export default {
 				this.stopWebcam();
 				this.stopScreen();
 				this.stopMic();
+				this.uploadPerc = 0
 
 				const data = await this.uploadVideo();
 				this.videoDuration = "00:00";
@@ -677,12 +689,21 @@ export default {
 			formData.append("text", new Blob([text], { type: "text/plain" }));
 
 			return (
-				await axios.post(`${APP_API}/rolls`, formData, {
-					params: { ext: ext[videoMime] },
-					headers: {
-						"Content-Type": "multipart/form-data",
+				await axios.post(
+					`${APP_API}/rolls`,
+					formData,
+					{
+						params: { ext: ext[videoMime] },
+						headers: {
+							"Content-Type": "multipart/form-data",
+						},
 					},
-				})
+					{
+						onUploadProgress: function (progressEvent) {
+							this.uploadPerc = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+						},
+					}
+				)
 			).data;
 		},
 

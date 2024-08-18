@@ -74,3 +74,12 @@ export function debounce(func, wait) {
 		timeout = setTimeout(later, wait);
 	};
 }
+
+export function addEllipsis(str, max) {
+	if (str.length <= max) {
+		return str;
+	}
+
+	str = str.slice(0, max);
+	return str + '...';
+}

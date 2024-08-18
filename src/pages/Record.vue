@@ -147,6 +147,7 @@ import SelectAScreenPlaceholder from "../components/SelectAScreenPlaceholder.vue
 import RecordNotAvailable from "../components/RecordNotAvailable.vue";
 import ScreenBeingRecorded from "../components/ScreenBeingRecorded.vue";
 import RollUploading from "../components/RollUploading.vue";
+import { videoDbName, videoDbSchema, videoDbTable } from "../lib/dexiedb";
 
 dayjs.extend(dayjs_duration);
 
@@ -184,6 +185,7 @@ export default {
 	},
 	data() {
 		return {
+			isUnmounting: false,
 			title: "",
 			comments: [],
 			commentAt: null,
@@ -231,10 +233,21 @@ export default {
 		};
 	},
 	async mounted() {
-		this.appDB = new Dexie("NcRoll");
-		this.appDB.version(1).stores({
-			currentStream: "id, blob",
-		});
+		this.appDB = new Dexie(videoDbName);
+		this.appDB.version(1).stores(videoDbSchema);
+		this.isUnmounting = false;
+	},
+	beforeDestroy() {
+		this.isUnmounting = true;
+		this.dismissCapture();
+	},
+	beforeRouteLeave(to, from, next) {
+		if (this.status === this.statusOpts.RECORDING) {
+			const answer = window.confirm('Do you really want to leave while a recording is in progress?');
+			if (!answer) return false;
+		}
+
+		next();
 	},
 	methods: {
 		async initScreen() {
@@ -297,6 +310,19 @@ export default {
 			window.removeEventListener("beforeunload", this.preventUnload);
 		},
 
+		dismissCapture() {
+			this.stopWebcam();
+			this.stopScreen();
+			this.stopMic();
+			clearInterval(this.videoStartedInterval);
+
+			if (this.recorder) {
+				this.stopCapture();
+			}
+
+			this.status = this.statusOpts.READY;
+		},
+
 		async startCapture() {
 			if (this.status === this.statusOpts.UPLOAD_ERR) {
 				this.initVideoUpload();
@@ -312,24 +338,29 @@ export default {
 				return;
 			}
 
-			try {
-				this.audioStream = await navigator.mediaDevices.getUserMedia({
-					video: false,
-					audio: this.micId ? { deviceId: this.micId } : false,
-				});
-			} catch (err) {
-				console.error(err);
-				return;
-			}
+			let streams = [];
+			let audioTrack = null;
 
 			const mainStream = this.$refs.mainVideo.srcObject;
-
-			const audioTrack = this.audioStream.getAudioTracks()[0];
 			const videoTrack = mainStream.getTracks()[0];
 
-			let streams = [videoTrack, audioTrack];
+			streams = [videoTrack];
 
-			if (this.audioStream) {
+			if (this.micId) {
+				try {
+					this.audioStream = await navigator.mediaDevices.getUserMedia({
+						video: false,
+						audio: { deviceId: this.micId },
+					});
+
+					audioTrack = this.audioStream.getAudioTracks()[0];
+				} catch (err) {
+					console.error(err);
+					return;
+				}
+			}
+
+			if (audioTrack) {
 				streams = [...streams, audioTrack];
 			}
 
@@ -337,7 +368,7 @@ export default {
 
 			this.recorder = new MediaRecorder(mediaStream, {
 				mimeType: videoMime,
-				audioBitsPerSecond: audioTrack.getSettings().sampleRate,
+				audioBitsPerSecond: audioTrack ? audioTrack.getSettings().sampleRate : undefined,
 				videoBitsPerSecond: videoTrack.getSettings().sampleRate,
 			});
 
@@ -345,7 +376,7 @@ export default {
 				this.saveVideoChunk(event);
 			};
 
-			await this.appDB.table("currentStream").clear();
+			await this.appDB.table(videoDbTable).clear();
 			this.recorder.start(3 * 1000);
 
 			this.status = this.statusOpts.RECORDING;
@@ -594,7 +625,7 @@ export default {
 			}
 
 			this.videoChunks = this.videoChunks + 1;
-			await this.appDB.table("currentStream").add({
+			await this.appDB.table(videoDbTable).add({
 				id: this.videoChunks,
 				blob: event.data,
 			});
@@ -626,11 +657,15 @@ export default {
 		},
 
 		async initVideoUpload() {
+			if (this.isUnmounting) {
+				return;
+			}
+
 			try {
 				this.stopWebcam();
 				this.stopScreen();
 				this.stopMic();
-				this.uploadPerc = 0
+				this.uploadPerc = 0;
 
 				const data = await this.uploadVideo();
 				this.videoDuration = "00:00";
@@ -654,7 +689,7 @@ export default {
 
 		async uploadVideo() {
 			const duration = this.videoEndedAt.getTime() - this.videoStartedAt.getTime();
-			const chunksData = await this.appDB.table("currentStream").orderBy("id").toArray();
+			const chunksData = await this.appDB.table(videoDbTable).orderBy("id").toArray();
 
 			let recordedBlob = new Blob([...chunksData.map((c) => c.blob)], {
 				type: videoMime,

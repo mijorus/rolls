@@ -1,2 +1,2 @@
-src/components/*.vue
-src/pages/*.vue
+js/
+vendor/

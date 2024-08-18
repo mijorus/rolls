@@ -12,7 +12,7 @@
 				</template>
 			</NcActionButton>
 			<NcActionButton
-				:disabled="!ready"
+				:disabled="!ready || !webcamId"
 				@click="streamWebcam()"
 				aria-label="Show webcam"
 				:modelValue="activeStreamName === 'webcam-stream'"
@@ -22,7 +22,7 @@
 				</template>
 			</NcActionButton>
 			<NcActionButton
-				:disabled="!ready || !pictureInPictureSupported"
+				:disabled="!ready || !pictureInPictureSupported || !webcamId"
 				@click="streamMonitorWithWebcam()"
 				aria-label="Show screen and webcam"
 				:modelValue="activeStreamName === 'webcam-screen'"
@@ -69,6 +69,9 @@ export default {
 	},
 	props: {
 		activeStreamName: {
+			type: String,
+		},
+		webcamId: {
 			type: String,
 		},
 		streamMonitor: {

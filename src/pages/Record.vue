@@ -36,6 +36,7 @@
 
 			<div>
 				<RecordActions
+					:webcamId="webcamId"
 					:ready="status !== statusOpts.ASKING_PERMISSION && screenSharingHasEnded === false"
 					:activeStreamName="activeStreamName"
 					:streamMonitor="streamMonitor"
@@ -402,6 +403,10 @@ export default {
 		async createFlippedWebcamStream() {
 			if (this.$refs.webcamVideo.srcObject && this.$refs.webcamVideo.srcObject.getTracks().length) {
 				return;
+			}
+			
+			if (!this.webcamId) {
+				return
 			}
 
 			try {

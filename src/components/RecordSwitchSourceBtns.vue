@@ -2,7 +2,7 @@
 	<div class="tw-flex tw-flex-row tw-items-center tw-gap-2">
 		<NcPopover>
 			<template #trigger>
-				<NcButton :disabled="!ready">
+				<NcButton :disabled="!ready || !activeCam">
 					<template #icon>
 						<Webcam :size="20" />
 					</template>
@@ -109,9 +109,9 @@ export default {
 	},
 	async mounted() {
 		await this.getDevices();
-		if (this.webcamDevices.length) {
-			this.$emit('webcamChange', this.webcamDevices[0]);
-		}
+		// if (this.webcamDevices.length) {
+		// 	this.$emit('webcamChange', this.webcamDevices[0]);
+		// }
 
 		if (this.micDevices.length) {
 			this.$emit('micChange', this.micDevices[0]);

@@ -2,6 +2,9 @@
 	<div>
 		<SharePopup :path="shareModalPath" :itemType="'folder'" v-if="showShareModal" @close="closeShareModal" />
 		<div v-if="ready">
+			<!-- <div>
+				<RecoverRecording />
+			</div> -->
 			<ul v-if="rolls.length">
 				<li v-for="roll in rolls" :key="roll.uuid" class="tw-relative">
 					<RouterLink
@@ -71,6 +74,7 @@ import MovieRoll from "vue-material-design-icons/MovieRoll.vue";
 import Delete from "vue-material-design-icons/Delete.vue";
 import Share from "vue-material-design-icons/Share.vue";
 import SharePopup from "./SharePopup.vue";
+import RecoverRecording from './RecoverRecording.vue';
 
 export default {
 	name: "ListRolls",
@@ -84,6 +88,7 @@ export default {
 		Delete,
 		Share,
 		SharePopup,
+		RecoverRecording,
 	},
 	async mounted() {
 		let { data } = await axios.get(`${APP_API}/rolls`);

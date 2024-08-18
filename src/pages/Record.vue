@@ -24,8 +24,17 @@
 					:perc="uploadPerc"
 					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl"
 				/>
+				<NcEmptyContent
+					v-show="status === statusOpts.COUNTDOWN"
+					:name="recordingCountDown"
+					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl"
+				/>
 			</div>
+
+			<audio ref="audiobip" src="../static/bip.mp3" :autoplay="false" :controls="false" :loop="false"></audio>
+
 			<video id="screen-video" ref="screenVideo" muted autoplay class="invisible"></video>
+
 			<video
 				id="webcam-video"
 				ref="webcamVideo"
@@ -51,7 +60,7 @@
 				<NcButton
 					:disabled="![statusOpts.READY, statusOpts.RECORDING, statusOpts.UPLOAD_ERR].includes(status)"
 					aria-label="Start recording"
-					@click="startCapture()"
+					@click="videoStartedAt !== null ? stopCapture() : startRecordingCountDown()"
 					:type="status === statusOpts.RECORDING ? 'error' : 'secondary'"
 				>
 					<template #icon>
@@ -139,7 +148,7 @@ import Webcam from "vue-material-design-icons/Webcam.vue";
 import OpenInNew from "vue-material-design-icons/OpenInNew.vue";
 import axios from "@nextcloud/axios";
 import PictureInPictureBottomRight from "vue-material-design-icons/PictureInPictureBottomRight.vue";
-import { APP_API, DAV_URL } from "../constants";
+import { APP_API, DAV_URL, APP_URL } from "../constants";
 import MarkdownEditor from "../components/MarkdownEditor.vue";
 import { randomString } from "../utils/funcs";
 import RecordActions from "../components/RecordActions.vue";
@@ -158,6 +167,7 @@ const tbMime = "image/png";
 export default {
 	name: "Record",
 	components: {
+		APP_URL,
 		NcButton,
 		NcActionButton,
 		NcActions,
@@ -186,6 +196,7 @@ export default {
 	},
 	data() {
 		return {
+			APP_URL: APP_URL,
 			isUnmounting: false,
 			title: "",
 			comments: [],
@@ -220,6 +231,7 @@ export default {
 			/** @type {Dexie | undefined} */
 			appDB: undefined,
 			savingCompleted: false,
+			recordingCountDown: '0',
 			status: "ASKING_PERMISSION",
 			statusOpts: {
 				ASKING_PERMISSION: "ASKING_PERMISSION",
@@ -228,6 +240,7 @@ export default {
 				UPLOADING: "UPLOADING",
 				RECORDING: "RECORDING",
 				UPLOAD_ERR: "UPLOAD_ERR",
+				COUNTDOWN: "COUNTDOWN",
 			},
 			webcamId: undefined,
 			micId: undefined,
@@ -324,6 +337,28 @@ export default {
 			this.status = this.statusOpts.READY;
 		},
 
+		startRecordingCountDown() {
+			const d = 3;
+			let t = d;
+
+			this.recordingCountDown = t.toString();
+			this.status = this.statusOpts.COUNTDOWN;
+
+			let cd;
+			cd = setInterval(() => {
+				t = t - 1;
+
+				if (t === 0) {
+					clearInterval(cd);
+					this.$refs.audiobip.play();
+					setTimeout(() => this.startCapture(), 500);
+				} else {
+					this.recordingCountDown = t.toString();
+				}
+
+			}, 1000);
+		},
+
 		async startCapture() {
 			if (this.status === this.statusOpts.UPLOAD_ERR) {
 				this.initVideoUpload();
@@ -331,11 +366,6 @@ export default {
 			}
 
 			if (!this.$refs.screenVideo) {
-				return;
-			}
-
-			if (this.videoStartedAt !== null) {
-				this.stopCapture();
 				return;
 			}
 
@@ -404,9 +434,9 @@ export default {
 			if (this.$refs.webcamVideo.srcObject && this.$refs.webcamVideo.srcObject.getTracks().length) {
 				return;
 			}
-			
+
 			if (!this.webcamId) {
-				return
+				return;
 			}
 
 			try {

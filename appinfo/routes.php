@@ -4,6 +4,7 @@ return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#info', 'url' => '/phpinfo', 'verb' => 'GET'],
+		['name' => 'page#static', 'url' => '/static/{path}', 'verb' => 'GET'],
 		['name' => 'page#index', 'url' => '/record', 'verb' => 'GET', 'postfix' => 'record'],
 		['name' => 'page#index', 'url' => '/watch', 'verb' => 'GET', 'postfix' => 'watch'],
 		['name' => 'page#index', 'url' => '/watch/{path}', 'verb' => 'GET', 'postfix' => 'watchroll'],

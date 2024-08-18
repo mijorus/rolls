@@ -38,7 +38,11 @@ webpackConfig.module.rules = [
 				},
 			},
 		],
-	}
+	},
+	{
+		test: /\.(mp3)$/i,
+		type: 'asset/resource',
+	},
 ];
 
 webpackConfig.resolve.alias.vue$ = 'vue/dist/vue.esm.js';

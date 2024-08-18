@@ -109,9 +109,9 @@ export default {
 	},
 	async mounted() {
 		await this.getDevices();
-		// if (this.webcamDevices.length) {
-		// 	this.$emit('webcamChange', this.webcamDevices[0]);
-		// }
+		if (this.webcamDevices.length) {
+			this.$emit('webcamChange', this.webcamDevices[0]);
+		}
 
 		if (this.micDevices.length) {
 			this.$emit('micChange', this.micDevices[0]);

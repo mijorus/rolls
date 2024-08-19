@@ -11,3 +11,5 @@
 /js/
 
 /development/*.db
+.DS_Store
+release.tar.gz

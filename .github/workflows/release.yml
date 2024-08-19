@@ -13,12 +13,28 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run release script
         run: ./release.sh
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: false
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ github.releases.upload_url }}  # Get upload URL from previous step
+          upload_url: ${{ github.create_release.outputs.upload_url }}  # Get upload URL from previous step
           asset_path: ./release.tar.gz
           asset_name: release.tar.gz
           asset_content_type: application/gzip  # Optional: Specify content type
+      - name: Publish release
+        uses: StuYarrow/publish-release@v1.1.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          id: ${{ steps.create_release.outputs.id }}

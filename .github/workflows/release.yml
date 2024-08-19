@@ -10,12 +10,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Run release script
-        uses: actions/checkout@v3
         id: tag
         run: TAG_NAME=$(grep -o '<version>.*</version>' appinfo/info.xml | sed 's/<\/*version>//g') >> "$GITHUB_OUTPUT"
       - name: Run release script
-        uses: actions/checkout@v3
         run: ./release.sh
       - name: Publish release package
         uses: softprops/action-gh-release@v1

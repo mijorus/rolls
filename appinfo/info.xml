@@ -4,16 +4,20 @@
 	<id>rolls</id>
 	<name>Rolls</name>
 	<summary>Share quick videos with your collegues</summary>
-	<description>-</description>
+	<website>https://github.com/mijorus/rolls</website>
+	<description></description>
 	<version>1.0.0</version>
 	<licence>agpl</licence>
 	<author mail="lorenzo@mijorus.it" homepage="https://mijorus.it">Lorenzo Paderi</author>
 	<namespace>Rolls</namespace>
 	<category>office</category>
-	<bugs>https://mijorus.it</bugs>
+	<bugs>https://github.com/mijorus/rolls/issues</bugs>
 	<dependencies>
 		<nextcloud min-version="29" max-version="29"/>
 	</dependencies>
+	<screenshot>https://raw.githubusercontent.com/mijorus/rolls/master/docs/screenshot1.png</screenshot>
+	<screenshot>https://raw.githubusercontent.com/mijorus/rolls/master/docs/screenshot2.png</screenshot>
+	<screenshot>https://raw.githubusercontent.com/mijorus/rolls/master/docs/screenshot3.png</screenshot>
 	<navigations>
 		<navigation>
 			<id>rolls</id>

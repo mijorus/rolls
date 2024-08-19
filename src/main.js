@@ -7,6 +7,10 @@ import './style/tailwind.css'
 import { mixins } from './utils/mixins.js';
 import { detectMobile } from './utils/funcs.js';
 import { isMobile } from '@nextcloud/vue';
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime.js'
+
+dayjs.extend(relativeTime)
 
 const isDevServer = process.env.WEBPACK_DEV_SERVER
 

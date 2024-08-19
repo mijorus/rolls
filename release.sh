@@ -24,5 +24,3 @@ cd ..
 tar -czf release.tar.gz rolls
 
 rm -r rolls
-	
-openssl dgst -sha512 -sign ~/.nextcloud/certificates/rolls.key ./release.tar.gz | openssl base64 > release.sign

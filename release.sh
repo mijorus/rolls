@@ -12,3 +12,5 @@ tar -czf release.tar.gz \
 	composer.json \
 	composer.lock \
 	README.md
+	
+openssl dgst -sha512 -sign ~/.nextcloud/certificates/rolls.key ./release.tar.gz | openssl base64 > release.sign

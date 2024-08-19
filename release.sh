@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 
+npm install
 npm run build
 
 tar -czf release.tar.gz \

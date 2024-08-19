@@ -92,9 +92,6 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import axios from "@nextcloud/axios";
 import { NcLoadingIcon, NcListItem, NcAvatar, NcActions, NcButton, NcActionButton, NcEmptyContent } from "@nextcloud/vue";
 import Comment from "vue-material-design-icons/Comment.vue";
 import TextIcon from "vue-material-design-icons/Text.vue";
@@ -103,10 +100,9 @@ import ArrowDown from "vue-material-design-icons/ArrowDown.vue";
 import Delete from "vue-material-design-icons/Delete.vue";
 import Send from "vue-material-design-icons/Send.vue";
 import Tab from "../components/Tab.vue";
-import { COMMENTS_DAYJS_FORMAT, PROMISE_STATUS } from "../utils/constants";
+import { PROMISE_STATUS } from "../utils/constants";
 import { comments } from '../lib/comments'
 
-dayjs.extend(relativeTime);
 
 export default {
 	name: "Watch",

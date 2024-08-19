@@ -111,8 +111,6 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import axios from "@nextcloud/axios";
 import VideoPlayer from "./../components/VideoPlayer.vue";
 import { APP_API, APP_INDEX, APP_URL, DAV_URL, REMOTE_URL } from "../constants";
@@ -136,7 +134,6 @@ import { COMMENTS_DAYJS_FORMAT, PROMISE_STATUS } from "../utils/constants";
 import CommentsBox from "../components/CommentsBox.vue";
 import SharePopup from "../components/SharePopup.vue";
 
-dayjs.extend(relativeTime);
 
 export default {
 	name: "Watch",

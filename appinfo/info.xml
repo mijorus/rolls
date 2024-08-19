@@ -5,7 +5,9 @@
 	<name>Rolls</name>
 	<summary>Share quick videos with your collegues</summary>
 	<website>https://github.com/mijorus/rolls</website>
-	<description></description>
+	<description>
+		This plugin allows you to create screen recordings and share them with anyone withing your organization.
+	</description>
 	<version>1.0.0</version>
 	<licence>agpl</licence>
 	<author mail="lorenzo@mijorus.it" homepage="https://mijorus.it">Lorenzo Paderi</author>

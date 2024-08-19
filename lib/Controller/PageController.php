@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OCA\Rolls\Controller;
 
-use Bamarni\Composer\Bin\Logger;
 use OCA\Rolls\AppInfo\Application;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;

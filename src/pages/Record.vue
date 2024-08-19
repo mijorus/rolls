@@ -157,7 +157,7 @@ import SelectAScreenPlaceholder from "../components/SelectAScreenPlaceholder.vue
 import RecordNotAvailable from "../components/RecordNotAvailable.vue";
 import ScreenBeingRecorded from "../components/ScreenBeingRecorded.vue";
 import RollUploading from "../components/RollUploading.vue";
-import { videoDbName, videoDbSchema, videoDbTable } from "../lib/dexiedb";
+import { dbVersion, videoDbName, videoDbSchema, videoDbTable } from "../lib/dexiedb";
 
 dayjs.extend(dayjs_duration);
 
@@ -248,7 +248,7 @@ export default {
 	},
 	async mounted() {
 		this.appDB = new Dexie(videoDbName);
-		this.appDB.version(1).stores(videoDbSchema);
+		this.appDB.version(dbVersion).stores(videoDbSchema);
 		this.isUnmounting = false;
 	},
 	beforeDestroy() {
@@ -780,6 +780,10 @@ export default {
 		onCommentKeyDown(e) {
 			const { target } = e;
 			if (e.key === "Enter" || e.keyCode === 13) {
+				if (target.value.length === 0) {
+					return
+				}
+
 				e.preventDefault();
 				this.comments = [
 					...this.comments,

@@ -55,6 +55,16 @@
 							<div class="tw-capitalize">{{ t("files", "Download") }}</div>
 						</a>
 					</NcButton>
+					<NcButton v-if="ready" class="button" @click="copyUrl">
+						<template #icon>
+							<ContentCopy v-if="!isCopying" :size="20" />
+							<Check v-else :size="20" />
+						</template>
+						<div class="tw-capitalize">
+							<span v-if="!isCopying">{{ t("rolls", "Copy url") }}</span>
+							<span v-else>{{ t("rolls", "Copied!") }}</span>
+						</div>
+					</NcButton>
 					<NcButton v-if="ready && roll.isMine" class="button" @click="openShareModal">
 						<template #icon>
 							<Share :size="20" />
@@ -80,7 +90,7 @@
 							</button>
 						</div>
 						<div class="muted" v-if="roll.text.length === 0 && !editMode">
-							<i>{{ t('rolls', 'No description provided') }}</i>
+							<i>{{ t("rolls", "No description provided") }}</i>
 						</div>
 						<div ref="editor"></div>
 					</div>
@@ -119,6 +129,8 @@ import Delete from "vue-material-design-icons/Delete.vue";
 import Close from "vue-material-design-icons/Close.vue";
 import Send from "vue-material-design-icons/Send.vue";
 import Share from "vue-material-design-icons/Share.vue";
+import ContentCopy from "vue-material-design-icons/ContentCopy.vue";
+import Check from "vue-material-design-icons/Check.vue";
 import Tab from "../components/Tab.vue";
 import { COMMENTS_DAYJS_FORMAT, PROMISE_STATUS } from "../utils/constants";
 import CommentsBox from "../components/CommentsBox.vue";
@@ -151,10 +163,13 @@ export default {
 		Close,
 		Share,
 		SharePopup,
+		Check,
+		ContentCopy,
 	},
 	data() {
 		return {
 			APP_INDEX,
+			isCopying: false,
 			showShareModal: false,
 			activeTab: "description",
 			/** @type { object | undefined} */
@@ -209,7 +224,7 @@ export default {
 		async loadDescription() {
 			let { text } = this.roll;
 
-			let content = '';
+			let content = "";
 
 			if (text) {
 				if (text.startsWith("#")) {
@@ -275,7 +290,7 @@ export default {
 				}
 			}
 
-			await this.$nextTick()
+			await this.$nextTick();
 
 			if (window.OCA.Text) {
 				if (this.editor) {
@@ -347,6 +362,17 @@ export default {
 
 		closeShareModal() {
 			this.showShareModal = false;
+		},
+
+		copyUrl() {
+			if (!this.roll) {
+				return;
+			}
+
+			this.isCopying = true;
+			const url = `${window.location.origin}/index.php/apps/rolls/watch/${this.roll.uuid}`;
+			navigator.clipboard.writeText(url);
+			setTimeout(() => (this.isCopying = false), 3000);
 		},
 	},
 };

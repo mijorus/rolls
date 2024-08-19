@@ -1,8 +1,8 @@
 <template>
 	<NcModal ref="modalRef" @close="closeModal">
 		<div class="modal__content" style="padding: 50px; text-align: center">
-			<label for="user-select" class="tw-mb-2">{{ t("rolls", "Search for share recipients") }}</label>
-			<div class="form-group tw-flex tw-flex-row tw-justify-center tw-items-end tw-gap-2">
+			<label for="user-select">{{ t("rolls", "Search for share recipients") }}</label>
+			<div class="tw-mt-2 form-group tw-flex tw-flex-row tw-justify-center tw-items-end tw-gap-2">
 				<NcSelect
 					v-model="selectedOption"
 					ref="userselect"

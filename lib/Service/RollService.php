@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace OCA\Rolls\Service;
 
-use Exception;
 use OCA\Rolls\Db\Roll;
 use OCA\Rolls\Db\RollsDb;
 use OCA\Rolls\Entity\RollListItem;
 use OCA\Rolls\Utils\Funcs;
 use OCP\Files\IRootFolder;
-use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Share\IManager;
-use OCP\Util;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -119,7 +116,6 @@ class RollService
 				continue;
 			}
 
-			// TODO:
 			$file = $files[0];
 
 			if (!($file instanceof \OCP\Files\File)) {
@@ -159,5 +155,4 @@ class RollService
 
 		return $output;
 	}
-	
 }

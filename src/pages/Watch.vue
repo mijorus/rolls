@@ -16,6 +16,8 @@
 					<a :href="`${APP_INDEX}/u/${roll.owner.id}`" class="tw-underline">
 						{{ roll.owner.displayName }}
 					</a>
+					&nbsp;&middot;&nbsp;
+					{{ creationDate }}
 				</small>
 			</div>
 
@@ -133,6 +135,7 @@ import Tab from "../components/Tab.vue";
 import { COMMENTS_DAYJS_FORMAT, PROMISE_STATUS } from "../utils/constants";
 import CommentsBox from "../components/CommentsBox.vue";
 import SharePopup from "../components/SharePopup.vue";
+import moment from "@nextcloud/moment";
 
 
 export default {
@@ -237,6 +240,7 @@ export default {
 				}
 
 				content = content.trim();
+				const descriptionPlaceholder = `*${t("rolls", "No description provided")}*`;
 
 				if (!content.length) {
 					content = descriptionPlaceholder;
@@ -372,6 +376,11 @@ export default {
 			setTimeout(() => (this.isCopying = false), 3000);
 		},
 	},
+	computed: {
+		creationDate() {
+			return moment(this.roll.creationDate * 1000).format('L HH:mm')
+		}
+	}
 };
 </script>
 

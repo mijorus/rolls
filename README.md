@@ -1,7 +1,7 @@
 # Rolls
 
 <p align="center">
-  <img src="docs/hero.png">
+  <img src="docs/screenshot1.png">
 </p>
 
 > This meeting could have been ~~an email~~ a video

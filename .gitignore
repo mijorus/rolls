@@ -13,3 +13,4 @@
 /development/*.db
 .DS_Store
 release.tar.gz
+release.sign

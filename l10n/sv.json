@@ -1,0 +1,9 @@
+{ "translations": {
+    "Disabled" : "Inaktiverad",
+    "Delete" : "Radera",
+    "Your browser does not support videos." : "Din webbläsare har inte stöd för video.",
+    "Error" : "Fel",
+    "Share" : "Dela",
+    "No description provided" : "Ingen beskrivning har angetts"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

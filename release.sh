@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-# npm run build
+npm run build
 
 tar -czf release.tar.gz \
 	appinfo/* \

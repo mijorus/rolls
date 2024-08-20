@@ -1,0 +1,14 @@
+OC.L10N.register(
+    "rolls",
+    {
+    "Edit comment" : "Labot piebildi",
+    "Delete comment" : "Izdzēst piebildi",
+    "Disabled" : "Atspējots",
+    "Uploading..." : "Augšupielādē...",
+    "Delete" : "Dzēst",
+    "Error" : "Kļūda",
+    "Download" : "Lejupielādēt",
+    "Copied!" : "Nokopēts!",
+    "Share" : "Dalīties"
+},
+"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

@@ -1,5 +1,7 @@
 { "translations": {
+    "Add" : "சேர்க்க",
     "Delete" : "நீக்குக",
-    "Error" : "வழு"
+    "Error" : "வழு",
+    "Download" : "பதிவிறக்குக"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -1,0 +1,11 @@
+{ "translations": {
+    "Edit comment" : "Ẓreg awennit",
+    "Delete comment" : "Kkes awennit",
+    "Disabled" : "Ittwarermed",
+    "Delete" : "Kkes",
+    "Error" : "Erreur",
+    "Download" : "Sider",
+    "Copied!" : "Yenɣel!",
+    "Share" : "Bḍu"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

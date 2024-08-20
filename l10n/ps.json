@@ -1,0 +1,9 @@
+{ "translations": {
+    "Edit comment" : "تبصره سمول",
+    "Delete comment" : "تبصره ړنګول",
+    "Delete" : "ړنګول",
+    "Error" : "شسیب",
+    "Download" : "ښکته کول",
+    "Copied!" : "کاپي شو!"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

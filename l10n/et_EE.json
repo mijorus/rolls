@@ -1,0 +1,11 @@
+{ "translations": {
+    "Edit comment" : "Muuda kommentaari",
+    "Delete comment" : "Kustuta kommentaar",
+    "Disabled" : "Keelatud",
+    "Uploading..." : "Üleslaadimine...",
+    "Delete" : "Kustuta",
+    "Error" : "Viga",
+    "Download" : "Laadi alla",
+    "Copied!" : "Kopeeritud!"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

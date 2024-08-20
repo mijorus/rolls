@@ -1,0 +1,10 @@
+{ "translations": {
+    "Disabled" : "অকার্যকর",
+    "Uploading..." : "আপলোড করা হচ্ছে..........",
+    "Add" : "যোগ কর",
+    "Delete" : "মুছে",
+    "Error" : "সমস্যা",
+    "Download" : "ডাউনলোড",
+    "Copied!" : "অনুলিপি!"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

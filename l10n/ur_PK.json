@@ -1,6 +1,7 @@
 { "translations": {
     "Delete" : "حذف کریں",
     "Error" : "ایرر",
+    "Download" : "ڈاؤن لوڈ",
     "Share" : "اشتراک"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

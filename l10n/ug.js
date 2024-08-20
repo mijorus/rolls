@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Uploading..." : "يۈكلەۋاتىدۇ…",
     "Delete" : "ئۆچۈر",
-    "Error" : "خاتالىق"
+    "Error" : "خاتالىق",
+    "Download" : "چۈشۈر"
 },
 "nplurals=2; plural=(n != 1);");

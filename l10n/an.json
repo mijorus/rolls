@@ -1,0 +1,9 @@
+{ "translations": {
+    "Disabled" : "Desactivau",
+    "Delete" : "Borrar",
+    "Error" : "Error",
+    "Download" : "Escargar",
+    "Copied!" : "Copiado!",
+    "Share" : "Compartir"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

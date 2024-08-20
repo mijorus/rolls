@@ -1,0 +1,20 @@
+OC.L10N.register(
+    "rolls",
+    {
+    "No comments yet" : "Aún no hay comentarios",
+    "Edit comment" : "Editar comentario",
+    "Delete comment" : "Borrar comentario",
+    "Discard" : "Descartar",
+    "Disabled" : "Deshabilitado",
+    "Uploading..." : "Cargando...",
+    "Search for share recipients" : "Buscar destinatarios de la compartición",
+    "Add" : "Guardar",
+    "Delete" : "Borrar",
+    "Your browser does not support videos." : "Tu navegador no admite videos.",
+    "Start recording" : "Iniciar grabación",
+    "Error" : "Error",
+    "Download" : "Descargar",
+    "Copied!" : "¡Copiado!",
+    "No description provided" : "No se proporcionó una descripción"
+},
+"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

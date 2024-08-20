@@ -1,0 +1,10 @@
+{ "translations": {
+    "Disabled" : "បាន​បិទ",
+    "Uploading..." : "កំពុងដាក់បញ្ចូល...",
+    "Add" : "បន្ថែម",
+    "Delete" : "លុប",
+    "Error" : "កំហុស",
+    "Download" : "ទាញយក",
+    "Copied!" : "បានចម្លង"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

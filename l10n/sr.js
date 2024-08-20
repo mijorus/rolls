@@ -1,9 +1,20 @@
 OC.L10N.register(
     "rolls",
     {
+    "No comments yet" : "Још нема коментара",
+    "Edit comment" : "Измени коментар",
+    "Delete comment" : "Обриши коментар",
+    "Discard" : "Одбаци",
     "Disabled" : "Искључено",
+    "Uploading..." : "Отпремам…",
+    "Search for share recipients" : "Претрага прималаца дељења",
+    "Add" : "Додај",
     "Delete" : "Избриши",
     "Your browser does not support videos." : "Ваш веб читач не подржава видео записе.",
+    "Start recording" : "Почни снимање",
+    "Error" : "Грешка",
+    "Download" : "Преузми",
+    "Copied!" : "Копирано!",
     "Share" : "Пдели",
     "No description provided" : "Није дат опис"
 },

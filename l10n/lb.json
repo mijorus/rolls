@@ -1,0 +1,11 @@
+{ "translations": {
+    "Delete comment" : "Kommentar läschen",
+    "Disabled" : "Deaktivéiert",
+    "Uploading..." : "Lueden erop...",
+    "Add" : "Dobäisetzen",
+    "Delete" : "Läschen",
+    "Error" : "Fehler",
+    "Download" : "Eroflueden",
+    "Copied!" : "Kopéiert!"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

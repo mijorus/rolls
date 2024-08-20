@@ -1,7 +1,17 @@
 OC.L10N.register(
     "rolls",
     {
+    "Edit comment" : "Editar comentário",
+    "Delete comment" : "Eliminar comentário",
+    "Discard" : "Descartar",
     "Disabled" : "Desactivado",
-    "Your browser does not support videos." : "O seu navegador não suporta vídeos."
+    "Uploading..." : "A enviar...",
+    "Add" : "Adicionar",
+    "Delete" : "Eliminar",
+    "Your browser does not support videos." : "O seu navegador não suporta vídeos.",
+    "Error" : "Erro",
+    "Download" : "Transferir",
+    "Copied!" : "Copiado!",
+    "Share" : "Partilhar"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

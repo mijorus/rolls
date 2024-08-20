@@ -1,0 +1,10 @@
+{ "translations": {
+    "Disabled" : "Dayandırılıb",
+    "Uploading..." : "Serverə yüklənir...",
+    "Delete" : "Sil",
+    "Error" : "Səhv",
+    "Download" : "Yüklə",
+    "Copied!" : "Kopyalandı!",
+    "Share" : "Yayımla"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

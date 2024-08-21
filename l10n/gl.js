@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Rolls" : "Rolos",
     "Share quick videos with your collegues" : "Comparta vídeos rápidos cos seus compañeiros",
+    "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Este complemento permítelle crear gravacións de pantalla e compartilas con calquera persoa da súa organización.",
     "New roll" : "Novo rolo",
     "No comments yet" : "Aínda non hai comentarios",
     "Start writing comments and they will appear here." : "Comece a escribir comentarios e aparecerán aquí.",

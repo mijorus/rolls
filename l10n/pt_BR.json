@@ -1,5 +1,12 @@
 { "translations": {
+    "Rolls" : "Engajamentos",
+    "Share quick videos with your collegues" : "Compartilhe vídeos rápidos com seus colegas",
+    "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Este plugin permite que você crie gravações de tela e compartilhe-as com qualquer pessoa da sua organização.",
+    "New roll" : "Novo engajamento",
     "No comments yet" : "Nenhum comentário ainda",
+    "Start writing comments and they will appear here." : "Comece a escrever comentários e eles aparecerão aqui.",
+    "Type a comment" : "Digite um comentário",
+    "Editing\") }}: {{ comment[\"oc:message" : "Editando\") }}: {{ comment[\"oc:message",
     "Edit comment" : "Editar comentário",
     "Delete comment" : "Excluir comentário",
     "Discard" : "Descartar",

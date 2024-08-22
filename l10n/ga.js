@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Rolls" : "Rollaí",
     "Share quick videos with your collegues" : "Roinn físeáin thapa le do chomhghleacaithe",
+    "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Ligeann an breiseán seo duit taifeadtaí scáileáin a chruthú agus iad a roinnt le haon duine laistigh de d'eagraíocht.",
     "New roll" : "Rolla nua",
     "No comments yet" : "Níl trácht ar bith fós",
     "Start writing comments and they will appear here." : "Tosaigh ag scríobh tuairimí agus beidh siad le feiceáil anseo.",

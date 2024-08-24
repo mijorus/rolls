@@ -24,6 +24,7 @@ OC.L10N.register(
     "Recording..." : "正在錄製 …",
     "Your screen is being recorded" : "正在錄製您的螢幕",
     "Select a screen to get started" : "選擇螢幕以開始",
+    "If you decide to share a only window, the webcam Picture in Picture will not be available" : "若您決定僅分享視窗，網路攝影機的畫中畫將不可用",
     "Name or email" : "名字或電郵地址",
     "Search for share recipients" : "搜尋分享參與者",
     "Add" : "添加",

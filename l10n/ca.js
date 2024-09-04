@@ -13,6 +13,8 @@ OC.L10N.register(
     "Your browser does not support videos." : "El vostre navegador no és compatible amb els vídeos.",
     "Start recording" : "Iniciar l'enregistrament",
     "Error" : "Error",
+    "description" : "descripció",
+    "comments" : "comentaris",
     "Download" : "Baixa",
     "Copied!" : "S'ha copiat!",
     "Share" : "Comparteix",

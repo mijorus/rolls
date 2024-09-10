@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "No comments yet" : "Még nincsenek hozzászólások",
+    "Editing" : "Szerkesztés",
     "Edit comment" : "Hozzászólás szerkesztése",
     "Delete comment" : "Hozzászólás törlése",
     "Discard" : "Elvetés",

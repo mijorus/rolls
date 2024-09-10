@@ -8,6 +8,7 @@ OC.L10N.register(
     "No comments yet" : "Aínda non hai comentarios",
     "Start writing comments and they will appear here." : "Comece a escribir comentarios e aparecerán aquí.",
     "Type a comment" : "Escriba un comentario",
+    "Editing" : "Editando",
     "Edit comment" : "Editar comentario",
     "Delete comment" : "Eliminar comentario",
     "Discard" : "Desbortar",

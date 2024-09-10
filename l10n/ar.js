@@ -8,7 +8,6 @@ OC.L10N.register(
     "No comments yet" : "لا توجد تعليقات حتى الآن ",
     "Start writing comments and they will appear here." : "إبدأ بكتابة ملاحظاتك و ستظهر هنا.",
     "Type a comment" : "أكتُب ملاحظةً",
-    "Editing\") }}: {{ comment[\"oc:message" : "تحرير\") }}: {{ ملاحظة[\"نكست كلاود:رسالة",
     "Edit comment" : "تعديل التعليق",
     "Delete comment" : "حذف التعليق",
     "Add\") : t(\"rolls\", \"Update" : "أضِف\") : t(\"لفافات\", \"تحديث",

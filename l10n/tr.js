@@ -8,7 +8,7 @@ OC.L10N.register(
     "No comments yet" : "Henüz bir yorum yok",
     "Start writing comments and they will appear here." : "Yorumları yazmaya başlayın. Burada görüntülenir.",
     "Type a comment" : "Bir yorum yazın",
-    "Editing\") }}: {{ comment[\"oc:message" : "Editing\") }}: {{ comment[\"oc:message",
+    "Editing" : "Düzenleniyor",
     "Edit comment" : "Yorumu düzenle",
     "Delete comment" : "Yorumu sil",
     "Add\") : t(\"rolls\", \"Update" : "Add\") : t(\"rolls\", \"Update",

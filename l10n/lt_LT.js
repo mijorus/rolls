@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "No comments yet" : "Kol kas nėra komentarų",
+    "Editing" : "Redagavimas",
     "Edit comment" : "Taisyti komentarą",
     "Delete comment" : "Ištrinti komentarą",
     "Discard" : "Atmesti",

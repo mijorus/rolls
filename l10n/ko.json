@@ -1,5 +1,6 @@
 { "translations": {
     "No comments yet" : "덧글이 없음",
+    "Editing" : "글 수정",
     "Edit comment" : "댓글 편집",
     "Delete comment" : "댓글 삭제",
     "Discard" : "무시",

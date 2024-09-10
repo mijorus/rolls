@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Rolls" : "Erroiluak",
     "No comments yet" : "Iruzkinik ez oraindik",
+    "Editing" : "Edizioa",
     "Edit comment" : "Editatu iruzkina",
     "Delete comment" : "Ezabatu Iruzkina",
     "Discard" : "Baztertu",

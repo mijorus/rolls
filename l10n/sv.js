@@ -5,6 +5,7 @@ OC.L10N.register(
     "No comments yet" : "Inga kommentarer än",
     "Start writing comments and they will appear here." : "Börja skriva kommentarer så dyker de upp här.",
     "Type a comment" : "Ange en kommentar",
+    "Editing" : "Ändrar",
     "Edit comment" : "Redigera kommentar",
     "Delete comment" : "Ta bort kommentar",
     "Discard" : "Ignorera",

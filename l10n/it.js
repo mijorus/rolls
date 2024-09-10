@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "No comments yet" : "Ancora nessun commento",
+    "Editing" : "Modificando",
     "Edit comment" : "Modifica commento",
     "Delete comment" : "Elimina commento",
     "Discard" : "Scarta",

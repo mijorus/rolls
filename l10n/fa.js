@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "No comments yet" : "هنوز نظری ثبت نشده است",
+    "Editing" : "ویرایش کردن",
     "Edit comment" : "ویرایش دیدگاه",
     "Delete comment" : "حذف دیدگاه",
     "Discard" : "لغو تغییرات",

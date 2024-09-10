@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "No comments yet" : "Nu există comentarii încă",
+    "Editing" : "Se modifică",
     "Edit comment" : "Editează comentariu",
     "Delete comment" : "Șterge comentariu",
     "Discard" : "Anulează",

@@ -8,7 +8,7 @@ OC.L10N.register(
     "No comments yet" : "目前沒有留言",
     "Start writing comments and they will appear here." : "開始編寫留言，它們將會出現在此處。",
     "Type a comment" : "輸入留言",
-    "Editing\") }}: {{ comment[\"oc:message" : "編輯\") }}: {{ comment[\"oc:message",
+    "Editing" : "編輯",
     "Edit comment" : "編輯留言",
     "Delete comment" : "刪除留言",
     "Add\") : t(\"rolls\", \"Update" : "新增\") : t(\"rolls\", \"更新",

@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "No comments yet" : "Ni še dodane nobene opombe",
+    "Editing" : "Urejanje",
     "Edit comment" : "Uredi opombo",
     "Delete comment" : "Izbriši opombo",
     "Discard" : "Opusti",

@@ -6,7 +6,7 @@
     "No comments yet" : "Још нема коментара",
     "Start writing comments and they will appear here." : "Почните да пишете коментаре, и они ће се појавити овде.",
     "Type a comment" : "Откуцајте коментар",
-    "Editing\") }}: {{ comment[\"oc:message" : "Уређивање\") }}: {{ коментар[\"oc:message",
+    "Editing" : "Уређивање",
     "Edit comment" : "Измени коментар",
     "Delete comment" : "Обриши коментар",
     "Add\") : t(\"rolls\", \"Update" : "Додај\") : t(\"ролне\", \"Ажурирај",

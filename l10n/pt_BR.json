@@ -6,7 +6,7 @@
     "No comments yet" : "Nenhum comentário ainda",
     "Start writing comments and they will appear here." : "Comece a escrever comentários e eles aparecerão aqui.",
     "Type a comment" : "Digite um comentário",
-    "Editing\") }}: {{ comment[\"oc:message" : "Editando\") }}: {{ comment[\"oc:message",
+    "Editing" : "Editando ",
     "Edit comment" : "Editar comentário",
     "Delete comment" : "Excluir comentário",
     "Add\") : t(\"rolls\", \"Update" : "Adicionar\") : t(\"rolls\", \"Atualizar",

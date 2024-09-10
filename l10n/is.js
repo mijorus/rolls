@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "No comments yet" : "Engar athugasemdir ennþá",
+    "Editing" : "Breytingar",
     "Edit comment" : "Breyta ummælum",
     "Delete comment" : "Eyða athugasemd",
     "Discard" : "Fleygja",

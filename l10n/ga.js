@@ -8,7 +8,7 @@ OC.L10N.register(
     "No comments yet" : "Níl trácht ar bith fós",
     "Start writing comments and they will appear here." : "Tosaigh ag scríobh tuairimí agus beidh siad le feiceáil anseo.",
     "Type a comment" : "Clóscríobh nóta tráchta",
-    "Editing\") }}: {{ comment[\"oc:message" : "Ag eagarthóireacht\") }}: {{ comment[ \"oc:message",
+    "Editing" : "Eagarthóireacht",
     "Edit comment" : "Cuir trácht in eagar",
     "Delete comment" : "Scrios nóta tráchta",
     "Add\") : t(\"rolls\", \"Update" : "Add\") : t( \"rollaí\", \"Nuashonraigh",

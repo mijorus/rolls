@@ -1,6 +1,7 @@
 OC.L10N.register(
     "rolls",
     {
+    "Editing" : "กำลังแก้ไข",
     "Edit comment" : "แก้ไขความคิดเห็น",
     "Delete comment" : "ลบความคิดเห็น",
     "Disabled" : "ปิดใช้งาน",

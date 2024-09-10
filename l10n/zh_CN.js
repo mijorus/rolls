@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "No comments yet" : "还没有评论",
+    "Editing" : "编辑",
     "Edit comment" : "编辑评论",
     "Delete comment" : "删除评论",
     "Discard" : "丢弃",

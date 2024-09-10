@@ -1,6 +1,7 @@
 OC.L10N.register(
     "rolls",
     {
+    "Editing" : "Editando",
     "Edit comment" : "Editar comentario",
     "Delete comment" : "Borrar comentario",
     "Disabled" : "Deshabilitado",

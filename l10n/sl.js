@@ -17,6 +17,6 @@ OC.L10N.register(
     "Download" : "Prejmi",
     "Copied!" : "Kopirano!",
     "Share" : "·Souporaba·",
-    "No description provided" : "Anketa je brez dodatnega opisa"
+    "No description provided" : "Opis ni podan"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

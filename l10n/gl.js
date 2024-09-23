@@ -11,6 +11,7 @@ OC.L10N.register(
     "Editing" : "Editando",
     "Edit comment" : "Editar comentario",
     "Delete comment" : "Eliminar comentario",
+    "Add\") : t(\"rolls\", \"Update" : "Engadir\") : t(\"rolls\", \"Actualizar",
     "Discard" : "Desbortar",
     "No rolls yet" : "Aínda non hai ningún Roll",
     "Start by creating a new roll using the button above." : "Comece creando un novo Roll usando o botón de enriba.",

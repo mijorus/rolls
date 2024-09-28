@@ -24,7 +24,7 @@ OC.L10N.register(
     "Your browser does not support videos." : "Votre navigateur ne prend pas en charge les vidéos.",
     "Add a title" : "Ajouter un titre",
     "Try to upload again" : "Réessayer de téléverser",
-    "Start recording" : "Démarrer l’enregistrement",
+    "Start recording" : "Lancer l’enregistrement",
     "Error" : "Erreur",
     "description" : "description",
     "comments" : "commentaires",

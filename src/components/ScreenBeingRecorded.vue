@@ -1,5 +1,5 @@
 <template>
-	<NcEmptyContent :name="t('rolls', 'Recording...')">
+	<NcEmptyContent :name="t('rolls', 'Recording…')">
 		<template #icon>
 			<RecordRec />
 		</template>

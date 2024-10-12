@@ -28,7 +28,7 @@ OC.L10N.register(
     "Select a screen to get started" : "إختَر شاشةً للبدء",
     "If you decide to share a only window, the webcam Picture in Picture will not be available" : "إذا اخترت مشاركة النافذة فقط، فإن خاصية صورة داخل صورة الكاميرا لن تكون متاحةً",
     "Name or email" : "الاسم أو الإيميل",
-    "Search for share recipients" : "البحث عن مُستَلِمِي المشاركة",
+    "Search for share recipients" : "إضافة أشخاص لاستلام المشاركة",
     "Add" : "أضِف",
     "Delete" : "حذف",
     "Your browser does not support videos." : "متصفحك لا يدعم الفيديوهات.",

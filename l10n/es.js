@@ -15,6 +15,7 @@ OC.L10N.register(
     "Start recording" : "Empezar la grabación",
     "Error" : "Error",
     "Download" : "Descargar",
+    "Copy url" : "Copiar enlace",
     "Copied!" : "¡Copiado!",
     "Share" : "Compartir",
     "No description provided" : "No se ha proporcionado descripción"

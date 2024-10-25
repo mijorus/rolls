@@ -5,6 +5,7 @@ OC.L10N.register(
     "No comments yet" : "Aucun commentaire pour l'instant",
     "Start writing comments and they will appear here." : "Écrivez vos commentaires, ils apparaitront ici.",
     "Type a comment" : "Nouveau commentaire",
+    "Editing" : "Éditer",
     "Edit comment" : "Modifier le commentaire",
     "Delete comment" : "Supprimer le commentaire",
     "Discard" : "ignorer",

@@ -31,7 +31,7 @@ OC.L10N.register(
     "Search for share recipients" : "إضافة أشخاص لاستلام المشاركة",
     "Add" : "إضافة ",
     "Delete" : "حذف",
-    "Your browser does not support videos." : "متصفحك لا يدعم الفيديوهات.",
+    "Your browser does not support videos." : "متصفحك لا يدعم تشغيل مقاطع الفيديو.",
     "Add a title" : "إضافة عنوان",
     "Add a comment at this timestamp" : "أضِف ملاحظةً عند هذا الختم الزمني",
     "Try to upload again" : "حاول الرفع مرة أخرى",

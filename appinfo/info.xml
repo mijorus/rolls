@@ -3,7 +3,7 @@
 	  xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>rolls</id>
 	<name>Rolls</name>
-	<summary>Share quick videos with your collegues</summary>
+	<summary>Share quick videos with your colleagues</summary>
 	<website>https://github.com/mijorus/rolls</website>
 	<description>
 		This plugin allows you to create screen recordings and share them with anyone withing your organization.

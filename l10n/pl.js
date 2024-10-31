@@ -12,6 +12,7 @@ OC.L10N.register(
     "Add" : "Dodaj",
     "Delete" : "Usuń",
     "Your browser does not support videos." : "Twoja przeglądarka nie obsługuje wideo.",
+    "Try to upload again" : "Spróbuj przesłać ponownie",
     "Error" : "Błąd",
     "Download" : "Pobierz",
     "Copied!" : "Skopiowano!",

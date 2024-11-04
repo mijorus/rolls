@@ -19,7 +19,7 @@ OC.L10N.register(
     "Do you really want to delete this Roll?" : "Bu ruloyu silmek istediğinize emin misiniz?",
     "Your browser does not support Picture in Picture, some features are disabled." : "Tarayıcınız reism içinde resim özelliğini desteklemiyor. Bazı özellikler kullanılamayacak.",
     "Rolls is not available on mobile devices" : "Rulolar mobil aygıtlar üzerinde kullanılamaz",
-    "Disabled" : "Devre dışı",
+    "Disabled" : "Kullanımdan kaldırılmış",
     "No microphones found" : "Herhangi bir mikrofon bulunamadı",
     "An unsaved video was found and can be recovered" : "Kaydedilmemiş bir görüntü bulundu ve kurtarılabilir",
     "Uploading..." : "Yükleniyor...",

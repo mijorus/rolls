@@ -63,7 +63,7 @@
 							<Check v-else :size="20" />
 						</template>
 						<div class="tw-capitalize">
-							<span v-if="!isCopying">{{ t("rolls", "Copy url") }}</span>
+							<span v-if="!isCopying">{{ t("rolls", "Copy URL") }}</span>
 							<span v-else>{{ t("rolls", "Copied!") }}</span>
 						</div>
 					</NcButton>

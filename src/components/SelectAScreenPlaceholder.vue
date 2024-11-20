@@ -2,7 +2,7 @@
 	<NcEmptyContent
 		:name="t('rolls', 'Select a screen to get started')"
 		:description="
-			t('rolls', 'If you decide to share a only window, the webcam Picture in Picture will not be available')
+			t('rolls', 'If you decide to share a window only, the webcam Picture in Picture will not be available')
 		"
 	>
 		<template #icon>

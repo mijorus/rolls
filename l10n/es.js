@@ -2,7 +2,6 @@ OC.L10N.register(
     "rolls",
     {
     "Rolls" : "Carretes",
-    "Share quick videos with your collegues" : "Comparte vídeos rápidos con tus colegas",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Este plugin permite crear grabaciones de pantalla y compartirlas con cualquiera dentro de tu organización.",
     "New roll" : "Nuevo carrete",
     "No comments yet" : "Todavía no hay comentarios.",
@@ -22,10 +21,8 @@ OC.L10N.register(
     "No microphones found" : "No se han encontrado micrófonos",
     "An unsaved video was found and can be recovered" : "Se ha encontrado un vídeo sin guardra y se puede recuperar",
     "Uploading..." : "Subiendo...",
-    "Recording..." : "Grabando…",
     "Your screen is being recorded" : "Tu pantalla está siendo grabada",
     "Select a screen to get started" : "Selecciona una pantalla para empezar",
-    "If you decide to share a only window, the webcam Picture in Picture will not be available" : "Si decides compartir una única ventana, la webcam Picture in Picture no estará disponible",
     "Name or email" : "Nombre o correo electrónico",
     "Search for share recipients" : "Buscar destinatarios del compartido",
     "Add" : "Añadir",
@@ -41,7 +38,6 @@ OC.L10N.register(
     "comments" : "comentarios",
     "This roll was not found" : "No se ha encontrado este carrete",
     "Download" : "Descargar",
-    "Copy url" : "Copiar enlace",
     "Copied!" : "¡Copiado!",
     "Share" : "Compartir",
     "No description provided" : "No se ha proporcionado descripción"

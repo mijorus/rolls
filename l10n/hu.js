@@ -14,6 +14,7 @@ OC.L10N.register(
     "Your browser does not support videos." : "A böngészője nem támogatja a videókat.",
     "Error" : "Hiba",
     "Download" : "Letöltés",
+    "Copy URL" : "URL másolása",
     "Copied!" : "Másolva.",
     "Share" : "Megosztás",
     "No description provided" : "Nincs leírás megadva"

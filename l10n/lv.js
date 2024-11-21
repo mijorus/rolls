@@ -2,7 +2,6 @@ OC.L10N.register(
     "rolls",
     {
     "Rolls" : "Videorullīši",
-    "Share quick videos with your collegues" : "Īsu video kopīgošana ar saviem darbabiedriem",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Šis spraudnis ļauj izveidot ekrānierakstus un kopīgot tos ar ikvienu apvienībā.",
     "New roll" : "Jauns videorullītis",
     "No comments yet" : "Vēl nav piebilžu",
@@ -22,10 +21,8 @@ OC.L10N.register(
     "No microphones found" : "Netika atrasts neviens mikrofons",
     "An unsaved video was found and can be recovered" : "Tika atrasts nesaglabāts video, ko var atkopt",
     "Uploading..." : "Augšupielādē...",
-    "Recording..." : "Ieraksta",
     "Your screen is being recorded" : "Ekrāns tiek ierakstīts",
     "Select a screen to get started" : "Jāatlasa ekrāns, lai uzsāktu",
-    "If you decide to share a only window, the webcam Picture in Picture will not be available" : "Ja izlemsi kopīgot tikai logu, tīmekļkameras attēls attēlā nebūs pieejams",
     "Name or email" : "Vārds vai e-pasta adrese",
     "Search for share recipients" : "Meklēt kopīgošanas saņēmējus",
     "Add" : "Pievienot",
@@ -41,7 +38,6 @@ OC.L10N.register(
     "comments" : "piebildes",
     "This roll was not found" : "Šis videorullītis netika atrasts",
     "Download" : "Lejupielādēt",
-    "Copy url" : "Ievietot URL starpliktuvē",
     "Copied!" : "Ievietots starpliktuvē.",
     "Share" : "Kopīgot",
     "No description provided" : "Apraksts nav sniegts"

@@ -2,7 +2,6 @@ OC.L10N.register(
     "rolls",
     {
     "Rolls" : "Rolls",
-    "Share quick videos with your collegues" : "與同時快速分享影片",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "此外掛程式讓您可以建立螢幕錄製並與組織內的任何人分享。",
     "New roll" : "新卷",
     "No comments yet" : "目前沒有留言",
@@ -23,10 +22,8 @@ OC.L10N.register(
     "No microphones found" : "找不到麥克風",
     "An unsaved video was found and can be recovered" : "找到未儲存的影片且可還原",
     "Uploading..." : "正在上傳……",
-    "Recording..." : "正在錄製……",
     "Your screen is being recorded" : "正在錄製您的螢幕",
     "Select a screen to get started" : "選取螢幕以開始",
-    "If you decide to share a only window, the webcam Picture in Picture will not be available" : "若您決定僅分享視窗，網路攝影機的畫中畫將不可用",
     "Name or email" : "名稱或電子郵件",
     "Search for share recipients" : "搜尋分享參與者",
     "Add" : "新增",
@@ -42,7 +39,7 @@ OC.L10N.register(
     "comments" : "留言",
     "This roll was not found" : "找不到此卷",
     "Download" : "下載",
-    "Copy url" : "複製 URL",
+    "Copy URL" : "複製網址",
     "Copied!" : "已複製！",
     "Share" : "分享",
     "No description provided" : "未提供描述"

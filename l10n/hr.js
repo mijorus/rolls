@@ -12,6 +12,7 @@ OC.L10N.register(
     "Your browser does not support videos." : "Vaš preglednik ne podržava videozapise.",
     "Error" : "Pogreška",
     "Download" : "Preuzmi",
+    "Copy URL" : "Kopiraj URL",
     "Copied!" : "Kopirano!",
     "Share" : "Dijeli",
     "No description provided" : "Nije naveden opis"

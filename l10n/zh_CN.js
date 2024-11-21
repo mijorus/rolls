@@ -16,6 +16,7 @@ OC.L10N.register(
     "Start recording" : "开始录制",
     "Error" : "错误",
     "Download" : "下载",
+    "Copy URL" : "复制超链接",
     "Copied!" : "已复制！",
     "Share" : "共享",
     "No description provided" : "没有提供描述"

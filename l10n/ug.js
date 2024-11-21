@@ -2,7 +2,6 @@ OC.L10N.register(
     "rolls",
     {
     "Rolls" : "Rolls",
-    "Share quick videos with your collegues" : "كوللىكتىپلىرىڭىز بىلەن تېز سىنلارنى ھەمبەھىرلەڭ",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "بۇ قىستۇرما ئېكران خاتىرىسىنى قۇرالايسىز ۋە تەشكىلاتىڭىز بىلەن بىللە بولغانلار بىلەن ئورتاقلىشالايسىز.",
     "New roll" : "يېڭى رول",
     "No comments yet" : "ھازىرچە ھېچقانداق باھا يوق",
@@ -23,10 +22,8 @@ OC.L10N.register(
     "No microphones found" : "مىكروفون تېپىلمىدى",
     "An unsaved video was found and can be recovered" : "ساقلانمىغان سىن تېپىلدى ، ئەسلىگە كەلتۈرگىلى بولىدۇ",
     "Uploading..." : "يۈكلەۋاتىدۇ…",
-    "Recording..." : "خاتىرىلەش ...",
     "Your screen is being recorded" : "ئېكرانىڭىز خاتىرىلىنىۋاتىدۇ",
     "Select a screen to get started" : "باشلاش ئۈچۈن ئېكران تاللاڭ",
-    "If you decide to share a only window, the webcam Picture in Picture will not be available" : "ئەگەر سىز پەقەت بىرلا كۆزنەكنى ئورتاقلىشىشنى قارار قىلسىڭىز ، رەسىمدىكى تور كامېراسى كۆرۈنمەيدۇ",
     "Name or email" : "ئىسىم ياكى ئېلخەت",
     "Search for share recipients" : "ھەمبەھىر تاپشۇرۇۋالغۇچىلارنى ئىزدەڭ",
     "Add" : "قوش",
@@ -42,7 +39,6 @@ OC.L10N.register(
     "comments" : "باھا",
     "This roll was not found" : "بۇ رول تېپىلمىدى",
     "Download" : "چۈشۈر",
-    "Copy url" : "Url نى كۆچۈرۈڭ",
     "Copied!" : "كۆچۈرۈلدى!",
     "Share" : "ھەمبەھىرلەش",
     "No description provided" : "ھېچقانداق چۈشەندۈرۈش بېرىلمىدى"

@@ -9,6 +9,7 @@ OC.L10N.register(
     "Your browser does not support videos." : "Via retumilo ne subtenas la vidaĵojn",
     "Error" : "Eraro",
     "Download" : "Elŝuti",
+    "Copy URL" : "Kopii retadreson",
     "Copied!" : "Kopiita!"
 },
 "nplurals=2; plural=(n != 1);");

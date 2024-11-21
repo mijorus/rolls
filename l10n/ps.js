@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "ړنګول",
     "Error" : "شسیب",
     "Download" : "ښکته کول",
+    "Copy URL" : "انترنتي نښه کاپي کول",
     "Copied!" : "کاپي شو!"
 },
 "nplurals=2; plural=(n != 1);");

@@ -14,6 +14,7 @@ OC.L10N.register(
     "Your browser does not support videos." : "Trình duyệt của bạn không hỗ trợ video.",
     "Error" : "Lỗi",
     "Download" : "Tải xuống",
+    "Copy URL" : "Sao chép liên kết",
     "Copied!" : "Đã sao chép!",
     "Share" : "Chia sẽ"
 },

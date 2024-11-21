@@ -17,6 +17,7 @@ OC.L10N.register(
     "description" : "descripció",
     "comments" : "comentaris",
     "Download" : "Baixa",
+    "Copy URL" : "Copia l'URL",
     "Copied!" : "S'ha copiat!",
     "Share" : "Comparteix",
     "No description provided" : "No s'ha proveït cap descripció"

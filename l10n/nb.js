@@ -2,7 +2,6 @@ OC.L10N.register(
     "rolls",
     {
     "Rolls" : "Ruller",
-    "Share quick videos with your collegues" : "Del raske videoer med kollegene dine",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Dette programtillegget lar deg lage skjermopptak og dele dem med alle i organisasjonen din.",
     "New roll" : "Ny rull",
     "No comments yet" : "Ingen kommentarer enda",
@@ -23,10 +22,8 @@ OC.L10N.register(
     "No microphones found" : "Ingen mikrofoner funnet",
     "An unsaved video was found and can be recovered" : "En ulagret video ble funnet og kan gjenopprettes",
     "Uploading..." : "Laster opp …",
-    "Recording..." : "Tar opp...",
     "Your screen is being recorded" : "Skjermen din blir tatt opp",
     "Select a screen to get started" : "Velg en skjerm for å komme i gang",
-    "If you decide to share a only window, the webcam Picture in Picture will not be available" : "Hvis du bestemmer deg for å dele et eneste vindu, vil ikke webkameraet Bilde i Bilde være tilgjengelig",
     "Name or email" : "Navn eller e-post",
     "Search for share recipients" : "Søk etter delingsmottakere",
     "Add" : "Legg til",
@@ -42,7 +39,6 @@ OC.L10N.register(
     "comments" : "kommentarer",
     "This roll was not found" : "Denne rullen ble ikke funnet",
     "Download" : "Last ned",
-    "Copy url" : "Kopier url",
     "Copied!" : "Kopiert!",
     "Share" : "Dele",
     "No description provided" : "Ingen beskrivelse angitt"

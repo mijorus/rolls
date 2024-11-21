@@ -15,6 +15,7 @@ OC.L10N.register(
     "Start recording" : "Почати запис",
     "Error" : "Помилка",
     "Download" : "Отримати",
+    "Copy URL" : "Копіювати URL",
     "Copied!" : "Скопійовано!",
     "Share" : "Спільний доступ",
     "No description provided" : "Відсутній опис"

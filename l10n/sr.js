@@ -2,7 +2,6 @@ OC.L10N.register(
     "rolls",
     {
     "Rolls" : "Ролне",
-    "Share quick videos with your collegues" : "Делите брзе видео клипове са својим колегама",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Овај додатак вам омогућава да креирате снимке екрана и да их делите са било којим чланом ваше организације",
     "New roll" : "Нова ролна",
     "No comments yet" : "Још нема коментара",
@@ -23,10 +22,8 @@ OC.L10N.register(
     "No microphones found" : "Није пронађен ниједан микрофон",
     "An unsaved video was found and can be recovered" : "Пронађен је видео клип који није сачуван и који може да се опорави",
     "Uploading..." : "Отпремам…",
-    "Recording..." : "Снима се",
     "Your screen is being recorded" : "Ваш екран се снима",
     "Select a screen to get started" : "За почетак, изаберите екран",
-    "If you decide to share a only window, the webcam Picture in Picture will not be available" : "Ако одлучите да делите само прозор, неће бити доступна веб камера у слика-у слици",
     "Name or email" : "Име или и+-мејл",
     "Search for share recipients" : "Претрага прималаца дељења",
     "Add" : "Додај",
@@ -42,7 +39,7 @@ OC.L10N.register(
     "comments" : "коментари",
     "This roll was not found" : "Није пронађена ова ролна",
     "Download" : "Преузми",
-    "Copy url" : "Копирај url",
+    "Copy URL" : "Копирај URL",
     "Copied!" : "Копирано!",
     "Share" : "Пдели",
     "No description provided" : "Није дат опис"

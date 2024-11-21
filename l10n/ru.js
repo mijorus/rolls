@@ -1,7 +1,6 @@
 OC.L10N.register(
     "rolls",
     {
-    "Share quick videos with your collegues" : "Делитесь короткими видео со своими коллегами",
     "No comments yet" : "Пока никто не прокомментировал",
     "Start writing comments and they will appear here." : "Начните писать комментарии, и они появятся здесь",
     "Type a comment" : "Введите комментарий",
@@ -14,7 +13,6 @@ OC.L10N.register(
     "No microphones found" : "Микрофон не найден",
     "An unsaved video was found and can be recovered" : "Несохраненное видео было найдено и доступно к восстановлению",
     "Uploading..." : "Идет загрузка…",
-    "Recording..." : "Идет запись...",
     "Your screen is being recorded" : "Ваш экран записывается",
     "Select a screen to get started" : "Выберите экран, чтобы начать",
     "Name or email" : "Имя или адрес электронной почты",
@@ -29,7 +27,7 @@ OC.L10N.register(
     "description" : "описание",
     "comments" : "комментарии",
     "Download" : "Скачать",
-    "Copy url" : "Скопировать URL",
+    "Copy URL" : "Копировать ссылку",
     "Copied!" : "Скопировано!",
     "Share" : "Поделиться",
     "No description provided" : "Описание отсуствует"

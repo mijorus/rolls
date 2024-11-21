@@ -1,5 +1,4 @@
 { "translations": {
-    "Share quick videos with your collegues" : "Partagez de courtes vidéos avec vos collègues.",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Ce plugin vous permet de créer des enregistrements d'écran et de les partager avec toute personne au sein de votre organisation.",
     "No comments yet" : "Aucun commentaire pour l'instant",
     "Start writing comments and they will appear here." : "Écrivez vos commentaires, ils apparaitront ici.",
@@ -15,10 +14,8 @@
     "No microphones found" : "Aucun microphone trouvé",
     "An unsaved video was found and can be recovered" : "Une vidéo non enregistrée a été trouvée et peut être récupérée",
     "Uploading..." : "Envoi en cours…",
-    "Recording..." : "Enregistrement...",
     "Your screen is being recorded" : "L'affichage de votre écran est enregistré",
     "Select a screen to get started" : "Sélectionner un écran pour commencer",
-    "If you decide to share a only window, the webcam Picture in Picture will not be available" : "Si vous décidez de partager une seule fenêtre, l'image dans l'image de la webcam ne sera pas disponible",
     "Name or email" : "Nom ou adresse e-mail",
     "Search for share recipients" : "Recherche de destinataires de partages",
     "Add" : "Ajouter",
@@ -33,7 +30,7 @@
     "description" : "description",
     "comments" : "commentaires",
     "Download" : "Télécharger",
-    "Copy url" : "Copier l'adresse URL",
+    "Copy URL" : "Copier l'adresse URL",
     "Copied!" : "Copié !",
     "Share" : "Partager",
     "No description provided" : "Aucune description fournie"

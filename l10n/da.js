@@ -13,6 +13,7 @@ OC.L10N.register(
     "Your browser does not support videos." : "Din browser understøtter ikke videoer.",
     "Error" : "Fejl",
     "Download" : "Download",
+    "Copy URL" : "Kopier URL",
     "Copied!" : "Kopieret!",
     "Share" : "Del"
 },

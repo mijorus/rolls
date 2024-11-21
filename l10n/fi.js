@@ -14,6 +14,7 @@ OC.L10N.register(
     "Start recording" : "Käynnistä tallennus",
     "Error" : "Virhe",
     "Download" : "Lataa",
+    "Copy URL" : "Kopioi osoite",
     "Copied!" : "Kopioitu!",
     "Share" : "Jaa",
     "No description provided" : "Kuvausta ei määritetty"

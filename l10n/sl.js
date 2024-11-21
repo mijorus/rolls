@@ -15,6 +15,7 @@ OC.L10N.register(
     "Start recording" : "Začni s snemanjem",
     "Error" : "Napaka",
     "Download" : "Prejmi",
+    "Copy URL" : "Kopiraj naslov URL",
     "Copied!" : "Kopirano!",
     "Share" : "·Souporaba·",
     "No description provided" : "Opis ni podan"

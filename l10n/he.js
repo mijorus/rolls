@@ -12,6 +12,7 @@ OC.L10N.register(
     "Your browser does not support videos." : "הדפדפן שלך לא תומך בסרטונים.",
     "Error" : "שגיאה",
     "Download" : "הורדה",
+    "Copy URL" : "העתקת כתובת",
     "Copied!" : "הועתק!",
     "Share" : "שתף",
     "No description provided" : "לא סופק תיאור"

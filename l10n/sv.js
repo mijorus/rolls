@@ -15,10 +15,8 @@ OC.L10N.register(
     "No microphones found" : "Inga mikrofoner hittades",
     "An unsaved video was found and can be recovered" : "En osparad video hittades och kan återställas",
     "Uploading..." : "Laddar upp...",
-    "Recording..." : "Inspelning...",
     "Your screen is being recorded" : "Din skärm spelas in",
     "Select a screen to get started" : "Välj en skärm för att komma igång",
-    "If you decide to share a only window, the webcam Picture in Picture will not be available" : "Om du bestämmer dig för att dela ett endast fönster, kommer webbkameran bild i bild inte att vara tillgänglig",
     "Name or email" : "Namn eller e-post",
     "Search for share recipients" : "Sök efter delningsmottagare",
     "Add" : "Lägg till",
@@ -32,7 +30,6 @@ OC.L10N.register(
     "description" : "beskrivning",
     "comments" : "kommentarer",
     "Download" : "Ladda ner",
-    "Copy url" : "Kopiera URL",
     "Copied!" : "Kopierad!",
     "Share" : "Dela",
     "No description provided" : "Ingen beskrivning har angetts"

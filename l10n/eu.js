@@ -9,7 +9,6 @@ OC.L10N.register(
     "Discard" : "Baztertu",
     "Disabled" : "Desgaituta",
     "Uploading..." : "Igotzen...",
-    "Recording..." : "Grabatzen...",
     "Search for share recipients" : "Bilatu partekatze-hartzaileak",
     "Add" : "Gehitu",
     "Delete" : "Ezabatu",
@@ -19,6 +18,7 @@ OC.L10N.register(
     "description" : "deskribapena",
     "comments" : "iruzkinak",
     "Download" : "Deskargatu",
+    "Copy URL" : "Kopiatu URLa",
     "Copied!" : "Kopiatuta!",
     "Share" : "Partekatu",
     "No description provided" : "Ez da deskribapenik eman"

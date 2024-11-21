@@ -14,6 +14,7 @@
     "description" : "опис",
     "comments" : "коментари",
     "Download" : "Преземи",
+    "Copy URL" : "Копирај URL",
     "Copied!" : "Копирано!",
     "Share" : "Сподели"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"

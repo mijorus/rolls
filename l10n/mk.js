@@ -16,6 +16,7 @@ OC.L10N.register(
     "description" : "опис",
     "comments" : "коментари",
     "Download" : "Преземи",
+    "Copy URL" : "Копирај URL",
     "Copied!" : "Копирано!",
     "Share" : "Сподели"
 },

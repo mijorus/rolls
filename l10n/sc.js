@@ -4,6 +4,7 @@ OC.L10N.register(
     "No comments yet" : "Perunu cummentu ancora",
     "Discard" : "Iscarta",
     "Disabled" : "Disativadu",
+    "Search for share recipients" : "Chirca destinatàrios de cumpartziduras",
     "Add" : "Agiunghe",
     "Delete" : "Cantzella",
     "Your browser does not support videos." : "Su navigadore tuo non suportat vìdeos.",

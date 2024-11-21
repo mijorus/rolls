@@ -15,6 +15,7 @@ OC.L10N.register(
     "Start recording" : "Започване на запис",
     "Error" : "Грешка",
     "Download" : "Изтегляне",
+    "Copy URL" : "Копирай URL адреса",
     "Copied!" : "Копирано!",
     "Share" : "Споделяне",
     "No description provided" : "Не е предоставено описание"

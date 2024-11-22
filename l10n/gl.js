@@ -39,7 +39,7 @@ OC.L10N.register(
     "comments" : "comentarios",
     "This roll was not found" : "Non se atopou este Roll",
     "Download" : "Descargar",
-    "Copy URL" : "Copiar URL",
+    "Copy URL" : "Copiar o URL",
     "Copied!" : "Copiado!",
     "Share" : "Compartir",
     "No description provided" : "Non foi fornecida nigunha descrición."

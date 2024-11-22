@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "Rolls" : "لفافات",
+    "Share quick videos with your colleagues" : "شارك مقاطع مرئية سريعة مع الزملاء و الأصدقاء",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "يتيح لك هذا الملحق البرمجي إنشاء تسجيلات للشاشة ومشاركتها مع أي شخص داخل مؤسستك.",
     "New roll" : "لفافة جديدة",
     "No comments yet" : "لا توجد تعليقات حتى الآن ",
@@ -22,8 +23,10 @@ OC.L10N.register(
     "No microphones found" : "لا يوجد أي لاقط صوتي",
     "An unsaved video was found and can be recovered" : "فيديو غير محفوظ أمكن إيجاده و يمكن استعادته",
     "Uploading..." : "عملية الرفع جارية …",
+    "Recording…" : "التسجيل جارٍ ...",
     "Your screen is being recorded" : "شاشتك يتم تسجيلها الآن",
     "Select a screen to get started" : "إختَر شاشةً للبدء",
+    "If you decide to share a window only, the webcam Picture in Picture will not be available" : "إذا قررت مشاركة نافذة فقط، فلن تكون ميزة \"صورة داخل صورة\" في كاميرا الويب متاحة",
     "Name or email" : "الاسم أو الإيميل",
     "Search for share recipients" : "إضافة أشخاص لاستلام المشاركة",
     "Add" : "إضافة ",
@@ -39,6 +42,7 @@ OC.L10N.register(
     "comments" : "ملاحظات",
     "This roll was not found" : "هذه اللفافة غير موجودة",
     "Download" : "تنزيل",
+    "Copy URL" : "انسخ الرابط",
     "Copied!" : "تمّ النسخ!",
     "Share" : "مُشارَكة",
     "No description provided" : "لم يتم تقديم وصف"

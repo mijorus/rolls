@@ -1,5 +1,6 @@
 { "translations": {
     "Rolls" : "Rolls",
+    "Share quick videos with your colleagues" : "與同事快速分享影片",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "此外掛程式讓您可以建立螢幕錄製並與組織內的任何人分享。",
     "New roll" : "新卷",
     "No comments yet" : "目前沒有留言",
@@ -20,8 +21,10 @@
     "No microphones found" : "找不到麥克風",
     "An unsaved video was found and can be recovered" : "找到未儲存的影片且可還原",
     "Uploading..." : "正在上傳……",
+    "Recording…" : "正在錄製……",
     "Your screen is being recorded" : "正在錄製您的螢幕",
     "Select a screen to get started" : "選取螢幕以開始",
+    "If you decide to share a window only, the webcam Picture in Picture will not be available" : "若您決定僅分享視窗，網路攝影機的畫中畫將無法使用",
     "Name or email" : "名稱或電子郵件",
     "Search for share recipients" : "搜尋分享參與者",
     "Add" : "新增",

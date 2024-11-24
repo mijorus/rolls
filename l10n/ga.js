@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "Rolls" : "Rollaí",
+    "Share quick videos with your colleagues" : "Roinn físeáin thapa le do chomhghleacaithe",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Ligeann an breiseán seo duit taifeadtaí scáileáin a chruthú agus iad a roinnt le haon duine laistigh de d'eagraíocht.",
     "New roll" : "Rolla nua",
     "No comments yet" : "Níl trácht ar bith fós",
@@ -22,8 +23,10 @@ OC.L10N.register(
     "No microphones found" : "Níor aimsíodh micreafón",
     "An unsaved video was found and can be recovered" : "Fuarthas físeán gan sábháil agus is féidir é a aisghabháil",
     "Uploading..." : "Á uaslódáil...",
+    "Recording…" : "Ag taifeadadh…",
     "Your screen is being recorded" : "Tá do scáileán á thaifeadadh",
     "Select a screen to get started" : "Roghnaigh scáileán chun tús a chur leis",
+    "If you decide to share a window only, the webcam Picture in Picture will not be available" : "Má shocraíonn tú gan ach fuinneog a roinnt, ní bheidh an ceamara gréasáin Pictiúr i bPictiúr ar fáil",
     "Name or email" : "Ainm nó ríomhphost",
     "Search for share recipients" : "Cuardaigh faighteoirí scaireanna",
     "Add" : "Cuir",
@@ -39,6 +42,7 @@ OC.L10N.register(
     "comments" : "tuairimí",
     "This roll was not found" : "Ní bhfuarthas an rolla seo",
     "Download" : "Íoslódáil",
+    "Copy URL" : "Cóipeáil URL",
     "Copied!" : "Cóipeáladh!",
     "Share" : "Comhroinn",
     "No description provided" : "Níor tugadh tuairisc"

@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "Rolls" : "Svitky",
+    "Share quick videos with your colleagues" : "Sdílejte rychlá videa se svými kolegy",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Tento zásuvný modul umožňuje pořizovat záznamy dění na obrazovce a nasdílet je komukoli v rámci vaší organizace.",
     "New roll" : "Nový svitek",
     "No comments yet" : "Zatím žádné komentáře",
@@ -22,8 +23,10 @@ OC.L10N.register(
     "No microphones found" : "Nenalezeny žádné mikrofony",
     "An unsaved video was found and can be recovered" : "Bylo nalezeno neuložené video a je možné ho obnovit",
     "Uploading..." : "Nahrávání…",
+    "Recording…" : "Zaznamenávání…",
     "Your screen is being recorded" : "Obsah vaší obrazovky je nahráván",
     "Select a screen to get started" : "Začněte výběrem obrazovky",
+    "If you decide to share a window only, the webcam Picture in Picture will not be available" : "Pokud se rozhodnete nasdílet pouze okno, funkce obraz v obraze pro webovou kameru nebude k dispozici",
     "Name or email" : "Jméno nebo e-mail",
     "Search for share recipients" : "Vyhledat příjemce sdílení",
     "Add" : "Přidat",
@@ -39,6 +42,7 @@ OC.L10N.register(
     "comments" : "komentáře",
     "This roll was not found" : "Tento svitek nebyl nalezen",
     "Download" : "Stáhnout",
+    "Copy URL" : "Zkopírovat URL",
     "Copied!" : "Zkopírováno!",
     "Share" : "Nasdílet",
     "No description provided" : "Nezadán žádný popis"

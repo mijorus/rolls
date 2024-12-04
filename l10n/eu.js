@@ -9,6 +9,7 @@ OC.L10N.register(
     "Discard" : "Baztertu",
     "Disabled" : "Desgaituta",
     "Uploading..." : "Igotzen...",
+    "Recording…" : "Grabatzen...",
     "Search for share recipients" : "Bilatu partekatze-hartzaileak",
     "Add" : "Gehitu",
     "Delete" : "Ezabatu",

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Delete" : "Skrap",
     "Your browser does not support videos." : "U blaaier ondersteun nie video’s nie.",
     "Download" : "Laai af",
+    "Copy URL" : "Kopieer URL",
     "Copied!" : "Gekopieer!"
 },
 "nplurals=2; plural=(n != 1);");

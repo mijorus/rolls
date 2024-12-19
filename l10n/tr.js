@@ -2,6 +2,7 @@ OC.L10N.register(
     "rolls",
     {
     "Rolls" : "Rulolar",
+    "Share quick videos with your colleagues" : "İş arkadaşlarınızla kısa görüntüler paylaşın",
     "This plugin allows you to create screen recordings and share them with anyone withing your organization." : "Bu uygulama eki ekran kayıtları oluşturmanızı ve bunları kuruluşunuzdaki herkesle paylaşmanızı sağlar.",
     "New roll" : "Yeni rulo",
     "No comments yet" : "Henüz bir yorum yok",
@@ -22,8 +23,10 @@ OC.L10N.register(
     "No microphones found" : "Herhangi bir mikrofon bulunamadı",
     "An unsaved video was found and can be recovered" : "Kaydedilmemiş bir görüntü bulundu ve kurtarılabilir",
     "Uploading..." : "Yükleniyor...",
+    "Recording…" : "Kaydediliyor…",
     "Your screen is being recorded" : "Ekranınız kaydediliyor",
     "Select a screen to get started" : "Başlamak için bir ekran seçin",
+    "If you decide to share a window only, the webcam Picture in Picture will not be available" : "Yalnızca bir pencereyi paylaşmaya karar verirseniz, Resim içinde resim kamerası kullanılamaz",
     "Name or email" : "Ad ya da e-posta",
     "Search for share recipients" : "Paylaşım alıcıları ara",
     "Add" : "Ekle",
@@ -39,6 +42,7 @@ OC.L10N.register(
     "comments" : "yorumlar",
     "This roll was not found" : "Bu rulo bulunamadı",
     "Download" : "İndir",
+    "Copy URL" : "Adresi kopyala",
     "Copied!" : "Kopyalandı!",
     "Share" : "Paylaş",
     "No description provided" : "Açıklama yazılmamış."

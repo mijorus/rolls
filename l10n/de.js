@@ -33,7 +33,7 @@ OC.L10N.register(
     "Add a comment at this timestamp" : "Diesem Zeitstempel einen Kommentar hinzufügen",
     "Try to upload again" : "Hochladen erneut versuchen",
     "Start recording" : "Aufnahme beginnen",
-    "An error occurred while uploading your Roll" : "Es ist ein Fehler beim Hochladen Ihrer Roll aufgetreten.",
+    "An error occurred while uploading your Roll" : "Es ist ein Fehler beim Hochladen deiner Roll aufgetreten.",
     "Error" : "Fehler",
     "description" : "Beschreibung",
     "comments" : "Kommentare",

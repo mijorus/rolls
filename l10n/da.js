@@ -8,13 +8,19 @@ OC.L10N.register(
     "Discard" : "Kassér",
     "Disabled" : "Deaktiveret",
     "Uploading..." : "Uploader...",
+    "Name or email" : "Navn eller e-mail",
+    "Search for share recipients" : "Søge efter delemodtagerefor share recipients",
     "Add" : "Tilføj",
     "Delete" : "Slet",
     "Your browser does not support videos." : "Din browser understøtter ikke videoer.",
     "Error" : "Fejl",
+    "description" : "beskrivelse",
+    "comments" : "kommentarer",
+    "This roll was not found" : "Denne rolle blev ikke fundet",
     "Download" : "Download",
     "Copy URL" : "Kopier URL",
     "Copied!" : "Kopieret!",
-    "Share" : "Del"
+    "Share" : "Del",
+    "No description provided" : "Ingen beskrivelse leveret"
 },
 "nplurals=2; plural=(n != 1);");

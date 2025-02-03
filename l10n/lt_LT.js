@@ -10,6 +10,7 @@ OC.L10N.register(
     "Disabled" : "Išjungta",
     "Uploading..." : "Įkeliama...",
     "Name or email" : "Vardas ar el. paštas",
+    "Search for share recipients" : "Ieškoti viešinio gavėjų",
     "Add" : "Pridėti",
     "Delete" : "Ištrinti",
     "Your browser does not support videos." : "Jūsų naršyklė nepalaiko vaizdo įrašų. ",

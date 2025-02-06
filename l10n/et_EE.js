@@ -6,6 +6,7 @@ OC.L10N.register(
     "Disabled" : "Keelatud",
     "Uploading..." : "Üleslaadimine...",
     "Delete" : "Kustuta",
+    "Your browser does not support videos." : "Su brauser ei toeta videoid.",
     "Error" : "Viga",
     "Download" : "Laadi alla",
     "Copied!" : "Kopeeritud!"

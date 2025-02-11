@@ -5,7 +5,7 @@ OC.L10N.register(
     "Edit comment" : "Editar comentário",
     "Delete comment" : "Eliminar comentário",
     "Discard" : "Descartar",
-    "Disabled" : "Desactivado",
+    "Disabled" : "Desativado",
     "Uploading..." : "A enviar...",
     "Add" : "Adicionar",
     "Delete" : "Eliminar",

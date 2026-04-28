@@ -108,6 +108,21 @@ class RollApiController extends ApiController
 	}
 
 	#[NoAdminRequired]
+	public function uploadChunk(): JSONResponse
+	{
+		$chunk = fopen($this->request->getUploadedFile('chunk')['tmp_name'], 'r');
+		$ext = $this->request->getParam('index');
+		$roll = $this->service->createRoll($requestFile, $ext, $thumbFile, $tbExt, $requestText);
+
+		return new JSONResponse(
+			['data' => [
+				'uuid' => $roll->getUuid(),
+				'fileId' => $roll->getVideoFile(),
+			]]
+		);
+	}
+
+	#[NoAdminRequired]
 	public function getRolls(): JSONResponse
 	{
 		$user = $this->session->getUser();

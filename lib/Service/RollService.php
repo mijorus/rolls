@@ -69,6 +69,45 @@ class RollService
 		return $roll;
 	}
 
+	public function saveChunk(string $folderName, $chunk, int $index)
+	{
+		$user = $this->session->getUser();
+		$userFolder = $this->storage->getUserFolder($user->getUID());
+
+		if (!str_starts_with($folderName, $userFolder->getPath() . '/')) {
+			throw new \OCP\Files\NotPermittedException('Folder is outside user directory');
+		}
+
+		$folder = $this->storage->newFolder($folderName);
+		$tbFolder = $folder->newFolder('.chunks');
+
+		$tbFolder->newFile($index . '.part', $chunk);
+		// return $roll;
+	}
+
+	public function generateFolderName(): string
+	{
+		$user = $this->session->getUser();
+		$userFolder = $this->storage->getUserFolder($user->getUID());
+
+		// Todo: should be a variable
+		$videoFolderName = Funcs::joinPaths($userFolder->getPath(), 'Rolls');
+
+		$exists = $this->storage->nodeExists($videoFolderName);
+
+		if (!$exists) {
+			$this->storage->newFolder($videoFolderName);
+		}
+
+		$uuid = Uuid::v4()->__toString();
+		$videoFolder = $this->storage->get($videoFolderName);
+
+		$foldernameBase = Funcs::joinPaths($videoFolder->getPath(),  'Roll_' . $uuid);
+		$folderName = Funcs::ensureUniqueFileName($this->storage, $foldernameBase);
+
+		return $folderName;
+	}
+
 	public function deleteRoll(Roll $roll)
 	{
 		$nodes = $this->storage->getById(

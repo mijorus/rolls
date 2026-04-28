@@ -9,7 +9,9 @@ return [
 
 		['name' => 'rollapi#index', 'url' => '/api/hello', 'verb' => 'GET'],
 		['name' => 'rollapi#get_upload_path', 'url' => '/api/upload_path', 'verb' => 'GET'],
+		['name' => 'rollapi#generate_new', 'url' => '/api/rolls', 'verb' => 'POST'],
 		['name' => 'rollapi#create_roll', 'url' => '/api/rolls', 'verb' => 'POST'],
+		['name' => 'rollapi#upload_chunk', 'url' => '/api/rolls', 'verb' => 'POST'],
 		['name' => 'rollapi#get_rolls',	'url' => '/api/rolls', 'verb' => 'GET'],
 		['name' => 'rollapi#delete_roll',	'url' => '/api/rolls/{uuid}', 'verb' => 'DELETE'],
 	],

@@ -69,7 +69,7 @@ class RollService
 		return $roll;
 	}
 
-	public function saveChunk(string $folderName, $chunk, int $index)
+	public function saveChunk(string $folderName, string $chunk, int $index)
 	{
 		$user = $this->session->getUser();
 		$userFolder = $this->storage->getUserFolder($user->getUID());
@@ -101,10 +101,13 @@ class RollService
 
 		$uuid = Uuid::v4()->__toString();
 		$videoFolder = $this->storage->get($videoFolderName);
+		$folderName = Funcs::joinPaths($videoFolder->getPath(),  'Roll_' . $uuid);
 
-		$foldernameBase = Funcs::joinPaths($videoFolder->getPath(),  'Roll_' . $uuid);
-		$folderName = Funcs::ensureUniqueFileName($this->storage, $foldernameBase);
-
+		while($this->storage->nodeExists($folderName)) {
+			$uuid = Uuid::v4()->__toString();
+			$folderName = Funcs::joinPaths($videoFolder->getPath(),  'Roll_' . $uuid);
+		}
+		
 		return $folderName;
 	}
 

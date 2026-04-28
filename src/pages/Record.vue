@@ -231,6 +231,8 @@ export default {
 			/** @type {Dexie | undefined} */
 			appDB: undefined,
 			savingCompleted: false,
+			chunkDurationMs: 5000,
+			chunkUploadErrors: 0,
 			recordingCountDown: '0',
 			status: "ASKING_PERMISSION",
 			statusOpts: {
@@ -397,6 +399,8 @@ export default {
 
 			const mediaStream = new MediaStream(streams);
 
+			this.chunkUploadErrors = 0;
+			this.videoChunks = 0;
 			this.recorder = new MediaRecorder(mediaStream, {
 				mimeType: videoMime,
 				audioBitsPerSecond: audioTrack ? audioTrack.getSettings().sampleRate : undefined,
@@ -408,7 +412,7 @@ export default {
 			};
 
 			await this.appDB.table(videoDbTable).clear();
-			this.recorder.start(3 * 1000);
+			this.recorder.start(this.chunkDurationMs);
 
 			this.status = this.statusOpts.RECORDING;
 			this.videoStartedAt = new Date();
@@ -660,12 +664,36 @@ export default {
 			}
 
 			this.videoChunks = this.videoChunks + 1;
+			const videoChunkArrKey = this.videoChunks - 1;
+
+			const formData = new FormData();
+			formData.append("chunk", event.data);
+			formData.append("id", new Blob([videoChunkArrKey.toString()], { type: "text/plain" }));
+
 			await this.appDB.table(videoDbTable).add({
-				id: this.videoChunks,
+				id: videoChunkArrKey,
 				blob: event.data,
 			});
 
-			console.log("Saved chunk!", this.recorder.state);
+			try {
+				await axios.post(
+					`${APP_API}/save_chunk`,
+					formData,
+					{
+						timeout: this.chunkDurationMs,
+						headers: {
+							"Content-Type": "multipart/form-data",
+						},
+					}
+				)
+
+				console.log("Uploaded chunk!", this.recorder.state);
+			} catch (e) {
+				console.error(e);
+				console.error("Uploading chunk failed! Saved on disk", this.recorder.state);
+				this.chunkUploadErrors += 1;
+			}
+
 			if (this.recorder.state === "inactive") {
 				if (this.savingCompleted) {
 					return;
@@ -717,32 +745,27 @@ export default {
 			} catch (err) {
 				console.error(err);
 				this.status = this.statusOpts.UPLOAD_ERR;
-
 				alert(t("rolls", "An error occurred while uploading your Roll"));
 			}
 		},
 
 		async uploadVideo() {
 			const duration = this.videoEndedAt.getTime() - this.videoStartedAt.getTime();
-			const chunksData = await this.appDB.table(videoDbTable).orderBy("id").toArray();
 
-			let recordedBlob = new Blob([...chunksData.map((c) => c.blob)], {
-				type: videoMime,
-			});
+			let recordedBlob;
+			if (this.chunkUploadErrors > 0) {
+				const chunksData = await this.appDB.table(videoDbTable).orderBy("id").toArray();
+	
+				recordedBlob = new Blob([...chunksData.map((c) => c.blob)], {
+					type: videoMime,
+				});
 
-			recordedBlob = await fixWebmDuration(recordedBlob, duration, {});
+				recordedBlob = await fixWebmDuration(recordedBlob, duration, {});
+			}
 
 			this.status = this.statusOpts.UPLOADING;
 
-			const ext = {
-				"video/webm": "webm",
-				"video/x-matroska": "mkv",
-				"video/mp4": "mp4",
-				"image/png": "png",
-			};
-
 			let text = "";
-
 			if (this.title.length) {
 				text = `# ${this.title}\n`;
 			}
@@ -754,16 +777,18 @@ export default {
 			});
 
 			const formData = new FormData();
+
 			formData.append("video", recordedBlob);
 			formData.append("thumbnail", this.thumbnail);
-			formData.append("text", new Blob([text], { type: "text/plain" }));
+			formData.append("duration", duration.toString(), { type: "text/plain" });
+			formData.append("mime", videoMime, { type: "text/plain" });
+			formData.append("text", text, { type: "text/plain" });
 
 			return (
 				await axios.post(
 					`${APP_API}/rolls`,
 					formData,
 					{
-						params: { ext: ext[videoMime] },
 						headers: {
 							"Content-Type": "multipart/form-data",
 						},

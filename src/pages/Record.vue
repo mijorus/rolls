@@ -230,6 +230,7 @@ export default {
 			thumbnail: false,
 			/** @type {Dexie | undefined} */
 			appDB: undefined,
+			webcamIsDrawing: false,
 			savingCompleted: false,
 			recordingCountDown: '0',
 			status: "ASKING_PERMISSION",
@@ -432,50 +433,58 @@ export default {
 		},
 
 		async createFlippedWebcamStream() {
-			if (this.$refs.webcamVideo.srcObject && this.$refs.webcamVideo.srcObject.getTracks().length) {
-				return;
-			}
+			// if (this.$refs.webcamVideo.srcObject && this.$refs.webcamVideo.srcObject.getTracks().length) {
+			// 	return;
+			// }
 
 			if (!this.webcamId) {
 				return;
 			}
 
 			try {
+				if (!this.ulFlippedWebcamVideo) {
+					this.ulFlippedWebcamVideo = document.createElement("video");
+					this.ulFlippedWebcamVideo.setAttribute("muted", true);
+					this.ulFlippedWebcamVideo.classList.add("hidden");					
+ 				} else {
+					this.ulFlippedWebcamVideo.srcObject.getTracks().forEach((track) => {
+						track.stop();
+						this.ulFlippedWebcamVideo.srcObject.removeTrack(track);
+					});
+				}
+				
 				let videoOpt = {
 					width: this.$refs.screenVideo.videoWidth,
 					height: this.$refs.screenVideo.videoHeight,
+					deviceId: { exact: this.webcamId }
 				};
-
-				if (this.webcamId) {
-					videoOpt.deviceId = this.webcamId;
-				}
-
+				
 				const stream = await navigator.mediaDevices.getUserMedia({
 					video: videoOpt,
 					audio: false,
 				});
 				
-				if (!this.ulFlippedWebcamVideo) {
-					this.ulFlippedWebcamVideo = document.createElement("video");
-					this.ulFlippedWebcamVideo.setAttribute("muted", true);
-					this.ulFlippedWebcamVideo.classList.add("hidden");					
-				}
-
 				this.ulFlippedWebcamVideo.srcObject = stream;
-				await this.ulFlippedWebcamVideo.play();
+				
+				if (this.ulFlippedWebcamVideo.paused) {
+					await this.ulFlippedWebcamVideo.play();
+				}
 
 				if (!this.ulFlippedWebcamCanvas) {
 					this.ulFlippedWebcamCanvas = document.createElement("canvas");
 					this.ulFlippedWebcamCanvas?.classList.add("hidden");
+					
+					if (!this.webcamIsDrawing) {
+						this.drawFlippedWebcamCanvas();
+					}
+	
+					const canvasStream = this.ulFlippedWebcamCanvas.captureStream(30);
+	
+					this.$refs.webcamVideo.srcObject = canvasStream;
+					await this.$refs.webcamVideo.play();
 				}
 
 				this.webcamIsVisible = true;
-				this.drawFlippedWebcamCanvas();
-
-				const canvasStream = this.ulFlippedWebcamCanvas.captureStream(30);
-
-				this.$refs.webcamVideo.srcObject = canvasStream;
-				await this.$refs.webcamVideo.play();
 			} catch (err) {
 				console.error(err);
 				return;
@@ -564,7 +573,7 @@ export default {
 		drawFlippedWebcamCanvas() {
 			const source = this.ulFlippedWebcamVideo;
 			const target = this.ulFlippedWebcamCanvas;
-			
+
 			if (!source || !target) {
 				return;
 			}
@@ -572,17 +581,23 @@ export default {
 			const ctx = target.getContext("2d");
 
 			if (source && source.videoWidth > 0 && source.videoHeight > 0) {
-				target.width = source.videoWidth;
-				target.height = source.videoHeight;
-
-				ctx.scale(-1, 1);
-				ctx.drawImage(source, target.width * -1, 0);
+				if (this.activeStreamName.startsWith('webcam-')) {
+					target.width = source.videoWidth;
+					target.height = source.videoHeight;
+	
+					ctx.scale(-1, 1);
+					ctx.drawImage(source, target.width * -1, 0);
+				}
 			}
 
+			this.webcamIsDrawing = true;
 			requestAnimationFrame(() => {
 				if (source && !source.paused) {
 					this.drawFlippedWebcamCanvas();
+					return;
 				}
+
+				this.webcamIsDrawing = false;
 			});
 		},
 
@@ -848,11 +863,8 @@ export default {
 			if (device.kind === "audioinput") {
 				this.micId = device.deviceId;
 			} else if (device.kind === "videoinput") {
-				if (this.ulFlippedWebcamVideo) {
-					this.ulFlippedWebcamVideo.srcObject.getTracks().forEach((track) => track.stop());
-				}
-
 				this.webcamId = device.deviceId;
+
 				if (["webcam-stream", "webcam-screen"].includes(this.activeStreamName)) {
 					await this.createFlippedWebcamStream();
 				}

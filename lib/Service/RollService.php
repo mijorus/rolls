@@ -70,32 +70,33 @@ class RollService
 		return $roll;
 	}
 
-	public function saveChunk(string $rollFolder, $chunk, int $index)
+	public function saveChunk(string $rollName, $chunk, int $index)
 	{
 		$rollsFolderPath = $this->getRollsFolder();
 
-		if (!strlen($rollFolder)) {
+		if (!strlen($rollName)) {
 			throw new Exception('Missing roll folder');
 		}
 
-		$rollFolder = null;
-		$rollFolderPath = Funcs::joinPaths($rollsFolderPath, $rollFolder);
-		$rollFolderChunksPath = Funcs::joinPaths($rollsFolderPath, $rollFolder, '.chunks');
+		/** @var \OCP\Files\Folder */
+		$rollFolderPath = Funcs::joinPaths($rollsFolderPath, $rollName);
+		// $rollFolderChunksPath = Funcs::joinPaths($rollsFolderPath, $rollFolder, '.chunks');
 
 		if (!$this->storage->nodeExists($rollFolderPath)) {
-			$rollFolder = $this->storage->newFolder($rollFolderPath);
+			$this->storage->newFolder($rollFolderPath);
 		} else {
-			$rollFolder = $this->storage->get($rollFolderPath);
+			$this->storage->get($rollFolderPath);
 		}
 
-		$videoFilePath = Funcs::joinPaths($rollFolder, 'roll.webm');
+		$videoFilePath = Funcs::joinPaths($rollFolderPath, 'roll.webm');
+
 		if ($index === 0) {
 			$this->storage->newFile($videoFilePath, $chunk);
 		} else {
-			$p = $this->storage->get($videoFilePath)->;
-			$l = $this->storage->get($videoFilePath)->getStorage()->getLocalFile($p);
-			$fp = fopen($l, 'ab');
-			fwrite($fp, $chunk);
+			/** @var \OCP\Files\File */
+			$p = $this->storage->get($videoFilePath);
+			$fp = $p->fopen('ab');
+			fwrite($fp, (string) $chunk);
 			fclose($fp);
 		}
 		// $chunksFolder = null;
@@ -104,8 +105,6 @@ class RollService
 		// } else {
 		// 	$chunksFolder = $this->storage->newFolder($rollFolderChunksPath);
 		// }
-
-		$chunksFolder->newFile(((string) $index) . '.chunk', $chunk);
 	}
 
 	public function getRollsFolder(): string

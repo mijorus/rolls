@@ -15,7 +15,7 @@
 	<category>office</category>
 	<bugs>https://github.com/mijorus/rolls/issues</bugs>
 	<dependencies>
-		<nextcloud min-version="29" max-version="29"/>
+		<nextcloud min-version="29" max-version="34"/>
 	</dependencies>
 	<screenshot>https://raw.githubusercontent.com/mijorus/rolls/master/docs/screenshot1.png</screenshot>
 	<screenshot>https://raw.githubusercontent.com/mijorus/rolls/master/docs/screenshot2.png</screenshot>

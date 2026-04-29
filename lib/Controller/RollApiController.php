@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace OCA\Rolls\Controller;
 
+use Exception;
+use JsonException;
 use OCA\Rolls\Db\Roll;
 use OCA\Rolls\Db\RollsDb;
 use OCA\Rolls\Entity\RollListItem;
@@ -108,18 +110,18 @@ class RollApiController extends ApiController
 	}
 
 	#[NoAdminRequired]
-	public function uploadChunk(): JSONResponse
+	public function uploadChunk(): Response
 	{
 		$chunk = fopen($this->request->getUploadedFile('chunk')['tmp_name'], 'r');
-		$ext = $this->request->getParam('index');
-		$roll = $this->service->createRoll($requestFile, $ext, $thumbFile, $tbExt, $requestText);
-
-		return new JSONResponse(
-			['data' => [
-				'uuid' => $roll->getUuid(),
-				'fileId' => $roll->getVideoFile(),
-			]]
-		);
+            
+        if (!$chunk) 
+            throw new Exception('Missing chunk');
+        
+		$index = $this->request->getParam('index');
+		$folder = $this->request->getParam('folder');
+		$this->service->saveChunk($folder, $chunk, (int) $index);
+        
+		return new Response(Http::STATUS_OK);
 	}
 
 	#[NoAdminRequired]
@@ -198,5 +200,42 @@ class RollApiController extends ApiController
 		$this->service->deleteRoll($roll);
 
 		return new Response(Http::STATUS_OK);
+	}
+    
+    #[NoAdminRequired]
+	public function newRoll(): Response
+	{
+        $path = $this->service->createNewRollFolder();
+        return new JSONResponse([
+            'path' => $path
+        ]);
+	}
+
+	#[NoAdminRequired]
+	public function finalizeRoll(): JSONResponse
+	{
+		$folder = $this->request->getParam('folder');
+
+		if (empty($folder)) {
+			return new JSONResponse(['message' => 'Missing folder'], Http::STATUS_BAD_REQUEST);
+		}
+
+		$thumbnailUpload = $this->request->getUploadedFile('thumbnail');
+		if (empty($thumbnailUpload)) {
+			return new JSONResponse(['message' => 'Missing thumbnail'], Http::STATUS_BAD_REQUEST);
+		}
+
+		$thumbFile = fopen($thumbnailUpload['tmp_name'], 'r');
+		$tbExt = $this->request->getParam('tbExt', 'png');
+		$requestText = $this->request->getParam('text', '');
+
+		$roll = $this->service->assembleChunksToRoll($folder, $thumbFile, $tbExt, $requestText);
+
+		return new JSONResponse([
+			'data' => [
+				'uuid' => $roll->getUuid(),
+				'fileId' => $roll->getVideoFile(),
+			]
+		]);
 	}
 }

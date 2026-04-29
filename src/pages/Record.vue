@@ -235,6 +235,7 @@ export default {
 			chunkUploadErrors: 0,
 			recordingCountDown: '0',
 			status: "ASKING_PERMISSION",
+            rollName: null,
 			statusOpts: {
 				ASKING_PERMISSION: "ASKING_PERMISSION",
 				READY: "READY",
@@ -396,6 +397,9 @@ export default {
 			if (audioTrack) {
 				streams = [...streams, audioTrack];
 			}
+            
+            const newRollRes = await axios.post(`${APP_API}/new_roll`);
+            this.rollName = newRollRes.data.path;
 
 			const mediaStream = new MediaStream(streams);
 
@@ -666,33 +670,36 @@ export default {
 			this.videoChunks = this.videoChunks + 1;
 			const videoChunkArrKey = this.videoChunks - 1;
 
-			const formData = new FormData();
-			formData.append("chunk", event.data);
-			formData.append("id", new Blob([videoChunkArrKey.toString()], { type: "text/plain" }));
-
 			await this.appDB.table(videoDbTable).add({
 				id: videoChunkArrKey,
 				blob: event.data,
 			});
 
-			try {
-				await axios.post(
-					`${APP_API}/save_chunk`,
-					formData,
-					{
-						timeout: this.chunkDurationMs,
-						headers: {
-							"Content-Type": "multipart/form-data",
-						},
-					}
-				)
+			if (this.chunkUploadErrors === 0) {
+                try {
+                    const formData = new FormData();
+                    formData.append("chunk", event.data);
+                    formData.append("index", videoChunkArrKey.toString());
+                    formData.append("folder", this.rollName);
 
-				console.log("Uploaded chunk!", this.recorder.state);
-			} catch (e) {
-				console.error(e);
-				console.error("Uploading chunk failed! Saved on disk", this.recorder.state);
-				this.chunkUploadErrors += 1;
-			}
+                    await axios.post(
+                        `${APP_API}/upload_chunk`,
+                        formData,
+                        {
+                            timeout: this.chunkDurationMs,
+                            headers: {
+                                "Content-Type": "multipart/form-data",
+                            },
+                        }
+                    )
+
+                    console.log("Uploaded chunk!", this.recorder.state);
+                } catch (e) {
+                    console.error(e);
+                    console.error("Uploading chunk failed! Saved on disk", this.recorder.state);
+                    this.chunkUploadErrors += 1;
+                }
+            }
 
 			if (this.recorder.state === "inactive") {
 				if (this.savingCompleted) {
@@ -752,54 +759,53 @@ export default {
 		async uploadVideo() {
 			const duration = this.videoEndedAt.getTime() - this.videoStartedAt.getTime();
 
-			let recordedBlob;
-			if (this.chunkUploadErrors > 0) {
-				const chunksData = await this.appDB.table(videoDbTable).orderBy("id").toArray();
-	
-				recordedBlob = new Blob([...chunksData.map((c) => c.blob)], {
-					type: videoMime,
-				});
-
-				recordedBlob = await fixWebmDuration(recordedBlob, duration, {});
-			}
-
-			this.status = this.statusOpts.UPLOADING;
-
 			let text = "";
 			if (this.title.length) {
 				text = `# ${this.title}\n`;
 			}
-
 			this.comments.forEach((comment) => {
 				text += `> [${comment.ts}]\n`;
 				text += `> ${comment.text}`;
 				text += `\n\n`;
 			});
 
-			const formData = new FormData();
+			this.status = this.statusOpts.UPLOADING;
 
-			formData.append("video", recordedBlob);
-			formData.append("thumbnail", this.thumbnail);
-			formData.append("duration", duration.toString(), { type: "text/plain" });
-			formData.append("mime", videoMime, { type: "text/plain" });
-			formData.append("text", text, { type: "text/plain" });
+			// Happy path: all chunks were uploaded server-side, just finalize
+			if (this.chunkUploadErrors === 0 && this.rollName) {
+				const formData = new FormData();
+				formData.append("folder", this.rollName);
+				formData.append("thumbnail", this.thumbnail);
+				formData.append("text", text);
+				formData.append("tbExt", "png");
 
-			return (
-				await axios.post(
-					`${APP_API}/rolls`,
-					formData,
-					{
-						headers: {
-							"Content-Type": "multipart/form-data",
-						},
+				return (await axios.post(`${APP_API}/finalize_roll`, formData, {
+					headers: { "Content-Type": "multipart/form-data" },
+					onUploadProgress: (progressEvent) => {
+						this.uploadPerc = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 					},
-					{
-						onUploadProgress: function (progressEvent) {
-							this.uploadPerc = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-						},
-					}
-				)
-			).data;
+				})).data;
+			}
+
+			// Fallback: re-assemble from IndexedDB and upload as a single blob
+			const chunksData = await this.appDB.table(videoDbTable).orderBy("id").toArray();
+			let recordedBlob = new Blob([...chunksData.map((c) => c.blob)], { type: videoMime });
+			recordedBlob = await fixWebmDuration(recordedBlob, duration, {});
+
+			const formData = new FormData();
+			formData.append("video", recordedBlob, "video.webm");
+			formData.append("thumbnail", this.thumbnail);
+			formData.append("duration", duration.toString());
+			formData.append("ext", "webm");
+			formData.append("tbExt", "png");
+			formData.append("text", new Blob([text], { type: "text/plain" }), "text.md");
+
+			return (await axios.post(`${APP_API}/rolls`, formData, {
+				headers: { "Content-Type": "multipart/form-data" },
+				onUploadProgress: (progressEvent) => {
+					this.uploadPerc = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+				},
+			})).data;
 		},
 
 		onCommentKeyDown(e) {

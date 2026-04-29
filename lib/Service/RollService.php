@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\Rolls\Service;
 
+use Exception;
 use OCA\Rolls\Db\Roll;
 use OCA\Rolls\Db\RollsDb;
 use OCA\Rolls\Entity\RollListItem;
@@ -69,46 +70,76 @@ class RollService
 		return $roll;
 	}
 
-	public function saveChunk(string $folderName, string $chunk, int $index)
+	public function saveChunk(string $rollFolder, $chunk, int $index)
 	{
-		$user = $this->session->getUser();
-		$userFolder = $this->storage->getUserFolder($user->getUID());
+		$rollsFolderPath = $this->getRollsFolder();
 
-		if (!str_starts_with($folderName, $userFolder->getPath() . '/')) {
-			throw new \OCP\Files\NotPermittedException('Folder is outside user directory');
+		if (!strlen($rollFolder)) {
+			throw new Exception('Missing roll folder');
 		}
 
-		$folder = $this->storage->newFolder($folderName);
-		$tbFolder = $folder->newFolder('.chunks');
+		$rollFolder = null;
+		$rollFolderPath = Funcs::joinPaths($rollsFolderPath, $rollFolder);
+		$rollFolderChunksPath = Funcs::joinPaths($rollsFolderPath, $rollFolder, '.chunks');
 
-		$tbFolder->newFile($index . '.part', $chunk);
-		// return $roll;
+		if (!$this->storage->nodeExists($rollFolderPath)) {
+			$rollFolder = $this->storage->newFolder($rollFolderPath);
+		} else {
+			$rollFolder = $this->storage->get($rollFolderPath);
+		}
+
+		$videoFilePath = Funcs::joinPaths($rollFolder, 'roll.webm');
+		if ($index === 0) {
+			$this->storage->newFile($videoFilePath, $chunk);
+		} else {
+			$p = $this->storage->get($videoFilePath)->;
+			$l = $this->storage->get($videoFilePath)->getStorage()->getLocalFile($p);
+			$fp = fopen($l, 'ab');
+			fwrite($fp, $chunk);
+			fclose($fp);
+		}
+		// $chunksFolder = null;
+		// if ($this->storage->nodeExists($rollFolderChunksPath)) {
+		// 	$chunksFolder = $this->storage->get($rollFolderChunksPath);
+		// } else {
+		// 	$chunksFolder = $this->storage->newFolder($rollFolderChunksPath);
+		// }
+
+		$chunksFolder->newFile(((string) $index) . '.chunk', $chunk);
 	}
 
-	public function generateFolderName(): string
+	public function getRollsFolder(): string
 	{
 		$user = $this->session->getUser();
 		$userFolder = $this->storage->getUserFolder($user->getUID());
-
 		// Todo: should be a variable
-		$videoFolderName = Funcs::joinPaths($userFolder->getPath(), 'Rolls');
+		return  Funcs::joinPaths($userFolder->getPath(), 'Rolls');
+	}
 
+	public function createNewRollFolder(): string
+	{
+		$videoFolderName = $this->getRollsFolder();
 		$exists = $this->storage->nodeExists($videoFolderName);
 
 		if (!$exists) {
 			$this->storage->newFolder($videoFolderName);
 		}
 
-		$uuid = Uuid::v4()->__toString();
-		$videoFolder = $this->storage->get($videoFolderName);
-		$folderName = Funcs::joinPaths($videoFolder->getPath(),  'Roll_' . $uuid);
+		$rollsFolder = $this->storage->get($videoFolderName);
 
-		while($this->storage->nodeExists($folderName)) {
+		$uuid = Uuid::v4()->__toString();
+		$rollFolderName = 'Roll_' . $uuid;
+		$folderName = Funcs::joinPaths($rollsFolder->getPath(), $rollFolderName);
+
+		while ($this->storage->nodeExists($folderName)) {
 			$uuid = Uuid::v4()->__toString();
-			$folderName = Funcs::joinPaths($videoFolder->getPath(),  'Roll_' . $uuid);
+			$rollFolderName = 'Roll_' . $uuid;
+			$folderName = Funcs::joinPaths($rollsFolder->getPath(),  $rollFolderName);
 		}
-		
-		return $folderName;
+
+		$this->storage->newFolder($folderName);
+
+		return $rollFolderName;
 	}
 
 	public function deleteRoll(Roll $roll)

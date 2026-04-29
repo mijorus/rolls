@@ -278,8 +278,8 @@ export default {
 		stopWebcam() {
 			if (this.ulFlippedWebcamVideo) {
 				this.ulFlippedWebcamVideo.srcObject.getTracks().forEach((track) => track.stop());
-
 				this.ulFlippedWebcamVideo.remove();
+				this.ulFlippedWebcamVideo = null;
 			}
 
 			if (this.ulFlippedWebcamCanvas) {
@@ -289,6 +289,7 @@ export default {
 					.forEach((track) => track.stop());
 
 				this.ulFlippedWebcamCanvas.remove();
+				this.ulFlippedWebcamCanvas = null;
 			}
 
 			if (this.$refs.webcamVideo) {
@@ -453,20 +454,23 @@ export default {
 					video: videoOpt,
 					audio: false,
 				});
-
-				this.ulFlippedWebcamVideo = document.createElement("video");
-				this.ulFlippedWebcamVideo.setAttribute("muted", true);
-				this.ulFlippedWebcamVideo.classList.add("hidden");
+				
+				if (!this.ulFlippedWebcamVideo) {
+					this.ulFlippedWebcamVideo = document.createElement("video");
+					this.ulFlippedWebcamVideo.setAttribute("muted", true);
+					this.ulFlippedWebcamVideo.classList.add("hidden");					
+				}
 
 				this.ulFlippedWebcamVideo.srcObject = stream;
-
 				await this.ulFlippedWebcamVideo.play();
 
-				this.ulFlippedWebcamCanvas = document.createElement("canvas");
-				this.ulFlippedWebcamCanvas?.classList.add("hidden");
+				if (!this.ulFlippedWebcamCanvas) {
+					this.ulFlippedWebcamCanvas = document.createElement("canvas");
+					this.ulFlippedWebcamCanvas?.classList.add("hidden");
+				}
 
 				this.webcamIsVisible = true;
-				this.drawVideoOnCanvas(this.ulFlippedWebcamVideo, this.ulFlippedWebcamCanvas);
+				this.drawFlippedWebcamCanvas();
 
 				const canvasStream = this.ulFlippedWebcamCanvas.captureStream(30);
 
@@ -501,7 +505,7 @@ export default {
 			if (!this.$refs.screenVideo.srcObject) {
 				this.$refs.screenVideo.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
 			}
-
+			
 			this.$refs.screenVideo.play();
 			this.screenSharingHasEnded = false;
 			this.$refs.screenVideo.srcObject.getTracks()[0].addEventListener("ended", this.screenSharingEnded);
@@ -557,30 +561,27 @@ export default {
 			}
 		},
 
-		/**
-		 *  @param target {HTMLCanvasElement}
-		 * @param source {HTMLVideoElement}
-		 */
-		drawVideoOnCanvas(source, target, streamName = "webcam") {
+		drawFlippedWebcamCanvas() {
+			const source = this.ulFlippedWebcamVideo;
+			const target = this.ulFlippedWebcamCanvas;
+			
+			if (!source || !target) {
+				return;
+			}
+			
 			const ctx = target.getContext("2d");
 
 			if (source && source.videoWidth > 0 && source.videoHeight > 0) {
 				target.width = source.videoWidth;
 				target.height = source.videoHeight;
 
-				if (streamName === "webcam") {
-					ctx.scale(-1, 1);
-					ctx.drawImage(source, target.width * -1, 0);
-				} else {
-					ctx.drawImage(source, 0, 0);
-				}
-
-				this.wbFrames += 1;
+				ctx.scale(-1, 1);
+				ctx.drawImage(source, target.width * -1, 0);
 			}
 
 			requestAnimationFrame(() => {
 				if (source && !source.paused) {
-					this.drawVideoOnCanvas(source, target, streamName);
+					this.drawFlippedWebcamCanvas();
 				}
 			});
 		},
@@ -598,7 +599,6 @@ export default {
 			if (source && source.videoWidth > 0 && source.videoHeight > 0) {
 				target.width = this.$refs.screenVideo.videoWidth;
 				target.height = this.$refs.screenVideo.videoHeight;
-
 				if (source.videoWidth !== target.width && source.videoHeight !== target.height) {
 					// Get canvas dimensions
 					const canvasWidth = target.width;
@@ -640,13 +640,11 @@ export default {
 						console.log("Saved thumbnail!");
 					}, tbMime);
 				}
-
-				this.wbFrames += 1;
 			}
 
 			requestAnimationFrame(() => {
 				if (source && !source.paused) {
-					this.drawVideoOnMainCanvas(source, target);
+					this.drawVideoOnMainCanvas();
 				}
 			});
 		},
@@ -850,10 +848,12 @@ export default {
 			if (device.kind === "audioinput") {
 				this.micId = device.deviceId;
 			} else if (device.kind === "videoinput") {
-				this.webcamId = device.deviceId;
+				if (this.ulFlippedWebcamVideo) {
+					this.ulFlippedWebcamVideo.srcObject.getTracks().forEach((track) => track.stop());
+				}
 
+				this.webcamId = device.deviceId;
 				if (["webcam-stream", "webcam-screen"].includes(this.activeStreamName)) {
-					this.stopWebcam();
 					await this.createFlippedWebcamStream();
 				}
 

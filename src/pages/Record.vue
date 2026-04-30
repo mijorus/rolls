@@ -7,62 +7,36 @@
 			<canvas ref="ulMainCanvas" class="tw-w-full hidden tw-rounded-xl"></canvas>
 			<div class="tw-relative tw-mb-3" id="main-video-container">
 				<video id="main-video" ref="mainVideo" class="tw-rounded-2xl" autoplay></video>
-				<button
-					id="main-video-placeholder"
-					class="!tw-rounded-2xl"
-					v-show="status === statusOpts.ASKING_PERMISSION"
-					@click="() => initScreen()"
-				>
+				<button id="main-video-placeholder" class="!tw-rounded-2xl" v-show="status === statusOpts.ASKING_PERMISSION"
+					@click="() => initScreen()">
 					<SelectAScreenPlaceholder />
 				</button>
-				<ScreenBeingRecorded
-					v-show="status === statusOpts.RECORDING && ['screen', 'webcam-screen'].includes(activeStreamName)"
-					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl"
-				/>
-				<RollUploading
-					v-show="status === statusOpts.UPLOADING"
-					:perc="uploadPerc"
-					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl"
-				/>
-				<NcEmptyContent
-					v-show="status === statusOpts.COUNTDOWN"
-					:name="recordingCountDown"
-					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl"
-				/>
+				<ScreenBeingRecorded v-show="status === statusOpts.RECORDING && ['screen', 'webcam-screen'].includes(activeStreamName)"
+					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl" />
+				<RollUploading v-show="status === statusOpts.UPLOADING" :perc="uploadPerc"
+					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl" />
+				<NcEmptyContent v-show="status === statusOpts.COUNTDOWN" :name="recordingCountDown"
+					class="tw-absolute tw-h-full tw-w-full separator tw-rounded-2xl" />
 			</div>
 
 			<audio ref="audiobip" src="../static/bip.mp3" :autoplay="false" :controls="false" :loop="false"></audio>
 
 			<video id="screen-video" ref="screenVideo" muted autoplay class="invisible"></video>
 
-			<video
-				id="webcam-video"
-				ref="webcamVideo"
-				muted
-				autoplay
-				:style="{ visibility: webcamVideoVisibility }"
-			></video>
+			<video id="webcam-video" ref="webcamVideo" muted autoplay :style="{ visibility: webcamVideoVisibility }"></video>
 
 			<div>
-				<RecordActions
-					:webcamId="webcamId"
-					:ready="status !== statusOpts.ASKING_PERMISSION && screenSharingHasEnded === false"
-					:activeStreamName="activeStreamName"
-					:streamMonitor="streamMonitor"
-					:streamMonitorWithWebcam="streamMonitorWithWebcam"
-					:streamWebcam="streamWebcam"
-				/>
+				<RecordActions :webcamId="webcamId" :ready="status !== statusOpts.ASKING_PERMISSION && screenSharingHasEnded === false"
+					:activeStreamName="activeStreamName" :streamMonitor="streamMonitor" :streamMonitorWithWebcam="streamMonitorWithWebcam"
+					:streamWebcam="streamWebcam" />
 			</div>
 
 			<div class="tw-pt-5"></div>
 
 			<div class="tw-flex tw-flex-row tw-items-center tw-gap-2">
-				<NcButton
-					:disabled="![statusOpts.READY, statusOpts.RECORDING, statusOpts.UPLOAD_ERR].includes(status)"
-					aria-label="Start recording"
+				<NcButton :disabled="![statusOpts.READY, statusOpts.RECORDING, statusOpts.UPLOAD_ERR].includes(status)" aria-label="Start recording"
 					@click="videoStartedAt !== null ? stopCapture() : startRecordingCountDown()"
-					:type="status === statusOpts.RECORDING ? 'error' : 'secondary'"
-				>
+					:type="status === statusOpts.RECORDING ? 'error' : 'secondary'">
 					<template #icon>
 						<Stop :size="20" v-if="status === statusOpts.RECORDING" />
 						<NcLoadingIcon :size="20" v-else-if="status === statusOpts.UPLOADING"></NcLoadingIcon>
@@ -83,14 +57,8 @@
 					</span>
 				</NcButton>
 				<div class="tw-ml-1"></div>
-				<RecordSwitchSourceBtns
-					v-if="status !== statusOpts.ASKING_PERMISSION"
-					:activeWebcamId="webcamId"
-					:activeMicId="micId"
-					:ready="status === statusOpts.READY"
-					v-on:webcamChange="setDevice"
-					v-on:micChange="setDevice"
-				/>
+				<RecordSwitchSourceBtns v-if="status !== statusOpts.ASKING_PERMISSION" :activeWebcamId="webcamId" :activeMicId="micId"
+					:ready="status === statusOpts.READY" v-on:webcamChange="setDevice" v-on:micChange="setDevice" />
 			</div>
 
 			<div class="tw-py-5">
@@ -99,30 +67,19 @@
 
 			<div>
 				<div class="tw-mb-8">
-					<input
-						type="text"
+					<input type="text"
 						class="tw-w-full tw-d-block !tw-border-none !tw-outline-none tw-font-bold !tw-text-3xl placeholder:!tw-text-3xl"
-						:placeholder="t('rolls', 'Add a title')"
-						v-model="title"
-					/>
+						:placeholder="t('rolls', 'Add a title')" v-model="title" />
 				</div>
 				<div class="tw-relative">
 					<span ref="addCommentBox">
-						<div
-							class="tw-text-white tw-inline-flex tw-px-2 tw-py-1 tw-rounded-full tw-flex-row tw-gap-2 bg-primary"
-						>
+						<div class="tw-text-white tw-inline-flex tw-px-2 tw-py-1 tw-rounded-full tw-flex-row tw-gap-2 bg-primary">
 							<Clock :size="20" />
 							<span>{{ commentAt || videoDuration }}</span>
 						</div>
-						<input
-							ref="inputComment"
-							class="!tw-border-none !tw-outline-none tw-w-full"
-							type="text"
-							:placeholder="t('rolls', 'Add a comment at this timestamp')"
-							@keydown="onCommentKeyDown"
-							@focus="onCommentFocus"
-							@blur="onCommentBlur"
-						/>
+						<input ref="inputComment" class="!tw-border-none !tw-outline-none tw-w-full" type="text"
+							:placeholder="t('rolls', 'Add a comment at this timestamp')" @keydown="onCommentKeyDown" @focus="onCommentFocus"
+							@blur="onCommentBlur" />
 					</span>
 
 					<p v-for="comment in sortedComments" :key="comment.id">{{ comment.ts }} - {{ comment.text }}</p>
@@ -432,7 +389,7 @@ export default {
 			}
 		},
 
-		async createFlippedWebcamStream() {
+		async createWebcamStream() {
 			// if (this.$refs.webcamVideo.srcObject && this.$refs.webcamVideo.srcObject.getTracks().length) {
 			// 	return;
 			// }
@@ -443,29 +400,29 @@ export default {
 
 			try {
 				if (!this.ulFlippedWebcamVideo) {
-					this.ulFlippedWebcamVideo = document.createElement("video");
-					this.ulFlippedWebcamVideo.setAttribute("muted", true);
-					this.ulFlippedWebcamVideo.classList.add("hidden");					
- 				} else {
 					this.ulFlippedWebcamVideo.srcObject.getTracks().forEach((track) => {
 						track.stop();
 						this.ulFlippedWebcamVideo.srcObject.removeTrack(track);
 					});
+				} else {
+					this.ulFlippedWebcamVideo = document.createElement("video");
+					this.ulFlippedWebcamVideo.setAttribute("muted", true);
+					this.ulFlippedWebcamVideo.classList.add("hidden");
 				}
-				
+
 				let videoOpt = {
 					width: this.$refs.screenVideo.videoWidth,
 					height: this.$refs.screenVideo.videoHeight,
 					deviceId: { exact: this.webcamId }
 				};
-				
+
 				const stream = await navigator.mediaDevices.getUserMedia({
 					video: videoOpt,
 					audio: false,
 				});
-				
+
 				this.ulFlippedWebcamVideo.srcObject = stream;
-				
+
 				if (this.ulFlippedWebcamVideo.paused) {
 					await this.ulFlippedWebcamVideo.play();
 				}
@@ -473,13 +430,13 @@ export default {
 				if (!this.ulFlippedWebcamCanvas) {
 					this.ulFlippedWebcamCanvas = document.createElement("canvas");
 					this.ulFlippedWebcamCanvas?.classList.add("hidden");
-					
+
 					if (!this.webcamIsDrawing) {
 						this.drawFlippedWebcamCanvas();
 					}
-	
+
 					const canvasStream = this.ulFlippedWebcamCanvas.captureStream(30);
-	
+
 					this.$refs.webcamVideo.srcObject = canvasStream;
 					await this.$refs.webcamVideo.play();
 				}
@@ -514,7 +471,7 @@ export default {
 			if (!this.$refs.screenVideo.srcObject) {
 				this.$refs.screenVideo.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
 			}
-			
+
 			this.$refs.screenVideo.play();
 			this.screenSharingHasEnded = false;
 			this.$refs.screenVideo.srcObject.getTracks()[0].addEventListener("ended", this.screenSharingEnded);
@@ -530,7 +487,7 @@ export default {
 				document.exitPictureInPicture();
 			}
 
-			await this.createFlippedWebcamStream();
+			await this.createWebcamStream();
 			this.setVideoOnMainCanvas(this.$refs.webcamVideo, "webcam-stream");
 		},
 
@@ -563,7 +520,7 @@ export default {
 				return;
 			}
 
-			await this.createFlippedWebcamStream();
+			await this.createWebcamStream();
 
 			if (document.pictureInPictureEnabled) {
 				await this.$refs.webcamVideo.requestPictureInPicture();
@@ -577,14 +534,14 @@ export default {
 			if (!source || !target) {
 				return;
 			}
-			
+
 			const ctx = target.getContext("2d");
 
 			if (source && source.videoWidth > 0 && source.videoHeight > 0) {
 				if (this.activeStreamName.startsWith('webcam-')) {
 					target.width = source.videoWidth;
 					target.height = source.videoHeight;
-	
+
 					ctx.scale(-1, 1);
 					ctx.drawImage(source, target.width * -1, 0);
 				}
@@ -794,7 +751,7 @@ export default {
 			const { target } = e;
 			if (e.key === "Enter" || e.keyCode === 13) {
 				if (target.value.length === 0) {
-					return
+					return;
 				}
 
 				e.preventDefault();
@@ -866,7 +823,7 @@ export default {
 				this.webcamId = device.deviceId;
 
 				if (["webcam-stream", "webcam-screen"].includes(this.activeStreamName)) {
-					await this.createFlippedWebcamStream();
+					await this.createWebcamStream();
 				}
 
 				if ("webcam-screen" === this.activeStreamName) {
@@ -947,7 +904,7 @@ export default {
 </style>
 
 <style>
-div.content-wrapper.text-editor__content-wrapper > div.editor__content.text-editor__content {
+div.content-wrapper.text-editor__content-wrapper>div.editor__content.text-editor__content {
 	max-width: 100% !important;
 }
 

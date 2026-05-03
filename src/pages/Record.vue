@@ -166,6 +166,8 @@ export default {
 			activeStreamName: "",
 			screenSharingHasEnded: false,
 			activeStream: undefined,
+			videoWidth: 1920,
+			videoHeight: 1080,
 			/** @type {HTMLVideoElement | null} */
 			ulFlippedWebcamVideo: null,
 			/** @type {HTMLCanvasElement | null} */
@@ -225,6 +227,10 @@ export default {
 		async initScreen() {
 			try {
 				await this.streamMonitor();
+				
+				this.videoWidth = this.$refs.screenVideo.videoWidth;
+				this.videoHeight = this.$refs.screenVideo.videoHeight;
+				
 				await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 				this.status = this.statusOpts.READY;
 			} catch (err) {
@@ -410,9 +416,9 @@ export default {
 					this.ulFlippedWebcamVideo.classList.add("hidden");
 				}
 
-				let videoOpt = {
-					width: this.$refs.screenVideo.videoWidth,
-					height: this.$refs.screenVideo.videoHeight,
+				const videoOpt = {
+					width: this.videoWidth,
+					height: this.videoHeight,
 					deviceId: { exact: this.webcamId }
 				};
 
@@ -531,16 +537,16 @@ export default {
 			const source = this.ulFlippedWebcamVideo;
 			const target = this.ulFlippedWebcamCanvas;
 
-			if (!source || !target) {
+			if (!source || !target || source.paused) {
+				this.webcamIsDrawing = false;
 				return;
 			}
 
-			const ctx = target.getContext("2d");
-
 			if (source && source.videoWidth > 0 && source.videoHeight > 0) {
 				if (this.activeStreamName.startsWith('webcam-')) {
-					target.width = source.videoWidth;
-					target.height = source.videoHeight;
+					const ctx = target.getContext("2d");
+					target.width = this.videoWidth;
+					target.height = this.videoHeight;
 
 					ctx.scale(-1, 1);
 					ctx.drawImage(source, target.width * -1, 0);
@@ -549,12 +555,7 @@ export default {
 
 			this.webcamIsDrawing = true;
 			requestAnimationFrame(() => {
-				if (source && !source.paused) {
-					this.drawFlippedWebcamCanvas();
-					return;
-				}
-
-				this.webcamIsDrawing = false;
+				this.drawFlippedWebcamCanvas();
 			});
 		},
 
@@ -569,8 +570,8 @@ export default {
 			const ctx = target.getContext("2d");
 
 			if (source && source.videoWidth > 0 && source.videoHeight > 0) {
-				target.width = this.$refs.screenVideo.videoWidth;
-				target.height = this.$refs.screenVideo.videoHeight;
+				target.width = this.videoWidth;
+				target.height = this.videoHeight;
 				if (source.videoWidth !== target.width && source.videoHeight !== target.height) {
 					// Get canvas dimensions
 					const canvasWidth = target.width;

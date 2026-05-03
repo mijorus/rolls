@@ -206,8 +206,13 @@ class RollApiController extends ApiController
 	public function newRoll(): Response
 	{
         $path = $this->service->createNewRollFolder();
+		$storagePath = Funcs::joinPaths($this->service->getRollsFolder(), $path);
+		$storageType = $this->storage->get($storagePath)->getStorage();
+		$isLocal = $storageType->isLocal();
+		
         return new JSONResponse([
-            'path' => $path
+            'path' => $path,
+			'chunkedUpload' => $isLocal,
         ]);
 	}
 

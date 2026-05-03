@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+// declare(strict_types=1);
 
 namespace OCA\Rolls\Service;
 
@@ -74,18 +74,22 @@ class RollService
 	{
 		$rollsFolderPath = $this->getRollsFolder();
 
-		if (!strlen($rollName)) {
+		if (empty($rollName)) {
 			throw new Exception('Missing roll folder');
 		}
 
 		/** @var \OCP\Files\Folder */
+		$rollFolder = null;
 		$rollFolderPath = Funcs::joinPaths($rollsFolderPath, $rollName);
-		// $rollFolderChunksPath = Funcs::joinPaths($rollsFolderPath, $rollFolder, '.chunks');
 
 		if (!$this->storage->nodeExists($rollFolderPath)) {
-			$this->storage->newFolder($rollFolderPath);
+			$rollFolder = $this->storage->newFolder($rollFolderPath);
 		} else {
-			$this->storage->get($rollFolderPath);
+			$rollFolder = $this->storage->get($rollFolderPath);
+		}
+		
+		if (!$rollFolder->getStorage()->isLocal()) {
+			throw new Exception('Chunked upload is only available on local mount points');
 		}
 
 		$videoFilePath = Funcs::joinPaths($rollFolderPath, 'roll.webm');
@@ -93,18 +97,24 @@ class RollService
 		if ($index === 0) {
 			$this->storage->newFile($videoFilePath, $chunk);
 		} else {
-			/** @var \OCP\Files\File */
-			$p = $this->storage->get($videoFilePath);
-			$fp = $p->fopen('ab');
-			fwrite($fp, (string) $chunk);
+			$videoFile = $this->storage->get($videoFilePath);
+			$pth = $videoFile->getInternalPath();
+			$fp = $videoFile->getStorage()->fopen($pth, 'a');
+			// file_put_contents($p, $chunk, FILE_APPEND)
+			// if (!$fp = fopen($p, 'a')) {
+			// 	throw new Exception('File cannot be opened in append mode');
+			// 	}
+				
+			/** @var string $chunk */
+			$data = stream_get_contents($chunk);
+			if (fwrite($fp, $data) === false) {
+				throw new Exception('Errore while writing to file');	
+			}
+
 			fclose($fp);
+			
+			$videoFile->touch();
 		}
-		// $chunksFolder = null;
-		// if ($this->storage->nodeExists($rollFolderChunksPath)) {
-		// 	$chunksFolder = $this->storage->get($rollFolderChunksPath);
-		// } else {
-		// 	$chunksFolder = $this->storage->newFolder($rollFolderChunksPath);
-		// }
 	}
 
 	public function getRollsFolder(): string
